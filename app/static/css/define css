@@ -1,0 +1,60 @@
+    Define css Header :
+color .navbar .logo= #fff
+color .icon = #fff 
+color .menu-list li.active  = #fff
+color .menu-list li a:hover = #fff
+color  .menu-list li a = #fff   
+
+font-size .navbar .logo a = 30px 
+font-size .menu-list li a = 18px 
+font-size .about .title = 38px
+font-size .icon = 20px 
+font-size .navbar .menu-list li a = 23px;
+font-size @media (max-width: 380px) .navbar .logo a = 27px
+
+font-family =  'Poppins', sans-serif
+
+font-weight .navbar .logo a = 600
+font-weight .menu-list li a = 500 
+font-weight .about .title = 700
+
+    Define css Card :
+color body .background = #f1f1f1
+color .card .background = #f1f1f1
+
+height .img .card  = 400px
+font-family = 'Poppins', sans-serif
+
+    Define css counter
+color .content .box .icon = #030000
+color .content .box .counter= #030000;
+color .content .box .text = #030000
+
+font-weight .content .box .text = 400;
+
+font-family: 'Poppins', sans-serif;
+
+    Define css carousel
+color h1 = red
+color .container span = red
+color .text1 = red
+color .text2 = red
+color .label = black
+
+font-size .text1 = 100px
+font-size .text2 = 100px
+font-size .label = 50px
+
+font-weight .text1 = 500
+font-weight .text2 = 700
+font-weight .text1 = 500
+
+padding .img = 30%
+
+    Define css footer
+color .footer-dark = #f0f9ff;
+font-size .footer-dark h3 = 16px
+font-size .footer-dark ul = 14px
+font-size .footer-dark .item.social > a =  20px;
+
+    Define css MissionSystemAdmin
