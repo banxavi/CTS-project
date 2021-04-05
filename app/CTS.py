@@ -153,7 +153,21 @@ def updatepassforgot():
 # @app.route('/forgotpsw')
 # def forgotpsw():
 #     return render_template('forgot_password.html')
+#Admin Block Account
+@app.route("/blockuser/<string:id_user>", methods=["GET"])
+def blockuser(id_user):
+    cursor = mysql.connection.cursor()
+    cursor.execute("UPDATE employee SET Status = '0' WHERE Employee_Id = (%s)",(id_user,))
+    mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
 
+#Admin Unlock Account 
+@app.route("/unlockuser/<string:id_user>", methods=["GET"])
+def unlockuser(id_user):
+    cursor = mysql.connection.cursor()
+    cursor.execute("UPDATE employee SET Status = '1' WHERE Employee_Id = (%s)",(id_user,))
+    mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
 
 #Form forgot password when verify link Gmail
 # @app.route('/verifyforgot')
@@ -174,7 +188,13 @@ def mission():
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-    return render_template("usermanagement.html")
+    cursor = mysql.connection.cursor() 
+    cursor.execute('SELECT * FROM employee')
+    account = cursor.fetchall()
+    a = 1
+    cursor.execute("SELECT * FROM cts.employee;")
+    x = cursor.fetchall()
+    return render_template("usermanagement.html",account = account ,x=x)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
