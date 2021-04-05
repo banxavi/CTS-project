@@ -9,13 +9,16 @@ import re
 from pymysql import cursors
 from werkzeug.utils import format_string
 import DTO
+import hashlib,uuid
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = '123456'
-# app.config['MYSQL_DB'] = 'cts'
-# mysql = MySQL(app) 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_DB'] = 'cts'
+mysql = MySQL(app) 
+
+
 
 
 # Function LOGOUT
@@ -29,23 +32,34 @@ def home():
 def logout():
     return render_template("login.html")
     
-# Login    
-@app.route('/logi',methods=['GET','POST'])
+# Function login
+@app.route('/login',methods=['GET','POST'])
 def login():
-    loi = ""
+    loi = None
+    global tmaname
+    global tma
+    global idempl
+    # try:
     if request.method == 'POST':
-        user = request.form['idname']
-        psw = request.form['password']
-        if user=="abc" and psw=="123":
-            session['idname'] = request.form['idname']  
-            return render_template('home.html')
-        if user=="abcd" and psw =="123":
-            session['idname'] = request.form['idname']     
-            return render_template('home.html')
-        else:
-                loi = 'Tài khoản hoặc mật khẩu sai'
-    return render_template("login.html",loi=loi)
+        tma = request.form['idname']
+        password = request.form['password']
+        passhash = hashlib.md5(password.encode()).hexdigest()
+        cursor = mysql.connection.cursor() 
+        cursor.execute('SELECT Email, Password FROM employee WHERE email = %s AND password = %s', (tma,  passhash,))
+        account = cursor.fetchone()
 
+        if tma==configadmin.username and password==configadmin.password:
+            session['idname'] = request.form['idname']  
+            return render_template('/home.html' )
+
+        if account:
+            session['idname'] = request.form['idname']      
+            return render_template('/home.html')
+
+        else:
+            loi = 'Tài khoản hoặc mật khẩu sai'
+    return render_template("login.html",loi=loi)
+    
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
 def register():
