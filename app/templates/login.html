@@ -70,8 +70,8 @@ Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></di
             <div class="field">
               <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"> 
             </div>
-            {% if loidk %}
-            <p style="color: red;"><strong>Thông báo:</strong> {{ loidk }}
+            {% if errorres %}
+            <p style="color: red;"><strong>Thông báo:</strong> {{ errorres }}
              {% endif %}
              
 <div class="field btn">
