@@ -48,7 +48,7 @@ def login():
         cursor.execute('SELECT Email, Password FROM employee WHERE email = %s AND password = %s', (tma,  passhash,))
         account = cursor.fetchone()
 
-        if tma==configadmin.username and password==configadmin.password:
+        if tma==configadmin.idname and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
 
