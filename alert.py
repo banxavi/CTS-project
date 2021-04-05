@@ -8,6 +8,7 @@ forgotfailemail = "Email không tồn tại hệ thống"
 #Alert admin manage mission
 addmissonsucc = "Thêm nhiệm vụ thành công"
 addmissionfail = "Thêm nhiệm vụ thất bại"
+errordate = "Thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
 editmissionsucc = "Sửa nhiệm vụ thành công"
 deletemissionsucc = "Xóa nhiệm vụ thành công"
 #Alert block employee

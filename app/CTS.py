@@ -1,21 +1,32 @@
-from typing import List
+from typing import ContextManager
+from flask.globals import g
 from flask.templating import render_template
-from flask import Flask, render_template, redirect,url_for,request,flash,session,sessions
+from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
 from app import app
-from flask_mysqldb import MySQL 
-import MySQLdb.cursors 
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 import pymysql
 import re
+import smtplib
+import ssl
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from pymysql import cursors
 from werkzeug.utils import format_string
-import DTO
+from flask_mail import Mail, Message
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import alert
+from datetime import *
+import pyautogui as pag
+
+
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = '123456'
-# app.config['MYSQL_DB'] = 'cts'
-# mysql = MySQL(app) 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '123456'
+app.config['MYSQL_DB'] = 'cts'
+mysql = MySQL(app) 
 
 
 # Function LOGOUT
@@ -71,16 +82,101 @@ def forgotpsw():
 # def verifyforgot():
 #     return render_template('verifyforgot.html')
 
+
 # Admin Management Mission
-@app.route('/mission')
+@app.route('/mission',methods=['GET','POST'])
 def mission():
-    # with open("dummydataTask.json", "r",encoding="utf8") as fin:
-    #     data = json.load(fin)
-    # Task = data 
-    # print(Task[1])
-    # print(type(Task))
-    Task = DTO.Myreq
-    return render_template("missionsystemadmin.html",Task1=Task)
+    cursor = mysql.connection.cursor()
+    cursor.execute('select * from mission')
+    task = cursor.fetchall()
+    return render_template('missionsystemadmin.html',task=task)
+
+
+@app.route('/viewmission', methods=['GET','POST'])
+def viewmission():
+    if request.method == 'POST':
+        id = request.form['id']
+        cursor = mysql.connection.cursor()
+        sqlview = 'select employee.Name from process,employee \
+        where  process.Employee_Id=employee.Employee_Id  and Mission_Id = %s'
+        cursor.execute(sqlview,id)
+        view = cursor.fetchall()
+        for a in view:
+            flash("{}".format(a[0]))
+        return redirect(url_for('mission'))
+
+# Admin add mission
+@app.route('/addmission',methods=["GET","POST"])
+def addmission():
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        name = request.form['name']
+        descr = request.form['descr']
+        startdate = request.form['startdate']
+        enddate = request.form['enddate']
+        point = request.form['point']
+        limit = request.form['limit']
+        start = datetime.strptime(startdate,"%Y-%m-%d" )
+        end = datetime.strptime(enddate,"%Y-%m-%d")
+        if start >= end  :
+            # flash("{}".format(alert.errordate))
+            pag.alert(text=alert.errordate, title="Thông báo:")
+            return redirect(url_for('mission'))
+        else :
+            sqlinsert = 'INSERT INTO `cts`.`mission` (`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s, %s, %s,%s,%s,%s)'
+            val = (name,descr,startdate,enddate,limit,point)
+            cursor.execute(sqlinsert,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.addmissonsucc))
+            return redirect(url_for('mission'))
+        
+# Admin edit mission
+@app.route('/editmission',methods=["GET","POST"])
+def editmission():
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        descr = request.form['descr']
+        startdate = request.form['startdate']
+        enddate = request.form['enddate']
+        point = request.form['point']
+        limit = request.form['limit']
+        state1 = 1
+        state0 = 0
+        start = datetime.strptime(startdate,"%Y-%m-%d" )
+        end = datetime.strptime(enddate,"%Y-%m-%d")
+        if start >= end:
+            # flash("{}".format(alert.errordate))
+            pag.alert(text=alert.errordate, title="Thông báo:")
+            return redirect(url_for('mission'))
+        elif int(limit) >=1:
+            sqlupdate = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
+                WHERE (`Mission_Id` = %s)'
+            val = (state1,name,descr,startdate,enddate,limit,point,id,)
+            cursor.execute(sqlupdate,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.editmissionsucc))
+            return redirect(url_for('mission'))
+        elif int(limit)<=0 :
+            sqlupdate = 'UPDATE `cts`.`mission` SET State = %s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
+                WHERE (`Mission_Id` = %s)'    
+            val = (state0,name,descr,startdate,enddate,limit,point,id,)
+            cursor.execute(sqlupdate,val)      
+            mysql.connection.commit()
+            flash("{}".format(alert.editmissionsucc))
+            return redirect(url_for('mission'))
+
+# Admin edit mission
+@app.route('/deletemission/<id>/',methods=["GET","POST"])
+def deletemission(id):
+    cursor = mysql.connection.cursor()
+    sqldelete = 'DELETE from mission WHERE Mission_Id=%s'
+    val = id
+    cursor.execute(sqldelete,(val,))
+    mysql.connection.commit()
+    flash("{}".format(alert.deletemissionsucc))
+    return redirect(url_for('mission'))
 
 # User Management
 @app.route('/usermanagement')
