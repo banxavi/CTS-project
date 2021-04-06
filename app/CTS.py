@@ -9,13 +9,14 @@ import re
 from pymysql import cursors
 from werkzeug.utils import format_string
 import DTO
+
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = '123456'
-# app.config['MYSQL_DB'] = 'cts'
-# mysql = MySQL(app) 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'mickey321654'
+app.config['MYSQL_DB'] = 'cts'
+mysql = MySQL(app) 
 
 
 # Function LOGOUT
@@ -85,7 +86,18 @@ def mission():
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-    return render_template("usermanagement.html")
+    cursor = mysql.connection.cursor()
+    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
+    cursor.execute(query)
+    data1 = cursor.fetchall()
+    query1 ="Select employee.Name, mission.Mission_Id, mission.Title,mission.Point, process.status\
+            From((cts.employee\
+            Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
+            Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
+            Where employee.Employee_Id = 1"
+    cursor.execute(query1)
+    data = cursor.fetchall()
+    return render_template("usermanagement.html",data = data,data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
