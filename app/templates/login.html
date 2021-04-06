@@ -40,36 +40,34 @@
       </div>
 
       <div class="form-inner">
-        
+
         <form action="/logi" method="POST" class="login">
           <div class="field">
             <input type="text" value="{{
-                request.form.idname }}"  name="idname" placeholder="Email hoặc tài khoản" required>
+                request.form.idname }}" name="idname" placeholder="Email hoặc tài khoản" required>
           </div>
           <div class="field">
             <input type="password" value="{{
                 request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
-            <span><i class="fas fa-eye" onclick="myFunction()"></i></span>
           </div>
           
-        
-          
+
           {% if loi %}
           <p style="color: red;"><strong>Thông báo:</strong> {{ loi }}
             {% endif %}
-              <!-- <div class="row align-items-center remember">
+            <!-- <div class="row align-items-center remember">
                 <input type="checkbox" name="check" value="check" checked>Remember Me
             </div> -->
 
-              <div class="">
-                <a href="/forgotpassword" style="color: blue;">Bạn quên mật khẩu?</a></div>
-              <div class="field btn">
-                <div class="btn-layer">
-                </div>
-                <input type="submit" value="Xác nhận">
+            <div class="">
+              <a href="/forgotpassword" style="color: blue;">Bạn quên mật khẩu?</a></div>
+            <div class="field btn">
+              <div class="btn-layer">
               </div>
-              <div class="signup-link">
-                Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></div>
+              <input type="submit" value="Xác nhận">
+            </div>
+            <div class="signup-link">
+              Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></div>
         </form>
 
         <form action="/notiregister" method="POST" class="signup">
@@ -116,7 +114,7 @@
 </html>
 
 <style>
-  span{
+  span {
     position: absolute;
     right: 38%;
     bottom: 44%;
@@ -131,4 +129,4 @@
       x.type = "password";
     }
   }
-  </script>
+</script>

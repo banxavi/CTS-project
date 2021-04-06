@@ -12,7 +12,9 @@ from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
 import DTO
+import SQL
 import alert
+
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config.from_pyfile('MailConfig.cfg')
 app.config['MYSQL_HOST'] = 'localhost'
@@ -62,7 +64,7 @@ def register():
         link = url_for('confirm_email', token = token, _external = True)
         msg.html= render_template('form_mail.html',link = link)
         cursor = mysql.connection.cursor() 
-        cursor.execute('SELECT * FROM Employee WHERE email = %s', (email,))
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
             error = "Tài khoản này đã tồn tại"
@@ -94,7 +96,8 @@ def updatepass():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO employee (Email,Password) VALUES (%s,%s)", (email,passhash,))
+            value =(email,passhash)
+            cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
             return render_template('/home.html', email = email)
@@ -111,7 +114,7 @@ def forgotpassword():
         link = url_for('forgot_email', token = token, _external = True)
         msg.html= render_template('form_forgot_pass.html',link = link)
         cursor = mysql.connection.cursor() 
-        cursor.execute('SELECT * FROM Employee WHERE email = %s', (email,))
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if not(account):
             error = alert.forgotfailemail
@@ -142,17 +145,14 @@ def updatepassforgot():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
-            cur.execute("UPDATE employee SET password=%s WHERE email=%s",
-                        (passhash, email))
+            value = (email, passhash)
+            cur.execute(SQL.SQLUPDATEPSW,(value))
             mysql.connection.commit()
             session['idname'] = email
             return render_template('/home.html', email = email)
     return render_template("update_password.html",email =email,error = error)
 
-# #Forgot password user
-# @app.route('/forgotpsw')
-# def forgotpsw():
-#     return render_template('forgot_password.html')
+
 #Admin Block Account
 @app.route("/blockuser/<string:id_user>", methods=["GET"])
 def blockuser(id_user):
@@ -188,7 +188,7 @@ def mission():
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-
+   
     return render_template("usermanagement.html")
 # Management ward admin
 @app.route('/managementward')
