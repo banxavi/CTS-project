@@ -17,7 +17,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import alert
 import SQL
-from datetime import *
+from datetime import date, datetime,timedelta
 import pyautogui as pag
 
 
@@ -90,7 +90,9 @@ def mission():
     cursor = mysql.connection.cursor()
     cursor.execute(SQL.SQLMISSION)
     task = cursor.fetchall()
-    return render_template('missionsystemadmin.html',task=task)
+    min = datetime.now()
+    max = min + timedelta(1)
+    return render_template('missionsystemadmin.html',task=task,min=min,max=max)
 
 
 @app.route('/viewmission', methods=['GET','POST'])
@@ -100,8 +102,9 @@ def viewmission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLVIEWMISS,id)
         view = cursor.fetchall()
+        flash("Nhiệm vụ có mã {} được nhận bởi: ".format(id))
         for a in view:
-            flash("{}".format(a[0]))
+            flash("Họ tên:{} . Email:{}".format(a[0],a[1]))
         return redirect(url_for('mission'))
 
 # Admin add mission
@@ -117,12 +120,10 @@ def addmission():
         limit = request.form['limit']
         start = datetime.strptime(startdate,"%Y-%m-%d" )
         end = datetime.strptime(enddate,"%Y-%m-%d")
-        if start >= end  :
-            # flash("{}".format(alert.errordate))
-            pag.alert(text=alert.ERRORDATE, title="Thông báo:")
+        if start >= end:
+            flash("{}".format(alert.ERRORDATE))
             return redirect(url_for('mission'))
         else :
-          
             val = (name,descr,startdate,enddate,limit,point)
             cursor.execute(SQL.SQLINSERTMISSION,val)
             mysql.connection.commit()
@@ -145,12 +146,16 @@ def editmission():
         state0 = 0
         start = datetime.strptime(startdate,"%Y-%m-%d" )
         end = datetime.strptime(enddate,"%Y-%m-%d")
-        if start >= end:
-            # flash("{}".format(alert.errordate))
-            pag.alert(text=alert.ERRORDATE, title="Thông báo:")
+
+        cursor.execute(SQL.SQLVIEWMISS,id)
+        view = cursor.fetchall()
+        if view :
+            flash("{}".format(alert.USERTAKEMISSION))
+            return redirect(url_for('mission'))
+        elif start >= end:
+            flash("{}".format(alert.ERRORDATE))
             return redirect(url_for('mission'))
         elif int(limit) >=1:
-          
             val = (state1,name,descr,startdate,enddate,limit,point,id,)
             cursor.execute(SQL.SQLUPDATEMISS1,val)
             mysql.connection.commit()

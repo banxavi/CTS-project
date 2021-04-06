@@ -8,9 +8,10 @@ FORGOTFAILEMAIL = "Email không tồn tại hệ thống"
 #Alert admin manage mission
 ADDMISSONSUCC = "Thêm nhiệm vụ thành công"
 ADDMISSIONFAIL = "Thêm nhiệm vụ thất bại"
-ERRORDATE = "Thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
+ERRORDATE = "Sửa thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
 EDITMISSIONSUCC = "Sửa nhiệm vụ thành công"
 DELETEMISSIONSUCC = "Xóa nhiệm vụ thành công"
+USERTAKEMISSION = "Sửa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
 #Alert block employee
 BLOCKEMPLOYEE = "Cấm nhân viên thành công"
 #Alert user's mission
