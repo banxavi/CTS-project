@@ -50,25 +50,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for a in account %}
                             <tr>
-                                <td></td>
+                                <td>{{a.0}}</td>
+                                <td>{{a.4}}</td>
+                                <td style="text-align: center;">{{a.2}}</td>
+                                <td style="text-align: center;">{{a.6}}</td>
+                                <td style="text-align: center;">{{a.5}}</td>
                                 <td>
-                                    <img
-                                        src=(https://images.unsplash.com/photo-1497215842964-222b430dc094?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80) />
-                                </td>
-                                <td style="text-align: center">
-                                    <input style="text-align: center" type="date" value="" readonly />
-                                </td>
-                                <td style="text-align: center"></td>
-                                <td style="text-align: center"></td>
-                                <td style="text-align: center">
-                                
-                                    <a href="/view" data-toggle="modal" data-target="" class="view" title="Xem"><i
-                                            class="material-icons">remove_red_eye</i></a>
-                                    <a href="" class="delete" title="Cấm" data-toggle="tooltip">
-                                        <i class="material-icons">block</i></a>
+                                    <a href="/view" data-toggle="modal" data-target="" class="view" title="Xem"><i class="fas fa-eye"></i></a>
+                                    {%if a.5==1%}
+                                    <a href="/blockuser/{{a.0}}" onclick="return confirm('Bạn có muốn khóa tài khoản này?')"  class="delete"
+                                        title="Khóa tài khoản"><i class="fas fa-user-lock"></i></a>
+                                    {%elif a.5==0%}
+                                    <a href="/unlockuser/{{a.0}}" onclick="return confirm('Bạn có muốn mở khóa tài khoản này?')"  class="delete"
+                                        title="Mở khóa tài khoản"><i class="fas fa-unlock"></i></a>   
+                                    {%endif%} 
                                 </td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                     {% if succ %}
@@ -148,6 +148,8 @@
                         </div>
                     </div>
                     {% endfor %}
+                    <!--  -->
+
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ LOGINFAILEMAIL = "Email không chính xác"
 LOGINFAILPASSWORD = "Mật khẩu không chính xác"
 # Alert register and forgot pass
 REGISTERFAILEMAIL = "Email đã có trong hệ thống"
-FORGOTFAILEMAIL = "Email không tồn tại hệ thống"
+FORGOTFAILEMAIL = "Email không tồn tại trong hệ thống"
 #Alert admin manage mission
 ADDMISSONSUCC = "Thêm nhiệm vụ thành công"
 ADDMISSIONFAIL = "Thêm nhiệm vụ thất bại"

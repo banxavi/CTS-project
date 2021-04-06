@@ -10,12 +10,10 @@ SQLUPDATEMISS0 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Descripti
 SQLDELETEMISS = 'DELETE from mission WHERE Mission_Id=%s'
 # REGISTER
 SQLREGISTER = 'INSERT INTO employee (Email,Password) VALUES (%s,%s)'
-SQLCOMPEMAIL = 'SELECT Email FROM Employee WHERE email = %s'
+SQLSELECTEMAIL = 'SELECT Email FROM Employee WHERE Email = %s'
 #UPDATE PASSOWRD
-SQLUPDATEPSW = 'UPDATE employee SET password=%s WHERE email=%s'
+SQLUPDATEPSW = 'UPDATE employee SET password=%s WHERE Email=%s'
 #LOCK ACCOUNT
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
-
-

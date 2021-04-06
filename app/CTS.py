@@ -4,37 +4,40 @@ from flask.templating import render_template
 from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
 from app import app
 from flask_mysqldb import MySQL
-import MySQLdb.cursors
-import pymysql
-import re
-import smtplib
-import ssl
+import hashlib
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from flask_mail import Mail, Message
+from pymysql import cursors
+from werkzeug.utils import format_string
+import DTO
+import SQL
+import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from pymysql import cursors
 from werkzeug.utils import format_string
 from flask_mail import Mail, Message
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import alert
 import SQL
 from datetime import *
 import pyautogui as pag
 
-
+app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'cts'
-mysql = MySQL(app) 
 
+
+mysql = MySQL(app) 
+mail = Mail(app)
+s = URLSafeTimedSerializer('thisisascrect!')
 
 # Function LOGOUT
 @app.route('/')
 def home():
     return render_template("home.html")
-
 
 # Logout account
 @app.route('/logout')
@@ -61,22 +64,118 @@ def login():
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
 def register():
-    return render_template("notification_register.html")
+    error = ""
+    if request.method == 'POST':
+        email = request.form['email']
+        token = s.dumps(email, salt='email-confirm')
+        msg = Message('Confirm email',sender="ctsinternshipqnu@gmail.com", recipients=[email])
+        link = url_for('confirm_email', token = token, _external = True)
+        msg.html= render_template('form_mail.html',link = link)
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        account = cursor.fetchone()
+        if account:
+            error = "Tài khoản này đã tồn tại"
+        else:
+            mail.send(msg)
+            return render_template('notification_register.html')
+    return render_template("login.html", errorres = error)     
+
+#Accept link gmail
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=36000)
+        return redirect(url_for('updatepass', email = email))
+    except SignatureExpired:
+        return render_template('overtime_mail.html')
+
 
 # Update password when verify link gmail
 @app.route('/updatepass',methods=['GET','POST'])
 def updatepass():
-    return render_template("update_password.html")
-    # forgot password 
+    error = ""
+    email = request.args.get('email', None)
+    if request.method == 'POST':
+        password = request.form['password']
+        pass_confirm = request.form['pass_confirm']
+        if password != pass_confirm:
+            error = alert.loginfailpassword
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest() 
+            cur = mysql.connection.cursor()
+            value =(email,passhash)
+            cur.execute(SQL.SQLREGISTER,(value))
+            mysql.connection.commit()
+            session['idname'] = email
+            return render_template('/home.html', email = email)
+    return render_template("update_password.html",email =email,error = error)
+
+# forgot password 
 @app.route('/forgotpassword',methods=['GET','POST'])
 def forgotpassword():
-    return render_template("forgot_password.html")
+    error = ""
+    if request.method == 'POST':
+        email = request.form['email']
+        token = s.dumps(email, salt='email-confirm')
+        msg = Message('Confirm email',sender="ctsinternshipqnu@gmail.com", recipients=[email])
+        link = url_for('forgot_email', token = token, _external = True)
+        msg.html= render_template('form_forgot_pass.html',link = link)
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        account = cursor.fetchone()
+        if not(account):
+            error = alert.FORGOTFAILEMAIL
+        else:
+            mail.send(msg)
+            return render_template('notification_register.html')
+    return render_template("forgot_password.html",error = error)
 
-#Forgot password user
-@app.route('/forgotpsw')
-def forgotpsw():
-    return render_template('forgot_password.html')
+#Accept link mail forgot password
+@app.route('/forgot_email/<token>')
+def forgot_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=36000)
+        return redirect(url_for('updatepassforgot', email = email))
+    except SignatureExpired:
+        return render_template('overtime_mail.html')
 
+#Update Password forgot
+@app.route('/updatepassforgot',methods=['GET','POST'])
+def updatepassforgot():
+    error = ""
+    email = request.args.get('email', None)
+    if request.method == 'POST':
+        password = request.form['password']
+        pass_confirm = request.form['pass_confirm']
+        if password != pass_confirm:
+            error = alert.loginfailpassword
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest() 
+            cur = mysql.connection.cursor()
+            value = (email, passhash)
+            cur.execute(SQL.SQLUPDATEPSW,(value))
+            mysql.connection.commit()
+            session['idname'] = email
+            return render_template('/home.html', email = email)
+    return render_template("update_password.html",email =email,error = error)
+
+
+#Admin Block Account
+@app.route("/blockuser/<string:id_user>", methods=["GET"])
+def blockuser(id_user):
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("UPDATE employee SET Status = '0' WHERE Employee_Id = (%s)",(id_user,))
+    # mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
+
+#Admin Unlock Account 
+@app.route("/unlockuser/<string:id_user>", methods=["GET"])
+def unlockuser(id_user):
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("UPDATE employee SET Status = '1' WHERE Employee_Id = (%s)",(id_user,))
+    # mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
 
 #Form forgot password when verify link Gmail
 # @app.route('/verifyforgot')
@@ -176,6 +275,7 @@ def deletemission(id):
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
+   
     return render_template("usermanagement.html")
 # Management ward admin
 @app.route('/managementward')
