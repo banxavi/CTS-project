@@ -1,14 +1,23 @@
-from typing import List
+from typing import ContextManager
+from flask.globals import g
 from flask.templating import render_template
-from flask import Flask, render_template, redirect,url_for,request,flash,session,sessions
+from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
 from app import app
-from flask_mysqldb import MySQL 
-import MySQLdb.cursors 
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 import pymysql
 import re
+import smtplib
+import ssl
+import configadmin
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from pymysql import cursors
 from werkzeug.utils import format_string
-import DTO
+from flask_mail import Mail, Message
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import hashlib,uuid
+
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -45,7 +54,7 @@ def login():
         cursor.execute('SELECT Email, Password FROM employee WHERE email = %s AND password = %s', (tma,  passhash,))
         account = cursor.fetchone()
 
-        if tma==configadmin.idname and password==configadmin.password:
+        if tma==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
 
