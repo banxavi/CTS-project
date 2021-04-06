@@ -4,7 +4,7 @@ loginfailemail = "Email không chính xác"
 loginfailpassword = "Mật khẩu không chính xác"
 # Alert register and forgot pass
 registerfailemail = "Email đã có trong hệ thống"
-forgotfailemail = "Email không tồn tại hệ thống"
+forgotfailemail = "Email không tồn tại"
 #Alert admin manage mission
 addmissonsucc = "Thêm nhiệm vụ thành công"
 addmissionfail = "Thêm nhiệm vụ thất bại"
@@ -22,5 +22,3 @@ addwardsucc = "Thêm phần thưởng thành công"
 addwardfail = "Thêm phần thưởng thất bại"
 editwardsucc = "Sửa phần thưởng thành công"
 deletwardsucc = "Xóa phần thưởng thành công"
-
-

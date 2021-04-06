@@ -16,32 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `employee`
+-- Table structure for table `process`
 --
 
-DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `process`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee` (
-  `Employee_Id` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(55) DEFAULT NULL,
-  `Email` varchar(255) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL,
-  `Image` binary(100) DEFAULT NULL,
-  `Status` int DEFAULT '1',
-  `Point` int DEFAULT NULL,
-  PRIMARY KEY (`Employee_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `process` (
+  `Employee_Id` int DEFAULT NULL,
+  `Mission_Id` int DEFAULT NULL,
+  `Status` int DEFAULT NULL,
+  `EndDate` datetime DEFAULT NULL,
+  `Process_Id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`Process_Id`),
+  KEY `FK_Employee_Id_idx` (`Employee_Id`),
+  KEY `FK_Mission_Id_idx` (`Mission_Id`),
+  CONSTRAINT `FK_Employee_Id` FOREIGN KEY (`Employee_Id`) REFERENCES `employee` (`Employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_Mission_Id` FOREIGN KEY (`Mission_Id`) REFERENCES `mission` (`Mission_Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee`
+-- Dumping data for table `process`
 --
 
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,NULL,'ducnguyenqn22@gmail.com','123',NULL,1,0),(2,NULL,'phuocnguyenqn@gmail.com','123',NULL,0,0),(3,NULL,'banxavi@gmail.com','123',NULL,1,0);
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+LOCK TABLES `process` WRITE;
+/*!40000 ALTER TABLE `process` DISABLE KEYS */;
+/*!40000 ALTER TABLE `process` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-05 10:29:14
+-- Dump completed on 2021-03-31 11:37:02
