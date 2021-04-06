@@ -100,7 +100,7 @@ def updatepass():
         password = request.form['password']
         pass_confirm = request.form['pass_confirm']
         if password != pass_confirm:
-            error = alert.loginfailpassword
+            error = alert.COMFIRMFAILPASSWORD
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
@@ -149,7 +149,7 @@ def updatepassforgot():
         password = request.form['password']
         pass_confirm = request.form['pass_confirm']
         if password != pass_confirm:
-            error = alert.loginfailpassword
+            error = alert.COMFIRMFAILPASSWORD
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
