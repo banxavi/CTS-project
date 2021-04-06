@@ -12,6 +12,7 @@ ERRORDATE = "Sửa thất bại! Ngày bắt đầu phải nhỏ hơn ngày kế
 EDITMISSIONSUCC = "Sửa nhiệm vụ thành công"
 DELETEMISSIONSUCC = "Xóa nhiệm vụ thành công"
 USERTAKEMISSION = "Sửa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
+DELETEUSERMISSION =  "Xóa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
 #Alert block employee
 BLOCKEMPLOYEE = "Cấm nhân viên thành công"
 #Alert user's mission

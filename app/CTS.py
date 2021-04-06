@@ -173,10 +173,16 @@ def editmission():
 def deletemission(id):
     cursor = mysql.connection.cursor()
     val = id
-    cursor.execute(SQL.SQLDELETEMISS,(val,))
-    mysql.connection.commit()
-    flash("{}".format(alert.DELETEMISSIONSUCC))
-    return redirect(url_for('mission'))
+    cursor.execute(SQL.SQLVIEWMISS,(val,))
+    view = cursor.fetchall()
+    if view :
+        flash("{}".format(alert.DELETEUSERMISSION))
+        return redirect(url_for('mission'))
+    else :
+        cursor.execute(SQL.SQLDELETEMISS,(val,))
+        mysql.connection.commit()
+        flash("{}".format(alert.DELETEMISSIONSUCC))
+        return redirect(url_for('mission'))
 
 # User Management
 @app.route('/usermanagement')
