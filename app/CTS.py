@@ -16,6 +16,7 @@ from flask_mail import Mail, Message
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import alert
+import SQL
 from datetime import *
 import pyautogui as pag
 
@@ -87,7 +88,7 @@ def forgotpsw():
 @app.route('/mission',methods=['GET','POST'])
 def mission():
     cursor = mysql.connection.cursor()
-    cursor.execute('select * from mission')
+    cursor.execute(SQL.SQLMISSION)
     task = cursor.fetchall()
     return render_template('missionsystemadmin.html',task=task)
 
@@ -97,9 +98,7 @@ def viewmission():
     if request.method == 'POST':
         id = request.form['id']
         cursor = mysql.connection.cursor()
-        sqlview = 'select employee.Name from process,employee \
-        where  process.Employee_Id=employee.Employee_Id  and Mission_Id = %s'
-        cursor.execute(sqlview,id)
+        cursor.execute(SQL.SQLVIEWMISS,id)
         view = cursor.fetchall()
         for a in view:
             flash("{}".format(a[0]))
@@ -123,9 +122,9 @@ def addmission():
             pag.alert(text=alert.ERRORDATE, title="Thông báo:")
             return redirect(url_for('mission'))
         else :
-            sqlinsert = 'INSERT INTO `cts`.`mission` (`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s, %s, %s,%s,%s,%s)'
+          
             val = (name,descr,startdate,enddate,limit,point)
-            cursor.execute(sqlinsert,val)
+            cursor.execute(SQL.SQLINSERTMISSION,val)
             mysql.connection.commit()
             flash("{}".format(alert.ADDMISSONSUCC))
             return redirect(url_for('mission'))
@@ -151,18 +150,15 @@ def editmission():
             pag.alert(text=alert.ERRORDATE, title="Thông báo:")
             return redirect(url_for('mission'))
         elif int(limit) >=1:
-            sqlupdate = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
-                WHERE (`Mission_Id` = %s)'
+          
             val = (state1,name,descr,startdate,enddate,limit,point,id,)
-            cursor.execute(sqlupdate,val)
+            cursor.execute(SQL.SQLUPDATEMISS1,val)
             mysql.connection.commit()
             flash("{}".format(alert.EDITMISSIONSUCC))
             return redirect(url_for('mission'))
-        elif int(limit)<=0 :
-            sqlupdate = 'UPDATE `cts`.`mission` SET State = %s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
-                WHERE (`Mission_Id` = %s)'    
+        elif int(limit)<=0 :   
             val = (state0,name,descr,startdate,enddate,limit,point,id,)
-            cursor.execute(sqlupdate,val)      
+            cursor.execute(SQL.SQLUPDATEMISS0,val)      
             mysql.connection.commit()
             flash("{}".format(alert.EDITMISSIONSUCC))
             return redirect(url_for('mission'))
@@ -171,9 +167,8 @@ def editmission():
 @app.route('/deletemission/<id>/',methods=["GET","POST"])
 def deletemission(id):
     cursor = mysql.connection.cursor()
-    sqldelete = 'DELETE from mission WHERE Mission_Id=%s'
     val = id
-    cursor.execute(sqldelete,(val,))
+    cursor.execute(SQL.SQLDELETEMISS,(val,))
     mysql.connection.commit()
     flash("{}".format(alert.DELETEMISSIONSUCC))
     return redirect(url_for('mission'))
