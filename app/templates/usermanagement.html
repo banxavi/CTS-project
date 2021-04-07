@@ -50,8 +50,8 @@
                         <tbody>
                             {% for  a in data1 %}
                             <tr>
-                                <td style="text-align: center" >{{a.0}}</td>
-                                <td><img src="/app/images/rose.jpg"  height = "50" width="50"/></td>
+                                <td>{{a.0}}</td>
+                                <td><img src="{{ url_for('static', filename='hinhc.png') }}"  height = "50" width="50"/></td>
                                 <td style="text-align: center">{{a.1}}</td>
                                 <td style="text-align: center">{{a.5}}</td>
                                 {% if a.4 == 1  %}
@@ -60,20 +60,22 @@
                                 {% if a.4== 0 %}
                                 <td style="text-align: center">Không Hoạt Động</td>
                                 {% endif %}
-                                <td>
-                                <a href="/view" data-toggle="modal" action data-target="#modalview" class="view" title="Xem"><i
+
+                                <td style="text-align: center">
+                                    <a href="/view" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
                                             class="material-icons">remove_red_eye</i></a>
                                             <a href="" class="delete" title="Cấm" data-toggle="tooltip">
                                         <i class="material-icons">block</i></a>
                                 </td>
                             </tr>
                            {% endfor %}
-                        </tbody>                 
+                        </tbody>
+                                                   
                     </table>
                 </div>
         </div>
         {% for a in data1 %}
-         <div id="modalview" class="modal fade" role="dialog">
+         <div id="modalview{{a.0}}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -135,7 +137,13 @@
                             </div>
                         </div>
                     </div>
-    {% endfor %}
+                    {% endfor %}
+                    <!--  -->
+
+                </div>
+            </div>
+        </div>
+    </form>
 </body>
 </html>
 {% endblock %}

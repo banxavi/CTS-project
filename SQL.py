@@ -1,9 +1,9 @@
+#Mission management
 SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
 and Mission_Id = %s'
-SQLVIEWUSER = 'Select Employee_Id, Name, Email,Image,Status,Point from cts.employee order by Employee_Id ASC'
 SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email,\
 employee.POINT,process.status,mission.Title from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
