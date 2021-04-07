@@ -13,8 +13,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='usermanagement.css') }}" />
     <script>
         $(document).ready(function () {
@@ -22,11 +24,8 @@
         });
     </script>
 </head>
-
 <body>
-    <form action="/usermanagement" method="POST" class="form-group">
         <div>
-            <div>
                 <div class="table-wrapper">
                     <div class="table-title">
                         <div class="row" style="margin-top: 55px">
@@ -37,7 +36,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <table id="example" class="table table-striped table-hover table-bordered">
                         <thead>
                         
@@ -52,8 +50,8 @@
                         <tbody>
                             {% for  a in data1 %}
                             <tr>
-                                <td><input type="text" class="form-control" name="employee_id" value ={{a.0}} readonly></td>
-                                <td><img src="{{url_for('static', filename='/static/rose.jpg')}}"  height = "50" width="50"/></td>
+                                <td style="text-align: center" >{{a.0}}</td>
+                                <td><img src="/app/images/rose.jpg"  height = "50" width="50"/></td>
                                 <td style="text-align: center">{{a.1}}</td>
                                 <td style="text-align: center">{{a.5}}</td>
                                 {% if a.4 == 1  %}
@@ -62,31 +60,28 @@
                                 {% if a.4== 0 %}
                                 <td style="text-align: center">Không Hoạt Động</td>
                                 {% endif %}
-                                <td style="text-align: center">
-                                    <a href="/view" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
+                                <td>
+                                <a href="/view" data-toggle="modal" action data-target="#modalview" class="view" title="Xem"><i
                                             class="material-icons">remove_red_eye</i></a>
-                                    <a href="" class="delete" title="Cấm" data-toggle="tooltip">
+                                            <a href="" class="delete" title="Cấm" data-toggle="tooltip">
                                         <i class="material-icons">block</i></a>
                                 </td>
                             </tr>
                            {% endfor %}
-                        </tbody>
-                                                   
+                        </tbody>                 
                     </table>
-                      <!-- Modal VIEW haha -->
-                    {% for a in data1  %}
-                    <div class="modal fade" id="modalview{{a.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                </div>
+        </div>
+        {% for a in data1 %}
+         <div id="modalview" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
                             <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Thông Tin Chi Tiết</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Xem thông tin nhân viên</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST">
+                                        <div class="form-group">
                                             <div class="row">
                                                 <div class="col">
                                                     <label>ID Nhân viên:</label>
@@ -95,24 +90,23 @@
                                                 </div>
                                                 <div class="col">
                                                     <label>Họ và tên:</label>
-                                                    <input type="text" class="form-control" value="{{a.1}}"  readonly />
+                                                    <input type="text" class="form-control" value="{{a.1}}" readonly />
                                                 </div>
                                             </div>
-                                </div>
-                                                <div class="form-group">
-                                                    <label>Điểm hiện tại:</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Điểm hiện tại:</label>
 
-                                                    <input type="text" class="form-control"  value="{{a.5}}"
-                                                        readonly />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Nhiệm vụ của user:</label>           
-                                                </div>
+                                            <input type="text" class="form-control" name="address" value="{{a.5}}"
+                                                readonly />
+                                        </div>
 
-                                        <table class="table table-striped table-hover table-bordered">
-                                            
+                                        <div class="form-group">
+                                            <label>Nhiệm vụ của user:</label>
+                                           
+                                        </div>
+                                        <table id="example" class="table table-striped table-hover table-bordered">
                                             <thead>
-                                            
                                                 <tr style="text-align: center">
                                                     <th>ID nhiệm vụ</th>
                                                     <th>Điểm<i class="fa fa-sort"></i></th>
@@ -121,38 +115,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                           
-                                                {% for i in data  %}
-                                                    
+                                               
                                                 <tr>
-                                                    <td style="text-align: center">{{i.1}}</td>
-                                                    <td style="text-align: center">{{i.2}}</td>
-                                                    <td style="text-align: center">{{i.4}}</td>
-                                                    <td style="text-align: center">{{i.3}}</td>
+                                                    <td style="text-align: center"></td>
+                                                    <td style="text-align: center"></td>
+                                                    <td style="text-align: center"></td>
+                                                    <td style="text-align: center"></td>
                                                 </tr>
-                                                    
-                                                {% endfor %}
-
+                                                
                                             </tbody>
-                                            
                                         </table>
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        </div>
-                        {% endfor %}
-                    
-                </div>
-            </div>
-        </div>
-    </form>
+                    </div>
+    {% endfor %}
 </body>
-<script>
-
-</script>
 </html>
 {% endblock %}

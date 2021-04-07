@@ -1,14 +1,15 @@
 from typing import List
 from flask.templating import render_template
-from flask import Flask, render_template, redirect,url_for,request,flash,session,sessions
+from flask import Flask, render_template, redirect,url_for,request,flash,session,sessions,jsonify
+from werkzeug import datastructures
 from app import app
 from flask_mysqldb import MySQL 
 import MySQLdb.cursors 
 import pymysql
 import re
 from pymysql import cursors
-from werkzeug.utils import format_string
 import DTO
+import SQL
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -86,18 +87,15 @@ def mission():
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
+    
     cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
+    
+    cursor.execute(SQL.SQLVIEWUSER)
     data1 = cursor.fetchall()
-    query1 ="Select employee.Name, mission.Mission_Id, mission.Title,mission.Point, process.status\
-            From((cts.employee\
-            Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
-            Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
-            Where employee.Employee_Id = 1"
-    cursor.execute(query1)
-    data = cursor.fetchall()
-    return render_template("usermanagement.html",data = data,data1 = data1)
+    return render_template("usermanagement.html",data1 = data1)
+
+
+
 # Management ward admin
 @app.route('/managementward')
 def managementward():
