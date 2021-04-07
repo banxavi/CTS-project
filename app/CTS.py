@@ -45,7 +45,7 @@ def index():
     elif 'idname' in session: 
         email= session['idname']
         cursor = mysql.connection.cursor() 
-        cursor.execute('SELECT * FROM employee WHERE Email = %s', (email,))
+        cursor.execute(SQL.SQLSELECTADMIN, (email,))
         table = cursor.fetchone()
         name = table[3]
         idplo = table[0]
@@ -78,7 +78,7 @@ def login():
         password = request.form['password']
         passhash = hashlib.md5(password.encode()).hexdigest()
         cursor = mysql.connection.cursor() 
-        cursor.execute('SELECT Email, Password FROM employee WHERE email = %s AND password = %s', (tma,  passhash,))
+        cursor.execute(SQL.SQLSELECTACCOUNT, (tma,  passhash,))
         account = cursor.fetchone()
 
         if tma==configadmin.username and password==configadmin.password:
