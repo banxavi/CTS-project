@@ -40,36 +40,39 @@
 
                     <table id="example" class="table table-striped table-hover table-bordered">
                         <thead>
+                        
                             <tr style="text-align: center">
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Hình</th>
-                                <th>Email</th>
+                                <th>Name</th>
                                 <th>Điểm<i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
                                 <th>Tác vụ</th>
                             </tr>
-                        </thead>
                         <tbody>
+                            {% for  a in data1 %}
                             <tr>
-                                <td></td>
-                                <td>
-                                    <img
-                                        src=(https://images.unsplash.com/photo-1497215842964-222b430dc094?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80) />
-                                </td>
+                                <td>{{a.0}}</td>
+                                <td><img src="{{ url_for('static', filename='hinhc.png') }}"  height = "50" width="50"/></td>
+                                <td style="text-align: center">{{a.1}}</td>
+                                <td style="text-align: center">{{a.5}}</td>
+                                {% if a.4 == 1  %}
+                                <td style="text-align: center">Hoạt Động</td>
+                                {% endif %}
+                                {% if a.4== 0 %}
+                                <td style="text-align: center">Không Hoạt Động</td>
+                                {% endif %}
+
                                 <td style="text-align: center">
-                                    <input style="text-align: center" type="date" value="" readonly />
-                                </td>
-                                <td style="text-align: center"></td>
-                                <td style="text-align: center"></td>
-                                <td style="text-align: center">
-                                
-                                    <a href="/view" data-toggle="modal" data-target="" class="view" title="Xem"><i
+                                    <a href="/view" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
                                             class="material-icons">remove_red_eye</i></a>
                                     <a href="" class="delete" title="Cấm" data-toggle="tooltip">
                                         <i class="material-icons">block</i></a>
                                 </td>
                             </tr>
+                           {% endfor %}
                         </tbody>
+                                                   
                     </table>
                     {% if succ %}
                     <p style="color: rgb(30, 255, 0)">
@@ -148,6 +151,8 @@
                         </div>
                     </div>
                     {% endfor %}
+                    <!--  -->
+
                 </div>
             </div>
         </div>

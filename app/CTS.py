@@ -4,38 +4,65 @@ from flask.templating import render_template
 from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
 from app import app
 from flask_mysqldb import MySQL
-import MySQLdb.cursors
-import pymysql
-import re
-import smtplib
-import ssl
-import configadmin
+import hashlib
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from flask_mail import Mail, Message
+from pymysql import cursors
+from werkzeug.utils import format_string
+import DTO
+import SQL
+import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from pymysql import cursors
 from werkzeug.utils import format_string
 from flask_mail import Mail, Message
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import hashlib,uuid
+import alert
+import SQL
+import configadmin
+from datetime import date, datetime,timedelta
+import pyautogui as pag
 
+app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'cts'
+
+
 mysql = MySQL(app) 
+mail = Mail(app)
+s = URLSafeTimedSerializer('thisisascrect!')
 
-
-# Function LOGOUT
-@app.route('/')
-def home():
-    return render_template("home.html")
-
-
+@app.route('/',methods=['GET','POST'])
+def index():
+    global email
+    global name 
+    global idplo
+    if session['idname'] =="abc":
+        return render_template('home.html')
+    elif 'idname' in session: 
+        email= session['idname']
+        cursor = mysql.connection.cursor() 
+        cursor.execute('SELECT * FROM employee WHERE Email = %s', (email,))
+        table = cursor.fetchone()
+        name = table[3]
+        idplo = table[0]
+        return render_template('home.html', name=name,idname = email)
+   
+    else:
+        return render_template('login.html')
+@app.route('/home',methods=['GET','POST'])
+def ha():
+    if 'idname' in session: 
+        return render_template('home.html')
+    else:
+        return render_template('res.html')
 # Logout account
 @app.route('/logout')
 def logout():
+    session.pop("idname",None)
     return render_template("login.html")
     
 # Login    
@@ -69,43 +96,233 @@ def login():
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
 def register():
-    return render_template("notification_register.html")
+    error = ""
+    if request.method == 'POST':
+        email = request.form['email']
+        token = s.dumps(email, salt='email-confirm')
+        msg = Message('Confirm email',sender="ctsinternshipqnu@gmail.com", recipients=[email])
+        link = url_for('confirm_email', token = token, _external = True)
+        msg.html= render_template('form_mail.html',link = link)
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        account = cursor.fetchone()
+        if account:
+            error = "Tài khoản này đã tồn tại"
+        else:
+            mail.send(msg)
+            return render_template('notification_register.html')
+    return render_template("login.html", errorres = error)     
+
+#Accept link gmail
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=36000)
+        return redirect(url_for('updatepass', email = email))
+    except SignatureExpired:
+        return render_template('overtime_mail.html')
+
 
 # Update password when verify link gmail
 @app.route('/updatepass',methods=['GET','POST'])
 def updatepass():
-    return render_template("update_password.html")
-    # forgot password 
+    error = ""
+    email = request.args.get('email', None)
+    if request.method == 'POST':
+        password = request.form['password']
+        pass_confirm = request.form['pass_confirm']
+        if password != pass_confirm:
+            error = alert.COMFIRMFAILPASSWORD
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest() 
+            cur = mysql.connection.cursor()
+            value =(email,passhash)
+            cur.execute(SQL.SQLREGISTER,(value))
+            mysql.connection.commit()
+            session['idname'] = email
+            return render_template('/home.html', email = email)
+    return render_template("update_password.html",email =email,error = error)
+
+# forgot password 
 @app.route('/forgotpassword',methods=['GET','POST'])
 def forgotpassword():
-    return render_template("forgot_password.html")
+    error = ""
+    if request.method == 'POST':
+        email = request.form['email']
+        token = s.dumps(email, salt='email-confirm')
+        msg = Message('Confirm email',sender="ctsinternshipqnu@gmail.com", recipients=[email])
+        link = url_for('forgot_email', token = token, _external = True)
+        msg.html= render_template('form_forgot_pass.html',link = link)
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        account = cursor.fetchone()
+        if not(account):
+            error = alert.FORGOTFAILEMAIL
+        else:
+            mail.send(msg)
+            return render_template('notification_register.html')
+    return render_template("forgot_password.html",error = error)
 
-#Forgot password user
-@app.route('/forgotpsw')
-def forgotpsw():
-    return render_template('forgot_password.html')
+#Accept link mail forgot password
+@app.route('/forgot_email/<token>')
+def forgot_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=36000)
+        return redirect(url_for('updatepassforgot', email = email))
+    except SignatureExpired:
+        return render_template('overtime_mail.html')
 
+#Update Password forgot
+@app.route('/updatepassforgot',methods=['GET','POST'])
+def updatepassforgot():
+    error = ""
+    email = request.args.get('email', None)
+    if request.method == 'POST':
+        password = request.form['password']
+        pass_confirm = request.form['pass_confirm']
+        if password != pass_confirm:
+            error = alert.COMFIRMFAILPASSWORD
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest() 
+            cur = mysql.connection.cursor()
+            value = (email, passhash)
+            cur.execute(SQL.SQLUPDATEPSW,(value))
+            mysql.connection.commit()
+            session['idname'] = email
+            return render_template('/home.html', email = email)
+    return render_template("update_password.html",email =email,error = error)
+
+
+#Admin Block Account
+@app.route("/blockuser/<string:id_user>", methods=["GET"])
+def blockuser(id_user):
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("UPDATE employee SET Status = '0' WHERE Employee_Id = (%s)",(id_user,))
+    # mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
+
+#Admin Unlock Account 
+@app.route("/unlockuser/<string:id_user>", methods=["GET"])
+def unlockuser(id_user):
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("UPDATE employee SET Status = '1' WHERE Employee_Id = (%s)",(id_user,))
+    # mysql.connection.commit()
+    return redirect(url_for('usermanagement'))
 
 #Form forgot password when verify link Gmail
 # @app.route('/verifyforgot')
 # def verifyforgot():
 #     return render_template('verifyforgot.html')
 
+
 # Admin Management Mission
-@app.route('/mission')
+@app.route('/mission',methods=['GET','POST'])
 def mission():
-    # with open("dummydataTask.json", "r",encoding="utf8") as fin:
-    #     data = json.load(fin)
-    # Task = data 
-    # print(Task[1])
-    # print(type(Task))
-    Task = DTO.Myreq
-    return render_template("missionsystemadmin.html",Task1=Task)
+    cursor = mysql.connection.cursor()
+    cursor.execute(SQL.SQLMISSION)
+    task = cursor.fetchall()
+    min = datetime.now()
+    max = min + timedelta(1)
+    return render_template('missionsystemadmin.html',task=task,min=min,max=max)
+
+# Show users take mission
+@app.route('/viewmission', methods=['GET','POST'])
+def viewmission():
+    if request.method == 'POST':
+        id = request.form['id']
+        cursor = mysql.connection.cursor()
+        cursor.execute(SQL.SQLVIEWMISS,id)
+        view = cursor.fetchall()
+        for a in view:
+            Title = a[5]
+        return render_template("userstakemission.html",view=view,Title=Title)
+
+
+# Admin add mission
+@app.route('/addmission',methods=["GET","POST"])
+def addmission():
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        name = request.form['name']
+        descr = request.form['descr']
+        startdate = request.form['startdate']
+        enddate = request.form['enddate']
+        point = request.form['point']
+        limit = request.form['limit']
+        start = datetime.strptime(startdate,"%Y-%m-%d" )
+        end = datetime.strptime(enddate,"%Y-%m-%d")
+        if start >= end:
+            flash("{}".format(alert.ERRORDATE))
+            return redirect(url_for('mission'))
+        else :
+            val = (name,descr,startdate,enddate,limit,point)
+            cursor.execute(SQL.SQLINSERTMISSION,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.ADDMISSONSUCC))
+            return redirect(url_for('mission'))
+        
+# Admin edit mission
+@app.route('/editmission',methods=["GET","POST"])
+def editmission():
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        descr = request.form['descr']
+        startdate = request.form['startdate']
+        enddate = request.form['enddate']
+        point = request.form['point']
+        limit = request.form['limit']
+        state1 = 1
+        state0 = 0
+        start = datetime.strptime(startdate,"%Y-%m-%d" )
+        end = datetime.strptime(enddate,"%Y-%m-%d")
+
+        cursor.execute(SQL.SQLVIEWMISS,id)
+        view = cursor.fetchall()
+        if view :
+            flash("{}".format(alert.USERTAKEMISSION))
+            return redirect(url_for('mission'))
+        elif start >= end:
+            flash("{}".format(alert.ERRORDATE))
+            return redirect(url_for('mission'))
+        elif int(limit) >=1:
+            val = (state1,name,descr,startdate,enddate,limit,point,id,)
+            cursor.execute(SQL.SQLUPDATEMISS1,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.EDITMISSIONSUCC))
+            return redirect(url_for('mission'))
+        elif int(limit)<=0 :   
+            val = (state0,name,descr,startdate,enddate,limit,point,id,)
+            cursor.execute(SQL.SQLUPDATEMISS0,val)      
+            mysql.connection.commit()
+            flash("{}".format(alert.EDITMISSIONSUCC))
+            return redirect(url_for('mission'))
+
+# Admin edit mission
+@app.route('/deletemission/<id>/',methods=["GET","POST"])
+def deletemission(id):
+    cursor = mysql.connection.cursor()
+    val = id
+    cursor.execute(SQL.SQLVIEWMISS,(val,))
+    view = cursor.fetchall()
+    if view :
+        flash("{}".format(alert.DELETEUSERMISSION))
+        return redirect(url_for('mission'))
+    else :
+        cursor.execute(SQL.SQLDELETEMISS,(val,))
+        mysql.connection.commit()
+        flash("{}".format(alert.DELETEMISSIONSUCC))
+        return redirect(url_for('mission'))
 
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-    return render_template("usermanagement.html")
+    cursor = mysql.connection.cursor()
+    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
+    cursor.execute(query)
+    data1 = cursor.fetchall()
+    return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
