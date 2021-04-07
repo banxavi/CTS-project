@@ -8,6 +8,7 @@ import hashlib
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
+from werkzeug.utils import format_string
 import DTO
 import SQL
 import alert
@@ -286,10 +287,9 @@ def deletemission(id):
 @app.route('/usermanagement')
 def usermanagement():
     cursor = mysql.connection.cursor()
-    
     cursor.execute(SQL.SQLVIEWUSER)
-    data1 = cursor.fetchall()
-    return render_template("usermanagement.html",data1 = data1)
+    EmployeeList = cursor.fetchall()
+    return render_template("usermanagement.html",EmployeeList = EmployeeList)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -304,8 +304,16 @@ def usermission():
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-   
-    return render_template('usermissionavaiable.html')
+    cursors = mysql.connection.cursor()
+    cursor = mysql.connection.cursor()
+    cursor.execute('select Mission_Id, Title, Description, StartDate,EndDate,mission.Limit ,Point, State\
+    from cts.Mission ORDER BY Mission_Id ASC')
+    Data = cursor.fetchall()
+    return render_template("usermissionavaiable.html",Data=Data)
+@app.route('/nhannhiemvu/<id>/',methods=['GET','POST'])
+def nhannhiemvu(id):
+
+    return render_template('nhiemvuuser1.html')
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
