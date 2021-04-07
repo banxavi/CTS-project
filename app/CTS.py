@@ -286,8 +286,8 @@ def deletemission(id):
 @app.route('/usermanagement')
 def usermanagement():
     cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
+    
+    cursor.execute(SQL.SQLVIEWUSER)
     data1 = cursor.fetchall()
     return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
@@ -304,7 +304,8 @@ def usermission():
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html")
+   
+    return render_template('usermissionavaiable.html')
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
