@@ -18,6 +18,7 @@ from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
 import SQL
+import mysql.connector
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 
@@ -29,6 +30,12 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'cts'
 
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="123456",
+    database="cts"
+    )
 
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -284,13 +291,7 @@ def deletemission(id):
         return redirect(url_for('mission'))
 
 # User Management
-@app.route('/usermanagement')
-def usermanagement():
-    cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
-    data1 = cursor.fetchall()
-    return render_template("usermanagement.html",data1 = data1)
+
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -307,6 +308,3 @@ def usermission():
 def usermissionavaiable():
     return render_template("usermissionavaiable.html")
 # User profile
-# @app.route('/userprofile')
-# def userprofile():
-#     return render_template("userprofile.html")
