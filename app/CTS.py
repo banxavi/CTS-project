@@ -193,7 +193,7 @@ def mission():
     max = min + timedelta(1)
     return render_template('missionsystemadmin.html',task=task,min=min,max=max)
 
-
+# Show users take mission
 @app.route('/viewmission', methods=['GET','POST'])
 def viewmission():
     if request.method == 'POST':
@@ -201,10 +201,10 @@ def viewmission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLVIEWMISS,id)
         view = cursor.fetchall()
-        flash("Nhiệm vụ có mã {} được nhận bởi: ".format(id))
         for a in view:
-            flash("Họ tên:{} . Email:{}".format(a[0],a[1]))
-        return redirect(url_for('mission'))
+            Title = a[5]
+        return render_template("userstakemission.html",view=view,Title=Title)
+
 
 # Admin add mission
 @app.route('/addmission',methods=["GET","POST"])
@@ -286,8 +286,11 @@ def deletemission(id):
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-   
-    return render_template("usermanagement.html")
+    cursor = mysql.connection.cursor()
+    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
+    cursor.execute(query)
+    data1 = cursor.fetchall()
+    return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():

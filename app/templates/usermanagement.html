@@ -40,36 +40,39 @@
 
                     <table id="example" class="table table-striped table-hover table-bordered">
                         <thead>
+                        
                             <tr style="text-align: center">
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Hình</th>
-                                <th>Email</th>
+                                <th>Name</th>
                                 <th>Điểm<i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
                                 <th>Tác vụ</th>
                             </tr>
-                        </thead>
                         <tbody>
-                            {% for a in account %}
+                            {% for  a in data1 %}
                             <tr>
                                 <td>{{a.0}}</td>
-                                <td>{{a.4}}</td>
-                                <td style="text-align: center;">{{a.2}}</td>
-                                <td style="text-align: center;">{{a.6}}</td>
-                                <td style="text-align: center;">{{a.5}}</td>
-                                <td>
-                                    <a href="/view" data-toggle="modal" data-target="" class="view" title="Xem"><i class="fas fa-eye"></i></a>
-                                    {%if a.5==1%}
-                                    <a href="/blockuser/{{a.0}}" onclick="return confirm('Bạn có muốn khóa tài khoản này?')"  class="delete"
-                                        title="Khóa tài khoản"><i class="fas fa-user-lock"></i></a>
-                                    {%elif a.5==0%}
-                                    <a href="/unlockuser/{{a.0}}" onclick="return confirm('Bạn có muốn mở khóa tài khoản này?')"  class="delete"
-                                        title="Mở khóa tài khoản"><i class="fas fa-unlock"></i></a>   
-                                    {%endif%} 
+                                <td><img src="{{ url_for('static', filename='hinhc.png') }}"  height = "50" width="50"/></td>
+                                <td style="text-align: center">{{a.1}}</td>
+                                <td style="text-align: center">{{a.5}}</td>
+                                {% if a.4 == 1  %}
+                                <td style="text-align: center">Hoạt Động</td>
+                                {% endif %}
+                                {% if a.4== 0 %}
+                                <td style="text-align: center">Không Hoạt Động</td>
+                                {% endif %}
+
+                                <td style="text-align: center">
+                                    <a href="/view" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
+                                            class="material-icons">remove_red_eye</i></a>
+                                    <a href="" class="delete" title="Cấm" data-toggle="tooltip">
+                                        <i class="material-icons">block</i></a>
                                 </td>
                             </tr>
-                            {% endfor %}
+                           {% endfor %}
                         </tbody>
+                                                   
                     </table>
                     {% if succ %}
                     <p style="color: rgb(30, 255, 0)">

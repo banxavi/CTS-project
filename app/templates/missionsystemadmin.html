@@ -83,15 +83,18 @@
                                   {% endif %}
                                   
                                 <td style="text-align: center;">
-                                    <a href="/view" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
+                                  
+                                    <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
                                     <a href="#" data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit"
                                         title="Sửa"><i class="material-icons">edit</i></a>
-                                    <a href="/deletemission/{{a.0}}" class="delete" title="Xóa" data-toggle="tooltip"><i
-                                            class="material-icons">delete</i></a>
+                                    <a  onclick="return confirm('Bạn có chắc xóa nhiệm  này?')" href="/deletemission/{{a.0}}" 
+                                    class="delete" title="Xóa" data-toggle="tooltip">
+                                    <i class="material-icons">delete</i></a>
                                 </td>
                             </tr>
                             {% endfor %}
+                            
                         </tbody>
 
                     </table>
