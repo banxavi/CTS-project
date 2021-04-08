@@ -43,8 +43,7 @@ def home():
     elif 'idname' in session: 
         email = session['idname']
         cursor = mysql.connection.cursor() 
-        sqlimage = "select Image from employee where Email=%s"
-        cursor.execute(sqlimage,(email,))
+        cursor.execute(SQL.SQLIMAGE,(email,))
         image = cursor.fetchone()
         return render_template('home.html',img=image[0])
     else:
@@ -85,8 +84,7 @@ def login():
             error = alert.LOGINSTATUS  
         elif check:
             session['idname'] = request.form['idname']  
-            sqlimage = "select Image from employee where Email=%s"
-            cursor.execute(sqlimage,(user,))
+            cursor.execute(SQL.SQLIMAGE,(user,))
             image = cursor.fetchone()
             return render_template('home.html',img=image[0])     
              

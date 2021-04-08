@@ -17,7 +17,9 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask.templating import render_template 
 from flask_mysqldb import MySQL 
 import MySQLdb.cursors
+import alert
 from app import CTS
+import SQL
 import mysql.connector
 DATA_DIR = 'app/static/css'
 KEEP_ALIVE_DELAY = 25
@@ -31,7 +33,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-
+ 
     database="cts"
     )
 
@@ -143,7 +145,7 @@ def post():
         if save_normalized_image(target, flask.request.data):
             broadcast(message)  # Notify subscribers of completion
     except Exception:  # Output errors
-        return '{}'.format("Tải ảnh không hợp lệ")
+        return '{}'.format(alert.IMAGEERROR)
     return redirect(url_for('profile'))
 
 
@@ -171,11 +173,9 @@ def profile():
             continue
         images.append('<div><img alt="User uploaded image" src="{}" /></div>'
                       .format(path))
-
     mycursor = mydb.cursor(buffered=True)
-    sql = 'select Name,Email,Image,Point from employee where Email = %s'
     id = CTS.session['idname']
-    mycursor.execute(sql,(id,))
+    mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
     myresult = mycursor.fetchall()
     return render_template("userprofile.html",data = myresult,img=CTS.image[0])
  
@@ -185,10 +185,9 @@ def updateprofile():
     if request.method=='POST':
         name = request.form['edithoten']
         mycursor = mydb.cursor()
-        sql="Update cts.employee set Name = %s where Email=%s"
         email = CTS.session['idname']
         val = (name,email)
-        mycursor.execute(sql,val)
+        mycursor.execute(SQL.SQLUPDATEPROFILE,val)
         mydb.commit()
-        flash("Cập Nhật Thành Công")
+        flash(alert.UPDATESUCC)
         return redirect(url_for('profile'))
