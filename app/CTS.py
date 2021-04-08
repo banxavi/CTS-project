@@ -89,7 +89,7 @@ def login():
             return render_template('/home.html')
 
         else:
-            loi = 'Tài khoản hoặc mật khẩu sai'
+            loi = alert.LOGINACCOUT
     return render_template("login.html",loi=loi)
 
 # Notification register
