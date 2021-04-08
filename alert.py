@@ -30,4 +30,4 @@ DELETWARDSUCC = "Xóa phần thưởng thành công"
 #Alert Login
 LOGINACCOUNT = "Tài khoản hoặc mật khẩu sai" 
 #Alert  Register
- REGISTERACCOUNT = "Tài khoản này đã tồn tại"
+REGISTERACCOUNT = "Tài khoản này đã tồn tại"
