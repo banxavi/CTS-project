@@ -19,6 +19,7 @@
   </head>
 
   <body>
+    <span hidden="true">{{IdUser}}</span>
     <div
       id="carouselExampleIndicators"
       class="carousel slide"
@@ -148,7 +149,7 @@
           <div class="icon">
             <i class="fas fa-hand-point-up" style="color: red"></i>
           </div>
-          <div class="counter">360</div>
+          <div class="counter">{{point}}</div>
           <div class="text">Tổng điểm tháng 4</div>
         </div>
 
@@ -156,7 +157,7 @@
           <div class="icon">
             <i class="fas fa-spinner fa-spin" style="color: orange"></i>
           </div>
-          <div class="counter">4</div>
+          <div class="counter">{{doingmission}}</div>
           <div class="text">Nhiệm vụ đang làm</div>
         </div>
 
@@ -164,7 +165,7 @@
           <div class="icon">
             <i class="fas fa-check-square" style="color: rgb(0, 194, 42)"></i>
           </div>
-          <div class="counter">{{nhanvien}}13</div>
+          <div class="counter">{{donemission}}</div>
           <div class="text">Đã hoàn thành</div>
         </div>
 

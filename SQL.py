@@ -1,3 +1,19 @@
+#LOGIN
+SQLCHECKEMAIL = 'SELECT Email FROM employee WHERE Email = %s'
+SQLCHECKPASS = 'SELECT Employee_Id,Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 1'
+SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 0'
+SQLSELECTID = 'SELECT Employee_Id FROM employee WHERE email = %s'
+#HOME
+SQLHOME = 'SELECT employee.Point, count(process.Process_Id)\
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "1" \
+and employee.Employee_Id = %s'
+
+SQLHOME1 = 'SELECT count(process.Process_Id)\
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "2" \
+and employee.Employee_Id =%s '
+
 #Mission management
 SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
 
