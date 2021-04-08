@@ -29,40 +29,21 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'cts'
-
-
 mysql = MySQL(app) 
 mail = Mail(app)
 s = URLSafeTimedSerializer('thisisascrect!')
 
-@app.route('/',methods=['GET','POST'])
-def index():
-    global email
-    global name 
-    global idplo
-    if session['idname'] =="abc":
-        return render_template('home.html')
-    elif 'idname' in session: 
-        email= session['idname']
-        cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTADMIN, (email,))
-        table = cursor.fetchone()
-        name = table[3]
-        idplo = table[0]
-        return render_template('home.html', name=name,idname = email)
-   
-    else:
-        return render_template('login.html')
-@app.route('/home',methods=['GET','POST'])
-def ha():
+@app.route('/')
+def home():
     if 'idname' in session: 
         return render_template('home.html')
     else:
-        return render_template('res.html')
+        return render_template("login.html")
+
 # Logout account
 @app.route('/logout')
 def logout():
-    session.pop("idname",None)
+    session.pop('idname', None)
     return render_template("login.html")
     
 # Login    
