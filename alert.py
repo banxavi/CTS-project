@@ -29,5 +29,6 @@ EDITWARDSUCC = "Sửa phần thưởng thành công"
 DELETWARDSUCC = "Xóa phần thưởng thành công"
 #Alert Login
 LOGINACCOUNT = "Tài khoản hoặc mật khẩu sai" 
+LOGINSTATUS = "Tài khoản đã bị khóa" 
 #Alert  Register
 REGISTERACCOUNT = "Tài khoản này đã tồn tại"

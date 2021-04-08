@@ -57,13 +57,21 @@ def login():
     if request.method == 'POST':
         user = request.form['idname']
         password = request.form['password']
-        passhash = hashlib.md5(password.encode()).hexdigest()
-        cursor = mysql.connection.cursor() 
+        checkblock = cursor.fetchone()
         cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
-        account = cursor.fetchone()
+       
+    
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash))
+        account = cursor.fetchone()     
+        cursor = mysql.connection.cursor()
+        passhash = hashlib.md5(password.encode()).hexdigest()
+        
         if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
+
+        elif checkblock:
+            error = alert.LOGINSTATUS   
 
         if account:
             session['idname'] = request.form['idname']      
