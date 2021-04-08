@@ -3,6 +3,7 @@ SQLCHECKEMAIL = 'SELECT Email FROM employee WHERE Email = %s'
 SQLCHECKPASS = 'SELECT Employee_Id,Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 1'
 SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 0'
 SQLSELECTID = 'SELECT Employee_Id FROM employee WHERE email = %s'
+
 #HOME
 SQLHOME = 'SELECT employee.Point, count(process.Process_Id)\
 from process inner join \
@@ -34,6 +35,8 @@ SQLDELETEMISS = 'DELETE from mission WHERE Mission_Id=%s'
 # REGISTER
 SQLREGISTER = 'INSERT INTO employee (Email,Password) VALUES (%s,%s)'
 SQLSELECTEMAIL = 'SELECT Email FROM Employee WHERE Email = %s'
+SQLSELECTACCOUNT = 'SELECT Email, Password FROM employee WHERE email = %s AND password = %s'
+SQLSELECTADMIN = 'SELECT * FROM employee WHERE Email = %s'
 #UPDATE PASSOWRD
 SQLUPDATEPSW = 'UPDATE employee SET password=%s WHERE Email=%s'
 #LOCK ACCOUNT

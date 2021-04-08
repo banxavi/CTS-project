@@ -13,7 +13,6 @@ from flask_mail import Mail, Message
 import alert
 import SQL
 import configadmin
-
 from datetime import date, datetime, timedelta
 import pyautogui as pag
 
@@ -22,7 +21,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cts'
 
 
@@ -38,15 +37,16 @@ def home():
     global IdUser
     if 'idname' in session:
         email= session['idname']
-        cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTID, (email,))
-        table = cursor.fetchone()
-        IdUser = table[0]
-        cursor.execute(SQL.SQLHOME,(IdUser,))
-        data = cursor.fetchone()
-        cursor.execute(SQL.SQLHOME1,(IdUser,))
-        data1 = cursor.fetchone()
-        return render_template('home.html',point = data[0],doingmission = data[1],donemission = data1[0],Email = email)
+        # cursor = mysql.connection.cursor() 
+        # cursor.execute(SQL.SQLSELECTID, (email,))
+        # table = cursor.fetchone()
+        # IdUser = table[0]
+        # cursor.execute(SQL.SQLHOME,(IdUser,))
+        # data = cursor.fetchone()
+        # cursor.execute(SQL.SQLHOME1,(IdUser,))
+        # data1 = cursor.fetchone()
+        # point = data[0],doingmission = data[1],donemission = data1[0],Email = email
+        return render_template('home.html')
     else:
         return render_template("login.html")
 
@@ -63,8 +63,35 @@ def logout():
 
 @app.route('/logi', methods=['GET', 'POST'])
 def login():
- 
-    return render_template("login.html")
+    error = ""
+    global Employee_Id
+    # try:
+    if request.method == 'POST':
+        cursor = mysql.connection.cursor()
+        user = request.form['idname']
+        password = request.form['password']
+        passhash = hashlib.md5(password.encode()).hexdigest() 
+
+        cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
+        account = cursor.fetchone() 
+
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
+        checkblock = cursor.fetchone()
+
+        if user==configadmin.username and password==configadmin.password:
+            session['idname'] = request.form['idname']  
+            return render_template('/home.html' )
+
+        elif checkblock:
+            error = alert.LOGINSTATUS   
+
+        elif account:
+            Employee_Id = account[0]
+            session['idname'] = request.form['idname']     
+            return render_template('/home.html',id=id)
+        else:
+            error = alert.LOGINACCOUNT
+    return render_template("login.html", error = error)
 
 # Notification register
 
@@ -75,15 +102,14 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         token = s.dumps(email, salt='email-confirm')
-        msg = Message('Confirm email',
-                      sender="ctsinternshipqnu@gmail.com", recipients=[email])
-        link = url_for('confirm_email', token=token, _external=True)
-        msg.html = render_template('form_mail.html', link=link)
-        cursor = mysql.connection.cursor()
-        cursor.execute(SQL.SQLSELECTEMAIL, (email,))
+        msg = Message('Confirm email',sender="ctsinternshipqnu@gmail.com", recipients=[email])
+        link = url_for('confirm_email', token = token, _external = True)
+        msg.html= render_template('form_mail.html',link = link)
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTEMAIL,(email))
         account = cursor.fetchone()
         if account:
-            error = alert.REGISTERFAILEMAIL
+            error = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
@@ -112,17 +138,15 @@ def updatepass():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest()
             cur = mysql.connection.cursor()
-            value = (email, passhash)
-            cur.execute(SQL.SQLREGISTER, (value))
+            value =(email, passhash)
+            cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email=email)
-    return render_template("update_password.html", email=email, error=error)
+            return render_template('/home.html', email = email)
+    return render_template("update_password.html", email =email,error = error)
 
-# forgot password
-
-
-@app.route('/forgotpassword', methods=['GET', 'POST'])
+# forgot password 
+@app.route('/forgotpassword', methods=['GET','POST'])
 def forgotpassword():
     error = ""
     if request.method == 'POST':
@@ -312,7 +336,6 @@ def deletemission(id):
 @app.route('/usermanagement')
 def usermanagement():
   
-
     return render_template("usermanagement.html")
 
 
