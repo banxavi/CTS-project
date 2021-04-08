@@ -89,7 +89,7 @@ def login():
             return render_template('/home.html')
 
         else:
-            loi = alert.LOGINACCOUT
+            loi = alert.LOGINACCOUNT
     return render_template("login.html",loi=loi)
 
 # Notification register
@@ -106,7 +106,7 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = "Tài khoản này đã tồn tại"
+            error = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')

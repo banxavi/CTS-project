@@ -27,3 +27,7 @@ ADDWARDSUCC = "Thêm phần thưởng thành công"
 ADDWARDFAIL = "Thêm phần thưởng thất bại"
 EDITWARDSUCC = "Sửa phần thưởng thành công"
 DELETWARDSUCC = "Xóa phần thưởng thành công"
+#Alert Login
+LOGINACCOUNT = "Tài khoản hoặc mật khẩu sai" 
+#Alert  Register
+ REGISTERACCOUNT = "Tài khoản này đã tồn tại"
