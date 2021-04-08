@@ -49,23 +49,21 @@ def logout():
 # Login    
 @app.route('/logi',methods=['GET','POST'])
 def login():
-    loi = None
-    global tmaname
-    global user
-    global idempl
+    error = ""
+    global Employee_Id
     # try:
     if request.method == 'POST':
+        cursor = mysql.connection.cursor()
         user = request.form['idname']
         password = request.form['password']
-        checkblock = cursor.fetchone()
+        passhash = hashlib.md5(password.encode()).hexdigest() 
+
         cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
-       
-    
-        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash))
-        account = cursor.fetchone()     
-        cursor = mysql.connection.cursor()
-        passhash = hashlib.md5(password.encode()).hexdigest()
-        
+        account = cursor.fetchone() 
+
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
+        checkblock = cursor.fetchone()
+
         if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
@@ -73,13 +71,13 @@ def login():
         elif checkblock:
             error = alert.LOGINSTATUS   
 
-        if account:
-            session['idname'] = request.form['idname']      
-            return render_template('/home.html')
-
+        elif account:
+            Employee_Id = account[0]
+            session['idname'] = request.form['idname']     
+            return render_template('/home.html',id=id)
         else:
-            loi = alert.LOGINACCOUNT
-    return render_template("login.html",loi=loi)
+            error = alert.LOGINACCOUNT
+    return render_template("login.html", error = error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
