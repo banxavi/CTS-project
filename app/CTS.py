@@ -70,18 +70,17 @@ def logout():
 def login():
     loi = None
     global tmaname
-    global tma
+    global user
     global idempl
     # try:
     if request.method == 'POST':
-        tma = request.form['idname']
+        user = request.form['idname']
         password = request.form['password']
         passhash = hashlib.md5(password.encode()).hexdigest()
         cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTACCOUNT, (tma,  passhash,))
+        cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
         account = cursor.fetchone()
-
-        if tma==configadmin.username and password==configadmin.password:
+        if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
 
