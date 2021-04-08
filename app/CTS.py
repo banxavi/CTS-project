@@ -27,7 +27,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -90,7 +90,7 @@ def register():
         link = url_for('confirm_email', token = token, _external = True)
         msg.html= render_template('form_mail.html',link = link)
         cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        cursor.execute(SQL.SQLSELECTEMAIL,(email))
         account = cursor.fetchone()
         if account:
             error = alert.REGISTERACCOUNT 
@@ -122,15 +122,15 @@ def updatepass():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
-            value =(email,passhash)
+            value =(email, passhash)
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
             return render_template('/home.html', email = email)
-    return render_template("update_password.html",email =email,error = error)
+    return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
-@app.route('/forgotpassword',methods=['GET','POST'])
+@app.route('/forgotpassword', methods=['GET','POST'])
 def forgotpassword():
     error = ""
     if request.method == 'POST':
