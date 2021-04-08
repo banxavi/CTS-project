@@ -27,7 +27,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
+
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -72,21 +72,27 @@ def login():
         user = request.form['idname']
         psw = request.form['password']
         passhash = hashlib.md5(psw.encode()).hexdigest() 
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
+        checkblock = cursor.fetchone()
         cursor.execute(SQL.SQLCHECKPASS,(user,passhash,))
         check = cursor.fetchone()
         if configadmin.username==user and configadmin.password==psw:
             session['idname'] = request.form['idname']  
             return redirect(url_for('home')) 
             # return render_template('home.html')
+
+        elif checkblock:
+            error = alert.LOGINSTATUS  
         elif check:
             session['idname'] = request.form['idname']  
             sqlimage = "select Image from employee where Email=%s"
             cursor.execute(sqlimage,(user,))
             image = cursor.fetchone()
-            return render_template('home.html',img=image[0])          
+            return render_template('home.html',img=image[0])     
+             
         else :
-            error = 'Tài khoản hoặc mật khẩu sai' 
-    return render_template("login.html",loi=error)
+             error = alert.LOGINACCOUNT
+    return render_template("login.html",error=error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
