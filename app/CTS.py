@@ -18,6 +18,7 @@ from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
 import SQL
+import configadmin
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 
@@ -26,40 +27,57 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cts'
-
-
 mysql = MySQL(app) 
 mail = Mail(app)
 s = URLSafeTimedSerializer('thisisascrect!')
 
-# Function LOGOUT
 @app.route('/')
 def home():
-    return render_template("home.html")
+    if 'idname' in session: 
+        return render_template('home.html')
+    else:
+        return render_template("login.html")
 
 # Logout account
 @app.route('/logout')
 def logout():
+    session.pop('idname', None)
     return render_template("login.html")
     
 # Login    
 @app.route('/logi',methods=['GET','POST'])
 def login():
-    loi = ""
+    error = ""
+    global Employee_Id
+    # try:
     if request.method == 'POST':
+        cursor = mysql.connection.cursor()
         user = request.form['idname']
-        psw = request.form['password']
-        if user=="abc" and psw=="123":
+        password = request.form['password']
+        passhash = hashlib.md5(password.encode()).hexdigest() 
+
+        cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
+        account = cursor.fetchone() 
+
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
+        checkblock = cursor.fetchone()
+
+        if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
-            return render_template('home.html')
-        if user=="abcd" and psw =="123":
+            return render_template('/home.html' )
+
+        elif checkblock:
+            error = alert.LOGINSTATUS   
+
+        elif account:
+            Employee_Id = account[0]
             session['idname'] = request.form['idname']     
-            return render_template('home.html')
+            return render_template('/home.html',id=id)
         else:
-                loi = 'Tài khoản hoặc mật khẩu sai'
-    return render_template("login.html",loi=loi)
+            error = alert.LOGINACCOUNT
+    return render_template("login.html", error = error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
@@ -72,10 +90,10 @@ def register():
         link = url_for('confirm_email', token = token, _external = True)
         msg.html= render_template('form_mail.html',link = link)
         cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
+        cursor.execute(SQL.SQLSELECTEMAIL,(email))
         account = cursor.fetchone()
         if account:
-            error = "Tài khoản này đã tồn tại"
+            error = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
@@ -104,15 +122,15 @@ def updatepass():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
-            value =(email,passhash)
+            value =(email, passhash)
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
             return render_template('/home.html', email = email)
-    return render_template("update_password.html",email =email,error = error)
+    return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
-@app.route('/forgotpassword',methods=['GET','POST'])
+@app.route('/forgotpassword', methods=['GET','POST'])
 def forgotpassword():
     error = ""
     if request.method == 'POST':
