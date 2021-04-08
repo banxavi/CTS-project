@@ -302,14 +302,14 @@ def managementward():
 def usermission():
     return render_template("usermission.html")
  # Mission avaiable
-@app.route('/usermissionavaiable')
-def usermissionavaiable():
-    cursors = mysql.connection.cursor()
-    cursor = mysql.connection.cursor()
-    cursor.execute('select Mission_Id, Title, Description, StartDate,EndDate,mission.Limit ,Point, State\
-    from cts.Mission ORDER BY Mission_Id ASC')
-    Data = cursor.fetchall()
-    return render_template("usermissionavaiable.html",Data=Data)
+# @app.route('/usermissionavaiable')
+# def usermissionavaiable():
+#     cursors = mysql.connection.cursor()
+#     cursor = mysql.connection.cursor()
+#     cursor.execute('select Mission_Id, Title, Description, StartDate,EndDate,mission.Limit ,Point, State\
+#     from cts.Mission ORDER BY Mission_Id ASC')
+#     Data = cursor.fetchall()
+#     return render_template("usermissionavaiable.html",Data=Data)
 @app.route('/nhannhiemvu/<id>/',methods=['GET','POST'])
 def nhannhiemvu(id):
 
