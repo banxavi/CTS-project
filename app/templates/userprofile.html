@@ -2,12 +2,11 @@
 {% include 'header.html'%}
 {% block content %}
 <body>
-
-
+  
   
    <div class="form-group">
     <div class="col-md-8 text-right">
-      <h1 >CTS</h1>
+      <h1 >CTS TMA</h1>
     
     </div>
     </div>
@@ -15,57 +14,67 @@
     <h1 style="   font-size: 50px;
     font-weight: 700;
     color:red ; padding: 0 55px;" >CTS</h1>
-
-
-
     <div class="">
         <h1 style="text-align: center;">Thông Tin Cá Nhân</h1>
-     <div style="padding: 0 100px;" class="form-group" >
-    <img src="https://img4.thuthuatphanmem.vn/uploads/2020/03/23/anh-de-thuong-cua-rose-black-pink_051300075.jpg" alt="Avatar" style="width:30px;height:30px;border-radius: 25px;" class="avatar">
-      </div>
-    <a style="padding: 0 100px;" href="$">Upload file</a>
-    <form action= "/capnhat" method="POST"> 
+        {% for a in data %}
+     <div style="padding: 0 200px;" class="form-group" >
+        <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
+
+        <fieldset>
+            <!-- <div  id="progressbar"> -->
+            <input  style="height: 50px; width: 100px;border: 1px dashed #BBB; cursor:pointer;" 
+             value ="{{request.form['file']}}}" name="file" id="file" title="Chọn file" type="file" />
+
+          </fieldset>
     
-    {%with messages = get_flashed_messages()%}
-
-    {%if messages%}
-
-    {% for message in messages %}
-
-    <div class="alert alert-success alert-dismissable" role="alert">
-
-     <button type="button" class="close" data-dismiss="alert" aria-label ="close">
-
-         <span aria-hidden="true">&times;</span>
-
-     </button>
-        {{message}}
-
-
+      </div>
+      <div id="images"></div>
+    <form action= "/updateprofile" method="POST"> 
+    <div style="padding: 0 200px;" class="form-group">
+    <div class="col-md-6.5 text-right">
+        <label name ="editdiem"><b>Điểm:{{a.3}}</b></label>
+        
     </div>
-
-    {%endfor%}
-    {%endif%}
-    {%endwith%}
-   
-
-    <div style="padding: 0 100px;" class="form-group">
-      <div class="row">
-                <div class="col">
-                    <label for="pwd">Email:</label>
-                    <input type="email" readonly class="form-control"value="" name="editemail" required>
-                </div>
-        </div>    
     </div>
-
-    </div>
-
-    <div style="padding: 0 100px;" class = "form-group">
+    <div style="padding: 0 200px;" class="form-group">
      
+      <div class="form-group">
+          <label for="pwd">Email:</label>
+          <input type="text" readonly class="form-control"value="{{a.1}}" name="editemail" required>
+      </div>
+</div>    
+</div>
+
+    <div style="padding: 0 200px;" class="form-group">
+      <label for="usr">Họ Tên:</label>
+      <input type="text" class="form-control" value="{{a.0}}" name="edithoten" required>
+    </div>
+  
+       	
+    </div>
+    {% endfor %}
+ <div style="padding: 0 200px;"class="form-group">
+    {% with messages = get_flashed_messages() %}         
+    {% if messages %} 
+      {% for message in messages %}
+        <div  class="alert alert-success  alert-dismissible">
+         {{message}}
+          </div>              
+      {% endfor %} 
+    {% endif %} 
+  {% endwith %}
+  </div>
+    <div style="padding: 0 200px;" class = "form-group">
+        <div class="col" align="center">
+            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+        </div> 
         <div class="col-md-6.5 text-right">
         <a for="pwd" href="" data-toggle="modal" data-target="#myModal">Đổi mật khẩu</a>
         </div >
       </form>
+
+
+        
         <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -106,4 +115,105 @@
 </div>
 </body>
 
+<script>
+  function sse() {
+      var source = new EventSource('/stream');
+      source.onmessage = function(e) {
+          if (e.data == '')
+              return;
+          var data = $.parseJSON(e.data);
+          var upload_message = 'Image uploaded by ' + data['ip_addr'];
+          var image = $('<img>', {alt: upload_message, src: data['src']});
+          var container = $('<div>').hide();
+          container.append($('<div>', {text: upload_message}));
+          container.append(image);
+          $('#images').prepend(container);
+          image.load(function(){
+              container.show('blind', {}, 1000);
+          });
+      };
+  }
+  function file_select_handler(to_upload) {
+      var progressbar = $('#progressbar');
+      var status = $('#status');
+      var xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener('loadstart', function(e1){
+          status.text('uploading image');
+          progressbar.progressbar({max: e1.total});
+      });
+      xhr.upload.addEventListener('progress', function(e1){
+          if (progressbar.progressbar('option', 'max') == 0)
+              progressbar.progressbar('option', 'max', e1.total);
+          progressbar.progressbar('value', e1.loaded);
+      });
+      xhr.onreadystatechange = function(e1) {
+          if (this.readyState == 4)  {
+              if (this.status == 200)
+                  var text = 'upload complete: ' + this.responseText;
+              else
+                  var text = 'upload failed: code ' + this.status;
+              status.html(text + '<br/>Select an image');
+              progressbar.progressbar('destroy');
+          }
+      };
+      xhr.open('POST', '/post', true);
+      xhr.send(to_upload);
+  };
+  function handle_hover(e) {
+      e.originalEvent.stopPropagation();
+      e.originalEvent.preventDefault();
+      e.target.className = (e.type == 'dragleave' || e.type == 'drop') ? '' : 'hover';
+  }
+
+  $('#drop').bind('drop', function(e) {
+      handle_hover(e);
+      if (e.originalEvent.dataTransfer.files.length < 1) {
+          return;
+      }
+      file_select_handler(e.originalEvent.dataTransfer.files[0]);
+  }).bind('dragenter dragleave dragover', handle_hover);
+  $('#file').change(function(e){
+      file_select_handler(e.target.files[0]);
+      e.target.value = '';
+  });
+  sse();
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-510348-17']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
 {% endblock  %}
+<meta charset="utf-8" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/vader/jquery-ui.css" />
+<style>
+  body {
+    max-width: 800px;
+    margin: auto;
+    padding: 1em;
+    background: black;
+    color: #fff;
+    font: 16px/1.6 menlo, monospace;
+    text-align:center;
+  }
+
+  a {
+    color: #fff;
+  }
+
+  .notice {
+    font-size: 80%;
+  }
+
+
+
+</style>

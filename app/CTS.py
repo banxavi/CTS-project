@@ -27,7 +27,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -35,11 +35,27 @@ s = URLSafeTimedSerializer('thisisascrect!')
 
 @app.route('/')
 def home():
+    global image
+    if 'idname' not in session:
+        return render_template("login.html")
+    elif session['idname']=="abc":
+        return render_template('home.html')
+    elif 'idname' in session: 
+        email = session['idname']
+        cursor = mysql.connection.cursor() 
+        sqlimage = "select Image from employee where Email=%s"
+        cursor.execute(sqlimage,(email,))
+        image = cursor.fetchone()
+        return render_template('home.html',img=image[0])
+    else:
+        return render_template("login.html")
+
+@app.route('/home')
+def homeadmin():
     if 'idname' in session: 
         return render_template('home.html')
     else:
         return render_template("login.html")
-
 # Logout account
 @app.route('/logout')
 def logout():
@@ -50,34 +66,27 @@ def logout():
 @app.route('/logi',methods=['GET','POST'])
 def login():
     error = ""
-    global Employee_Id
-    # try:
+    global image
     if request.method == 'POST':
-        cursor = mysql.connection.cursor()
+        cursor = mysql.connection.cursor() 
         user = request.form['idname']
-        password = request.form['password']
-        passhash = hashlib.md5(password.encode()).hexdigest() 
-
-        cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
-        account = cursor.fetchone() 
-
-        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
-        checkblock = cursor.fetchone()
-
-        if user==configadmin.username and password==configadmin.password:
+        psw = request.form['password']
+        passhash = hashlib.md5(psw.encode()).hexdigest() 
+        cursor.execute(SQL.SQLCHECKPASS,(user,passhash,))
+        check = cursor.fetchone()
+        if configadmin.username==user and configadmin.password==psw:
             session['idname'] = request.form['idname']  
-            return render_template('/home.html' )
-
-        elif checkblock:
-            error = alert.LOGINSTATUS   
-
-        elif account:
-            Employee_Id = account[0]
-            session['idname'] = request.form['idname']     
-            return render_template('/home.html',id=id)
-        else:
-            error = alert.LOGINACCOUNT
-    return render_template("login.html", error = error)
+            return redirect(url_for('home')) 
+            # return render_template('home.html')
+        elif check:
+            session['idname'] = request.form['idname']  
+            sqlimage = "select Image from employee where Email=%s"
+            cursor.execute(sqlimage,(user,))
+            image = cursor.fetchone()
+            return render_template('home.html',img=image[0])          
+        else :
+            error = 'Tài khoản hoặc mật khẩu sai' 
+    return render_template("login.html",loi=error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
@@ -90,7 +99,7 @@ def register():
         link = url_for('confirm_email', token = token, _external = True)
         msg.html= render_template('form_mail.html',link = link)
         cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLSELECTEMAIL,(email))
+        cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
             error = alert.REGISTERACCOUNT 
@@ -302,13 +311,13 @@ def deletemission(id):
         return redirect(url_for('mission'))
 
 # User Management
-@app.route('/usermanagement')
-def usermanagement():
-    cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
-    data1 = cursor.fetchall()
-    return render_template("usermanagement.html",data1 = data1)
+# @app.route('/usermanagement')
+# def usermanagement():
+#     cursor = mysql.connection.cursor()
+#     query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
+#     cursor.execute(query)
+#     data1 = cursor.fetchall()
+#     return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -319,11 +328,11 @@ def managementward():
  # User's mission
 @app.route('/usermission')
 def usermission():
-    return render_template("usermission.html")
+    return render_template("usermission.html",img=image[0])
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html")
+    return render_template("usermissionavaiable.html",img=image[0])
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
