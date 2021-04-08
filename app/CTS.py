@@ -26,7 +26,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'mickey321654'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cts'
 
 
