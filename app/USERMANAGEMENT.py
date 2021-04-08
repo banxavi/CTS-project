@@ -15,10 +15,10 @@ from gevent.timeout import Timeout
 import flask 
 from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
 from flask.templating import render_template 
-from flask_mysqldb import MySQL
+from flask_mysqldb import MySQL 
 import MySQLdb.cursors
 import mysql.connector
-DATA_DIR = 'dataimage'
+DATA_DIR = 'app/static/css'
 KEEP_ALIVE_DELAY = 25
 MAX_IMAGE_SIZE = 800, 600
 MAX_IMAGES = 100
@@ -35,11 +35,11 @@ mydb = mysql.connector.connect(
     )
 
 
-try:  # Reset saved files on each start
-    rmtree(DATA_DIR, True)
-    os.mkdir(DATA_DIR)
-except OSError:
-    pass
+# try:  # Reset saved files on each start
+#     rmtree(DATA_DIR, True)
+#     os.mkdir(DATA_DIR)
+# except OSError:
+#     pass
 
 
 def broadcast(message):

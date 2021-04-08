@@ -1,3 +1,6 @@
+# Login SQL
+SQLCHECKEMAIL = 'SELECT Email FROM employee WHERE Email = %s'
+SQLCHECKPASS = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s'
 #Mission management
 SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
 

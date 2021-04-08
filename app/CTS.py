@@ -7,7 +7,7 @@ from flask_mysqldb import MySQL
 import hashlib
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
-from pymysql import cursors
+from pymysql import NULL, cursors
 from werkzeug.utils import format_string
 import DTO
 import SQL
@@ -18,6 +18,7 @@ from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
 import SQL
+import configadmin
 import mysql.connector
 from datetime import date, datetime,timedelta
 import pyautogui as pag
@@ -44,29 +45,36 @@ s = URLSafeTimedSerializer('thisisascrect!')
 # Function LOGOUT
 @app.route('/')
 def home():
-    return render_template("home.html")
+    if 'idname' in session: 
+        return render_template('home.html')
+    else:
+        return render_template("login.html")
 
 # Logout account
 @app.route('/logout')
 def logout():
+    session.pop('idname', None)
     return render_template("login.html")
     
 # Login    
 @app.route('/logi',methods=['GET','POST'])
 def login():
-    loi = ""
+    error = ""
     if request.method == 'POST':
+        cursor = mysql.connection.cursor() 
         user = request.form['idname']
         psw = request.form['password']
-        if user=="abc" and psw=="123":
+        cursor.execute(SQL.SQLCHECKPASS,(user,psw,))
+        check = cursor.fetchone()
+        if configadmin.username==user and configadmin.password==psw:
             session['idname'] = request.form['idname']  
             return render_template('home.html')
-        if user=="abcd" and psw =="123":
-            session['idname'] = request.form['idname']     
-            return render_template('home.html')
-        else:
-                loi = 'Tài khoản hoặc mật khẩu sai'
-    return render_template("login.html",loi=loi)
+        elif check:
+            session['idname'] = request.form['idname']  
+            return render_template('home.html')          
+        else :
+            error = 'Tài khoản hoặc mật khẩu sai' 
+    return render_template("login.html",loi=error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
