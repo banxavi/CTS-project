@@ -28,3 +28,8 @@ SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 #LOGINACCOUNT
 SQLCHECKPASS = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 1'
 SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 0'
+#SHOWPROFILEUSER
+SQLSHOWPROFILE = 'select Name,Email,Image,Point from employee where Email = %s'
+SQLUPDATEPROFILE = 'Update cts.employee set Name = %s where Email=%s'
+#SESSION IMAGE
+SQLIMAGE = "select Image from employee where Email=%s"

@@ -75,8 +75,8 @@
             <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
           </div>
-          {% if errorres %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ errorres }}
+          {% if error %}
+          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
             {% endif %}
 
             <div class="field btn">
