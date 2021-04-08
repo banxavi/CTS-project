@@ -2,8 +2,6 @@
 LOGINSUCC = "Đăng nhập thành công"
 LOGINFAILEMAIL = "Email không chính xác"
 LOGINFAILPASSWORD = "Mật khẩu không chính xác"
-#Alert Register
-COMFIRMFAILPASSWORD = "Mật khẩu nhập lại không chính xác"
 # Alert register and forgot pass
 REGISTERFAILEMAIL = "Email đã có trong hệ thống"
 FORGOTFAILEMAIL = "Email không tồn tại trong hệ thống"
@@ -27,3 +25,5 @@ ADDWARDSUCC = "Thêm phần thưởng thành công"
 ADDWARDFAIL = "Thêm phần thưởng thất bại"
 EDITWARDSUCC = "Sửa phần thưởng thành công"
 DELETWARDSUCC = "Xóa phần thưởng thành công"
+
+

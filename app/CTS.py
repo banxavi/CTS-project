@@ -9,15 +9,11 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
-import DTO
-import SQL
-import alert
+import SQL,alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from pymysql import cursors
 from werkzeug.utils import format_string
 from flask_mail import Mail, Message
-import alert
-import SQL
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 
@@ -47,19 +43,8 @@ def logout():
 # Login    
 @app.route('/logi',methods=['GET','POST'])
 def login():
-    loi = ""
-    if request.method == 'POST':
-        user = request.form['idname']
-        psw = request.form['password']
-        if user=="abc" and psw=="123":
-            session['idname'] = request.form['idname']  
-            return render_template('home.html')
-        if user=="abcd" and psw =="123":
-            session['idname'] = request.form['idname']     
-            return render_template('home.html')
-        else:
-                loi = 'Tài khoản hoặc mật khẩu sai'
-    return render_template("login.html",loi=loi)
+  
+    return render_template("login.html")
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
@@ -75,7 +60,7 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = "Tài khoản này đã tồn tại"
+            error = alert.REGISTERFAILEMAIL
         else:
             mail.send(msg)
             return render_template('notification_register.html')
@@ -100,7 +85,7 @@ def updatepass():
         password = request.form['password']
         pass_confirm = request.form['pass_confirm']
         if password != pass_confirm:
-            error = alert.COMFIRMFAILPASSWORD
+            error = alert.loginfailpassword
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
@@ -149,7 +134,7 @@ def updatepassforgot():
         password = request.form['password']
         pass_confirm = request.form['pass_confirm']
         if password != pass_confirm:
-            error = alert.COMFIRMFAILPASSWORD
+            error = alert.LOGINFAILPASSWORD
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
@@ -193,7 +178,7 @@ def mission():
     max = min + timedelta(1)
     return render_template('missionsystemadmin.html',task=task,min=min,max=max)
 
-# Show users take mission
+
 @app.route('/viewmission', methods=['GET','POST'])
 def viewmission():
     if request.method == 'POST':
@@ -201,10 +186,10 @@ def viewmission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLVIEWMISS,id)
         view = cursor.fetchall()
+        flash("Nhiệm vụ có mã {} được nhận bởi: ".format(id))
         for a in view:
-            Title = a[5]
-        return render_template("userstakemission.html",view=view,Title=Title)
-
+            flash("Họ tên:{} . Email:{}".format(a[0],a[1]))
+        return redirect(url_for('mission'))
 
 # Admin add mission
 @app.route('/addmission',methods=["GET","POST"])
@@ -286,11 +271,8 @@ def deletemission(id):
 # User Management
 @app.route('/usermanagement')
 def usermanagement():
-    cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
-    data1 = cursor.fetchall()
-    return render_template("usermanagement.html",data1 = data1)
+   
+    return render_template("usermanagement.html")
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -305,6 +287,8 @@ def usermission():
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
+    # cursor = mysql.connection.cursor()
+    # # cursor.execute(SQL.SQLSHOWUSERMISSION,(email,))
     return render_template("usermissionavaiable.html")
 # User profile
 # @app.route('/userprofile')
