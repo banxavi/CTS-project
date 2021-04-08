@@ -1,3 +1,6 @@
+SQLCHECKPASS = 'SELECT Employee_Id,Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 1'
+SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 0'
+SQLCHECKEMAIL = 'SELECT Email FROM employee WHERE Email = %s'
 #Mission management
 SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
 
@@ -18,18 +21,15 @@ SQLDELETEMISS = 'DELETE from mission WHERE Mission_Id=%s'
 # REGISTER
 SQLREGISTER = 'INSERT INTO employee (Email,Password) VALUES (%s,%s)'
 SQLSELECTEMAIL = 'SELECT Email FROM Employee WHERE Email = %s'
-SQLSELECTACCOUNT = 'SELECT Email, Password FROM employee WHERE email = %s AND password = %s'
-SQLSELECTADMIN = 'SELECT * FROM employee WHERE Email = %s'
 #UPDATE PASSOWRD
 SQLUPDATEPSW = 'UPDATE employee SET password=%s WHERE Email=%s'
 #LOCK ACCOUNT
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
-#LOGINACCOUNT
-SQLCHECKPASS = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 1'
-SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Password= %s and Status = 0'
-#SHOWPROFILEUSER
-SQLSHOWPROFILE = 'select Name,Email,Image,Point from employee where Email = %s'
-SQLUPDATEPROFILE = 'Update cts.employee set Name = %s where Email=%s'
-#SESSION IMAGE
-SQLIMAGE = "select Image from employee where Email=%s"
+#Mission User
+SQLVIEWMISSUSER = 'SELECT Mission_Id, Title, Description, StartDate,EndDate,mission.Limit ,Point, State\
+    FROM cts.Mission ORDER BY Mission_Id ASC'
+SQLTAKEMISSION = 'INSERT INTO `cts`.`process` (`Employee_Id`, `Mission_Id`, `status`) VALUES (%s,%s,%s)'
+SQLVALIDATE = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s"
+SQLGETEMP_ID = "SELECT Employee_Id FROM cts.employee where Email=%s"
+SQLUPDATEMISSION = "UPDATE cts.mission SET mission.Limit=mission.Limit-1 where Mission_Id=%s"

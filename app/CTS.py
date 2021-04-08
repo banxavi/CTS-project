@@ -20,7 +20,7 @@ import alert
 import SQL
 import configadmin
 from datetime import date, datetime,timedelta
-import pyautogui as pag
+
 
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -29,32 +29,27 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 
 app.config['MYSQL_DB'] = 'cts'
+
+
 mysql = MySQL(app) 
 mail = Mail(app)
 s = URLSafeTimedSerializer('thisisascrect!')
 
+# Function LOGOUT
 @app.route('/')
 def home():
-    global image
-    if 'idname' not in session:
-        return render_template("login.html")
-    elif session['idname']=="abc":
-        return render_template('home.html')
-    elif 'idname' in session: 
+    global idplo
+    if 'idname' in session:
         email = session['idname']
         cursor = mysql.connection.cursor() 
-        cursor.execute(SQL.SQLIMAGE,(email,))
-        image = cursor.fetchone()
-        return render_template('home.html',img=image[0])
+        cursor.execute('SELECT Employee_Id FROM employee WHERE Email = %s', (email,))
+        table = cursor.fetchone()
+        idplo = table[0]
     else:
-        return render_template("login.html")
+        return render_template('login.html')
+    return render_template('home.html', idname = email)
+   
 
-@app.route('/home')
-def homeadmin():
-    if 'idname' in session: 
-        return render_template('home.html')
-    else:
-        return render_template("login.html")
 # Logout account
 @app.route('/logout')
 def logout():
@@ -65,32 +60,28 @@ def logout():
 @app.route('/logi',methods=['GET','POST'])
 def login():
     error = ""
-    global image
     if request.method == 'POST':
         cursor = mysql.connection.cursor() 
         user = request.form['idname']
         psw = request.form['password']
-        passhash = hashlib.md5(psw.encode()).hexdigest() 
-        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
-        checkblock = cursor.fetchone()
+        passhash = hashlib.md5(psw.encode()).hexdigest()
         cursor.execute(SQL.SQLCHECKPASS,(user,passhash,))
         check = cursor.fetchone()
+        cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash))
+        checkblock = cursor.fetchone()
+        
         if configadmin.username==user and configadmin.password==psw:
             session['idname'] = request.form['idname']  
-            return redirect(url_for('home')) 
-            # return render_template('home.html')
-
+            return render_template('home.html')
         elif checkblock:
-            error = alert.LOGINSTATUS  
+            error = "Tài khoản đã bị khóa"
         elif check:
+            Employee_Id = check[0]
             session['idname'] = request.form['idname']  
-            cursor.execute(SQL.SQLIMAGE,(user,))
-            image = cursor.fetchone()
-            return render_template('home.html',img=image[0])     
-             
+            return render_template('home.html')          
         else :
-             error = alert.LOGINACCOUNT
-    return render_template("login.html",error=error)
+            error = 'Tài khoản hoặc mật khẩu sai' 
+    return render_template("login.html",loi=error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
@@ -106,7 +97,7 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = alert.REGISTERACCOUNT 
+            error = "Tài khoản này đã tồn tại"
         else:
             mail.send(msg)
             return render_template('notification_register.html')
@@ -135,15 +126,15 @@ def updatepass():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
-            value =(email, passhash)
+            value =(email,passhash)
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
             return render_template('/home.html', email = email)
-    return render_template("update_password.html", email =email,error = error)
+    return render_template("update_password.html",email =email,error = error)
 
 # forgot password 
-@app.route('/forgotpassword', methods=['GET','POST'])
+@app.route('/forgotpassword',methods=['GET','POST'])
 def forgotpassword():
     error = ""
     if request.method == 'POST':
@@ -315,13 +306,13 @@ def deletemission(id):
         return redirect(url_for('mission'))
 
 # User Management
-# @app.route('/usermanagement')
-# def usermanagement():
-#     cursor = mysql.connection.cursor()
-#     query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-#     cursor.execute(query)
-#     data1 = cursor.fetchall()
-#     return render_template("usermanagement.html",data1 = data1)
+@app.route('/usermanagement')
+def usermanagement():
+    cursor = mysql.connection.cursor()
+    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
+    cursor.execute(query)
+    data1 = cursor.fetchall()
+    return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -332,12 +323,31 @@ def managementward():
  # User's mission
 @app.route('/usermission')
 def usermission():
-    return render_template("usermission.html",img=image[0])
+    return render_template("usermission.html")
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html",img=image[0])
-# User profile
-# @app.route('/userprofile')
-# def userprofile():
-#     return render_template("userprofile.html")
+    cursor = mysql.connection.cursor()
+    cursor.execute(SQL.SQLVIEWMISSUSER)
+    Data = cursor.fetchall()
+    return render_template("usermissionavaiable.html",Data=Data)
+#Take Mission
+@app.route('/takemission/<id>/',methods=['GET','POST'])
+def takemission(id):
+    cursor = mysql.connection.cursor()
+    Employee_mail = session['idname']
+    cursor.execute(SQL.SQLGETEMP_ID,(Employee_mail,))
+    Employee_Id =cursor.fetchone()
+    cursor.execute(SQL.SQLVALIDATE,(Employee_Id[0],id))
+    Validate = cursor.fetchone()
+    if request.method == "GET":
+        if Validate:
+            flash(alert.TAKEMISSIONFAIL)
+            return redirect(url_for('usermissionavaiable'))
+        else:
+            cursor.execute(SQL.SQLTAKEMISSION,(Employee_Id[0],id,1,))
+            cursor.execute(SQL.SQLUPDATEMISSION,(id,))
+            mysql.connection.commit()
+            flash(alert.TAKEMISSION)
+            return redirect(url_for('usermissionavaiable'))
+    

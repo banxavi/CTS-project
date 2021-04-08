@@ -21,17 +21,11 @@ BLOCKEMPLOYEE = "Cấm nhân viên thành công"
 DONEMISSION = "Chúc mừng bạn đã hoàn thành nhiệm vụ"
 CANCELMISSION = "Bạn đã hủy nhiệm vụ thành công"
 #Alert mission avaiable
-TAKEMISSION = "Bạn đã nhận nhiệm vụ thành công"
+TAKEMISSION = "Nhận nhiệm vụ thành công!"
+TAKEMISSIONFAIL ="Bạn đã nhận nhiệm vụ này rồi!"
 #Alert admin manage ward
 ADDWARDSUCC = "Thêm phần thưởng thành công"
 ADDWARDFAIL = "Thêm phần thưởng thất bại"
 EDITWARDSUCC = "Sửa phần thưởng thành công"
 DELETWARDSUCC = "Xóa phần thưởng thành công"
-#Alert Login
-LOGINACCOUNT = "Tài khoản hoặc mật khẩu sai" 
-LOGINSTATUS = "Tài khoản đã bị khóa" 
-#Alert  Register
-REGISTERACCOUNT = "Tài khoản này đã tồn tại"
-#Edit profile
-UPDATESUCC = "Cập nhập thành công"
-IMAGEERROR = "Ảnh không hợp lệ"
+

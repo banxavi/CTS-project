@@ -52,8 +52,8 @@
           </div>
           
 
-          {% if error %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
+          {% if loi %}
+          <p style="color: red;"><strong>Thông báo:</strong> {{ loi }}
             {% endif %}
             <!-- <div class="row align-items-center remember">
                 <input type="checkbox" name="check" value="check" checked>Remember Me
@@ -75,8 +75,8 @@
             <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
           </div>
-          {% if error %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
+          {% if errorres %}
+          <p style="color: red;"><strong>Thông báo:</strong> {{ errorres }}
             {% endif %}
 
             <div class="field btn">

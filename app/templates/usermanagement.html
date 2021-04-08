@@ -52,9 +52,8 @@
                         <tbody>
                             {% for  a in data1 %}
                             <tr>
-  
                                 <td>{{a.0}}</td>
-                                <td><img src="{{ url_for('static',filename=a.3 )}}" style="height: 50px; width: 50px;"/></td>
+                                <td><img src="{{ url_for('static', filename='hinhc.png') }}"  height = "50" width="50"/></td>
                                 <td style="text-align: center">{{a.1}}</td>
                                 <td style="text-align: center">{{a.5}}</td>
                                 {% if a.4 == 1  %}
