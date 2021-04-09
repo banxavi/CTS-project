@@ -1,7 +1,7 @@
 from typing import ContextManager
 from flask.globals import g
 from flask.templating import render_template
-from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
+from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions,jsonify
 from app import app
 from flask_mysqldb import MySQL
 import hashlib
@@ -27,7 +27,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
 app.config['MYSQL_DB'] = 'cts'
 
 
@@ -305,14 +304,8 @@ def deletemission(id):
         flash("{}".format(alert.DELETEMISSIONSUCC))
         return redirect(url_for('mission'))
 
-# User Management
-@app.route('/usermanagement')
-def usermanagement():
-    cursor = mysql.connection.cursor()
-    query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    cursor.execute(query)
-    data1 = cursor.fetchall()
-    return render_template("usermanagement.html",data1 = data1)
+
+    
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -329,8 +322,8 @@ def usermission():
 def usermissionavaiable():
     cursor = mysql.connection.cursor()
     cursor.execute(SQL.SQLVIEWMISSUSER)
-    Data = cursor.fetchall()
-    return render_template("usermissionavaiable.html",Data=Data)
+    MissionAvaiable = cursor.fetchall()
+    return render_template("usermissionavaiable.html",MissionAvaiable=MissionAvaiable)
 #Take Mission
 @app.route('/takemission/<id>/',methods=['GET','POST'])
 def takemission(id):

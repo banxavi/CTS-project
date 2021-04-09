@@ -3,6 +3,7 @@
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,6 +22,7 @@
         });
     </script>
 </head>
+
 <body>
     <div>
         <div class=" ">
@@ -75,7 +77,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for a in Data %}
+                {% for a in MissionAvaiable %}
                 <tr>
                     <td>{{a.0}}</td>
                     <td>{{a.1}}</td>
@@ -114,7 +116,7 @@
             <p style="color: rgb(255, 0, 0);"><strong>Thông báo:</strong> {{ ac }}
                 {% endif %}
                 <!-- Modal VIEW -->
-                {% for a in Data %}
+                {% for a in MissionAvaiable %}
                 <div id="modalview{{a.0}}" class="modal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -176,5 +178,6 @@
                 </div>
                 {% endfor %}
 </body>
+
 </html>
 {% endblock %}
