@@ -33,7 +33,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
- 
+
     database="cts"
     )
 
@@ -177,7 +177,7 @@ def profile():
     id = CTS.session['idname']
     mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
     myresult = mycursor.fetchall()
-    return render_template("userprofile.html",data = myresult,img=CTS.image[0])
+    return render_template("userprofile.html",data = myresult,img=CTS.image[0],point=CTS.image[1])
  
 
 @app.route('/updateprofile',methods=['GET','POST'])

@@ -6,7 +6,7 @@ SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employ
 and Mission_Id = %s'
 
 SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email,\
-employee.POINT,process.status,mission.Title from mission, process,employee where\
+employee.POINT,process.status,mission.Title ,employee.Image from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
 
 SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s, %s, %s,%s,%s,%s)'
@@ -32,4 +32,4 @@ SQLCHECKBLOCK = 'SELECT Email,Password FROM employee WHERE Email = %s and Passwo
 SQLSHOWPROFILE = 'select Name,Email,Image,Point from employee where Email = %s'
 SQLUPDATEPROFILE = 'Update cts.employee set Name = %s where Email=%s'
 #SESSION IMAGE
-SQLIMAGE = "select Image from employee where Email=%s"
+SQLIMAGE = "select Image,Point from employee where Email=%s"
