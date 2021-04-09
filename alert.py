@@ -35,3 +35,5 @@ REGISTERACCOUNT = "Tài khoản này đã tồn tại"
 #Edit profile
 UPDATESUCC = "Cập nhập thành công"
 IMAGEERROR = "Ảnh không hợp lệ"
+#Alert List user mission
+NOTTAKEMISSION = "Chưa có người nhận"

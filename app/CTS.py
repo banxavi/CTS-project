@@ -45,7 +45,8 @@ def home():
         cursor = mysql.connection.cursor() 
         cursor.execute(SQL.SQLIMAGE,(email,))
         image = cursor.fetchone()
-        return render_template('home.html',img=image[0])
+    
+        return render_template('home.html',img=image[0],point=image[1])
     else:
         return render_template("login.html")
 
@@ -86,7 +87,7 @@ def login():
             session['idname'] = request.form['idname']  
             cursor.execute(SQL.SQLIMAGE,(user,))
             image = cursor.fetchone()
-            return render_template('home.html',img=image[0])     
+            return render_template('home.html',img=image[0],point=image[1])     
              
         else :
              error = alert.LOGINACCOUNT
@@ -139,7 +140,7 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email)
+            return render_template('/home.html', email = email,img=image[0],point="0")
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
@@ -232,6 +233,7 @@ def viewmission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLVIEWMISS,id)
         view = cursor.fetchall()
+        Title = alert.NOTTAKEMISSION
         for a in view:
             Title = a[5]
         return render_template("userstakemission.html",view=view,Title=Title)
@@ -332,11 +334,11 @@ def managementward():
  # User's mission
 @app.route('/usermission')
 def usermission():
-    return render_template("usermission.html",img=image[0])
+    return render_template("usermission.html",img=image[0],point=image[1])
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html",img=image[0])
+    return render_template("usermissionavaiable.html",img=image[0],point=image[1])
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
