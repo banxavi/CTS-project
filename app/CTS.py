@@ -45,8 +45,11 @@ def home():
         cursor = mysql.connection.cursor() 
         cursor.execute(SQL.SQLIMAGE,(email,))
         image = cursor.fetchone()
-    
-        return render_template('home.html',img=image[0],point=image[1])
+        cursor.execute(SQL.SQLHOMEUSER1,(email,))
+        homeuser = cursor.fetchone()
+        cursor.execute(SQL.SQLHOMEUSER2,(email,))
+        homeuser1 = cursor.fetchone()
+        return render_template('home.html',img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
     else:
         return render_template("login.html")
 

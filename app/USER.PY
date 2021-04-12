@@ -120,8 +120,7 @@ def usermanagement():
  
 
     mycursor = mydb.cursor(buffered=True)
-    sql = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    mycursor.execute(sql)
+    mycursor.execute(SQL.SQLUSERMANA)
     data1 = mycursor.fetchall()
     return render_template("usermanagement.html",data1 = data1)
 

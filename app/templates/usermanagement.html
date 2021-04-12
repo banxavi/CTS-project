@@ -53,7 +53,7 @@
                             {% for  a in data1 %}
                             <tr>
   
-                                <td>{{a.0}}</td>
+                                <td>{{a.6}}</td>
                                 <td><img src="{{ url_for('static',filename=a.3 )}}" style="height: 50px; width: 50px;"/></td>
                                 <td style="text-align: center">{{a.1}}</td>
                                 <td style="text-align: center">{{a.5}}</td>
@@ -65,7 +65,7 @@
                                 {% endif %}
 
                                 <td style="text-align: center">
-                                    <a href="/view" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
+                                    <a href="" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
                                             class="material-icons">remove_red_eye</i></a>
                                     <a href="" class="delete" title="Cấm" data-toggle="tooltip">
                                         <i class="material-icons">block</i></a>
@@ -84,7 +84,7 @@
                         <strong>Alert:</strong> {{ ac }} {% endif %}
 
                         <!-- Modal VIEW haha -->
-                        {% for a in account %}
+                        {% for a in data1 %}
                     </p>
 
                     <div id="modalview{{a.0}}" class="modal fade" role="dialog">

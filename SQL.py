@@ -1,5 +1,5 @@
 #Mission management
-SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
+SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission'
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
@@ -33,3 +33,14 @@ SQLSHOWPROFILE = 'select Name,Email,Image,Point from employee where Email = %s'
 SQLUPDATEPROFILE = 'Update cts.employee set Name = %s where Email=%s'
 #SESSION IMAGE
 SQLIMAGE = "select Image,Point from employee where Email=%s"
+#USER MANAGEMENT
+SQLUSERMANA = 'Select Employee_Id, Name, Email,Image,Status,Point, ROW_NUMBER() OVER(Order by employee.Name) as STT from cts.employee '
+# HOME USER SELECT
+SQLHOMEUSER1 ='SELECT count(process.Process_Id) \
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "1" \
+and employee.Email = %s'
+SQLHOMEUSER2 ='SELECT count(process.Process_Id) \
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "2" \
+and employee.Email = %s'
