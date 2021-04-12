@@ -39,6 +39,7 @@ def home():
     if 'idname' not in session:
         return render_template("login.html")
     elif session['idname']=="abc":
+        
         return render_template('home.html')
     elif 'idname' in session: 
         email = session['idname']
@@ -56,7 +57,12 @@ def home():
 @app.route('/home')
 def homeadmin():
     if 'idname' in session: 
-        return render_template('home.html')
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLHOMECOUNTEMPL)
+        countempl = cursor.fetchone()
+        cursor.execute(SQL.SQLHOMECOUNTMISS)
+        countmiss = cursor.fetchone()
+        return render_template('home.html',countempl=countempl[0],countmiss=countmiss[0])
     else:
         return render_template("login.html")
 # Logout account
@@ -70,6 +76,7 @@ def logout():
 def login():
     error = ""
     global image
+   
     if request.method == 'POST':
         cursor = mysql.connection.cursor() 
         user = request.form['idname']
@@ -81,7 +88,7 @@ def login():
         check = cursor.fetchone()
         if configadmin.username==user and configadmin.password==psw:
             session['idname'] = request.form['idname']  
-            return redirect(url_for('home')) 
+            return redirect(url_for('homeadmin'))
             # return render_template('home.html')
 
         elif checkblock:
@@ -90,8 +97,7 @@ def login():
             session['idname'] = request.form['idname']  
             cursor.execute(SQL.SQLIMAGE,(user,))
             image = cursor.fetchone()
-            return render_template('home.html',img=image[0],point=image[1])     
-             
+            return redirect(url_for('home'))       
         else :
              error = alert.LOGINACCOUNT
     return render_template("login.html",error=error)
@@ -114,7 +120,7 @@ def register():
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", errorres = error)     
+    return render_template("login.html", error = error)     
 
 #Accept link gmail
 @app.route('/confirm_email/<token>')
@@ -143,7 +149,7 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point="0")
+            return render_template('/home.html', email = email,img=image[0],point=image[1])
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
@@ -189,28 +195,14 @@ def updatepassforgot():
             passhash = hashlib.md5(password.encode()).hexdigest() 
             cur = mysql.connection.cursor()
             value = (email, passhash)
-            cur.execute(SQL.SQLUPDATEPSW,(value))
+            cur.execute(SQL.SQLUPDATEPSW,value)
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email)
+            return render_template('/home.html', email = email,img=image[0],point=image[1])
     return render_template("update_password.html",email =email,error = error)
 
 
-#Admin Block Account
-@app.route("/blockuser/<string:id_user>", methods=["GET"])
-def blockuser(id_user):
-    # cursor = mysql.connection.cursor()
-    # cursor.execute("UPDATE employee SET Status = '0' WHERE Employee_Id = (%s)",(id_user,))
-    # mysql.connection.commit()
-    return redirect(url_for('usermanagement'))
 
-#Admin Unlock Account 
-@app.route("/unlockuser/<string:id_user>", methods=["GET"])
-def unlockuser(id_user):
-    # cursor = mysql.connection.cursor()
-    # cursor.execute("UPDATE employee SET Status = '1' WHERE Employee_Id = (%s)",(id_user,))
-    # mysql.connection.commit()
-    return redirect(url_for('usermanagement'))
 
 #Form forgot password when verify link Gmail
 # @app.route('/verifyforgot')
@@ -282,7 +274,7 @@ def editmission():
         start = datetime.strptime(startdate,"%Y-%m-%d" )
         end = datetime.strptime(enddate,"%Y-%m-%d")
 
-        cursor.execute(SQL.SQLVIEWMISS,id)
+        cursor.execute(SQL.SQLVIEWMISS,(id,))
         view = cursor.fetchall()
         if view :
             flash("{}".format(alert.USERTAKEMISSION))
@@ -319,14 +311,6 @@ def deletemission(id):
         flash("{}".format(alert.DELETEMISSIONSUCC))
         return redirect(url_for('mission'))
 
-# User Management
-# @app.route('/usermanagement')
-# def usermanagement():
-#     cursor = mysql.connection.cursor()
-#     query = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-#     cursor.execute(query)
-#     data1 = cursor.fetchall()
-#     return render_template("usermanagement.html",data1 = data1)
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -337,11 +321,19 @@ def managementward():
  # User's mission
 @app.route('/usermission')
 def usermission():
-    return render_template("usermission.html",img=image[0],point=image[1])
+    if 'idname' in session: 
+        email = session['idname']
+        cursor = mysql.connection.cursor()
+        cursor.execute(SQL.SQLMISSIONUSER,(email,))
+        missionuser = cursor.fetchall()
+        return render_template("usermission.html",missionuser=missionuser,img=image[0],point=image[1])
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html",img=image[0],point=image[1])
+    cursor = mysql.connection.cursor()
+    cursor.execute(SQL.SQLMISSION1)
+    mission = cursor.fetchall()
+    return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
 # User profile
 # @app.route('/userprofile')
 # def userprofile():

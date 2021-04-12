@@ -67,8 +67,15 @@
                                 <td style="text-align: center">
                                     <a href="" data-toggle="modal" action data-target="#modalview{{a.0}}" class="view" title="Xem"><i
                                             class="material-icons">remove_red_eye</i></a>
-                                    <a href="" class="delete" title="Cấm" data-toggle="tooltip">
-                                        <i class="material-icons">block</i></a>
+                                     {%if a.4==1%}
+                                    <a href="/blockuser/{{a.0}}"
+                                        onclick="return confirm('Bạn có muốn khóa tài khoản này?')" class="delete"
+                                        title="Khóa tài khoản"><i class="fas fa-user-lock"></i></a>
+                                    {%elif a.4==0%}
+                                    <a href="/unlockuser/{{a.0}}"
+                                        onclick="return confirm('Bạn có muốn mở khóa tài khoản này?')" class="delete"
+                                        title="Mở khóa tài khoản"><i class="fas fa-unlock"></i></a>
+                                    {%endif%}
                                 </td>
                             </tr>
                            {% endfor %}
