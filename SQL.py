@@ -1,5 +1,5 @@
 #Mission management
-SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point from mission'
+SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission'
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
@@ -21,7 +21,7 @@ SQLSELECTEMAIL = 'SELECT Email FROM Employee WHERE Email = %s'
 SQLSELECTACCOUNT = 'SELECT Email, Password FROM employee WHERE email = %s AND password = %s'
 SQLSELECTADMIN = 'SELECT * FROM employee WHERE Email = %s'
 #UPDATE PASSOWRD
-SQLUPDATEPSW = 'UPDATE employee SET password=%s WHERE Email=%s'
+SQLUPDATEPSW = 'UPDATE employee SET Password=%s WHERE Email=(%s)'
 #LOCK ACCOUNT
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
@@ -33,3 +33,29 @@ SQLSHOWPROFILE = 'select Name,Email,Image,Point from employee where Email = %s'
 SQLUPDATEPROFILE = 'Update cts.employee set Name = %s where Email=%s'
 #SESSION IMAGE
 SQLIMAGE = "select Image,Point from employee where Email=%s"
+#USER MANAGEMENT
+SQLUSERMANA = 'Select Employee_Id, Name, Email,Image,Status,Point, ROW_NUMBER() OVER(Order by employee.Name) as STT from cts.employee '
+# HOME USER SELECT
+SQLHOMEUSER1 ='SELECT count(process.Process_Id) \
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "1" \
+and employee.Email = %s'
+SQLHOMEUSER2 ='SELECT count(process.Process_Id) \
+from process inner join \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = "2" \
+and employee.Email = %s'
+#HOME ADMIN SQL SELECT 
+SQLHOMECOUNTEMPL = 'select count(employee.Employee_Id) from Employee'
+SQLHOMECOUNTMISS='select count(mission.Mission_Id) from mission'
+#MANAGEMENT LOCK ACCOUNT
+SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
+SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
+# SHOW MISSION AVAIABLE
+SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1'
+# SHOW MISSION OF USER
+SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
+                ,mission.Description,mission.StartDate,mission.EndDate , mission.Point , \
+                process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
+                where process.Employee_Id=employee.Employee_Id and \
+                process.Mission_Id=mission.Mission_Id \
+                and employee.Email = %s'

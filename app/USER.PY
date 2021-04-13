@@ -114,16 +114,31 @@ def event_stream(client):
             a=1
 
 
-
+# Admin management user
 @app.route('/usermanagement')
 def usermanagement():
- 
-
     mycursor = mydb.cursor(buffered=True)
-    sql = "Select Employee_Id, Name, Email,Image,Status,Point from cts.employee "
-    mycursor.execute(sql)
+    mycursor.execute(SQL.SQLUSERMANA)
     data1 = mycursor.fetchall()
     return render_template("usermanagement.html",data1 = data1)
+
+# Admin Block Account
+@app.route("/blockuser/<string:id_user>", methods=["GET"])
+def blockuser(id_user):
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLUNLOCKACC, ("0",id_user,))
+    mydb.commit()
+    return redirect(url_for('usermanagement'))
+
+# Admin Unlock Account
+@app.route("/unlockuser/<string:id_user>", methods=["GET"])
+def unlockuser(id_user):
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLUNLOCKACC, ("1",id_user,))
+    mydb.commit()
+    return redirect(url_for('usermanagement'))
+
+
 
 @app.route('/post', methods=['POST'])
 def post():

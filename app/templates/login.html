@@ -22,12 +22,12 @@
 
 <body
   style="background-image: url(https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-03.jpg);">
-  <div class="wrapper">
+  <div style="padding: 0 20px;" class="wrapper">
     <div class="title-text">
-      <div class="title login">
-        Đăng nhập</div>
+      <div  class="title login">
+        CTS INTERNSHIP</div>
       <div class="title signup">
-        Đăng ký</div>
+        CTS INTERNSHIP</div>
     </div>
     <div class="form-container">
       <div class="slide-controls">
@@ -69,11 +69,11 @@
             <div class="signup-link">
               Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></div>
         </form>
-
+        
         <form action="/notiregister" method="POST" class="signup">
           <div class="field">
             <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
           </div>
           {% if error %}
           <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
@@ -82,7 +82,7 @@
             <div class="field btn">
               <div class="btn-layer">
               </div>
-              <input type="submit" value="Xác nhận">
+      <input type="submit" class="signup" value="Tiếp tục">
             </div>
         </form>
 
@@ -90,11 +90,15 @@
     </div>
   </div>
   <script>
+    
     const loginText = document.querySelector(".title-text .login");
     const loginForm = document.querySelector("form.login");
     const loginBtn = document.querySelector("label.login");
     const signupBtn = document.querySelector("label.signup");
     const signupLink = document.querySelector("form .signup-link a");
+
+
+
     signupBtn.onclick = (() => {
       loginForm.style.marginLeft = "-50%";
       loginText.style.marginLeft = "-50%";
