@@ -74,7 +74,7 @@ $(document).ready(function(){
                         <th>Tên nhiệm vụ</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
-                        <th>Điểm<i class="fa fa-sort"></i></th>
+                        <th>Điểm</th>
                         <th>Số lượng còn<i class="fa fa-sort"></i></th>
                         <th>Trạng thái<i class="fa fa-sort"></i></th>
                         <th>Tác vụ</th>
@@ -82,26 +82,25 @@ $(document).ready(function(){
                   
                 </thead>
                 <tbody>
-                    {% for a in account %}
+                    {% for a in mission %}
                     <tr>
                         <td >{{a.0}}</td>
                         <td>{{a.1}}</td>
  
-                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.2}}" readonly></td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.3}}"readonly></td>
-                        <td style="text-align: center;">{{a.4}}</td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.3}}" readonly></td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.4}}"readonly></td>
                         <td style="text-align: center;">{{a.7}}</td>
                         <td style="text-align: center;">{{a.6}}</td>
+                        <td style="text-align: center;">{{a.5}}</td>
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}"  data-toggle="modal" data-target="#modalview{{a.0}}" class="view" title="View" ><i class="material-icons">remove_red_eye</i></a>
-                            <a href="/nhannhiemvu/{{a.0}}" data-toggle="tooltip"   class="accept" title="Bạn có muốn nhận nhiệm vụ này chứ?" ><i class="material-icons">add_shopping_cart</i></a>
+                            <a href="/addmissionuser/{{a.0}}" data-toggle="tooltip"   class="accept" title="Bạn có muốn nhận nhiệm vụ này chứ?" ><i class="material-icons">add_shopping_cart</i></a>
                             <!-- <a href="/edit/{{a.0}}"  data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit" title="Edit" >Sửa</a>
                             <a href="/delete/{{a.0}}" class="delete" title="Delete" data-toggle="tooltip">Xóa</a> -->
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                
             </table>
      
 
@@ -115,7 +114,7 @@ $(document).ready(function(){
              <p style="color: rgb(255, 0, 0);"><strong>Thông báo:</strong> {{ ac }}
               {% endif %}
               <!-- Modal VIEW -->
-              {% for a in account %}
+              {% for a in mission %}
               <div id="modalview{{a.0}}" class="modal fade" role="dialog">
                 <div class="modal-dialog">   
                    <div class="modal-content">    

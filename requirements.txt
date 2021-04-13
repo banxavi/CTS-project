@@ -1,0 +1,8 @@
+flask 
+flask_mysqldb 
+itsdangerous 
+werkzeug
+itsdangerous 
+flask_mail 
+datetime 
+pyautogui

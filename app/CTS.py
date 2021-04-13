@@ -14,15 +14,17 @@ import alert
 import SQL
 import configadmin
 from datetime import date, datetime, timedelta
-import pyautogui as pag
+
 
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'cts'
+app.config['MYSQL_PORT'] = 3306
+
 
 
 mysql = MySQL(app)
@@ -31,22 +33,23 @@ s = URLSafeTimedSerializer('thisisascrect!')
 
 # Function LOGOUT
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def home():
     global Email
-    global IdUser
-    if 'idname' in session:
-        email= session['idname']
-        # cursor = mysql.connection.cursor() 
-        # cursor.execute(SQL.SQLSELECTID, (email,))
-        # table = cursor.fetchone()
-        # IdUser = table[0]
-        # cursor.execute(SQL.SQLHOME,(IdUser,))
-        # data = cursor.fetchone()
-        # cursor.execute(SQL.SQLHOME1,(IdUser,))
-        # data1 = cursor.fetchone()
-        # point = data[0],doingmission = data[1],donemission = data1[0],Email = email
-        return render_template('home.html')
+    global iduser
+    if 'idname' =="abc":
+            return render_template('home.html')
+    elif 'idname' in session:
+        Email= session['idname']
+        cursor = mysql.connection.cursor() 
+        cursor.execute(SQL.SQLSELECTID, (Email,))
+        table = cursor.fetchone()
+        iduser = table[0]
+        cursor.execute(SQL.SQLHOME,(iduser,))
+        data = cursor.fetchone()
+        cursor.execute(SQL.SQLHOME1,(iduser,))
+        data1 = cursor.fetchone()
+        return render_template('home.html',point = data[0],doingmission = data[1],donemission = data1[0],Email = Email)
     else:
         return render_template("login.html")
 
@@ -81,21 +84,16 @@ def login():
         if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
             return render_template('/home.html' )
-
         elif checkblock:
             error = alert.LOGINSTATUS   
-
         elif account:
-            Employee_Id = account[0]
             session['idname'] = request.form['idname']     
-            return render_template('/home.html',id=id)
+            return redirect(url_for('home'))
         else:
             error = alert.LOGINACCOUNT
     return render_template("login.html", error = error)
 
 # Notification register
-
-
 @app.route('/notiregister', methods=['GET', 'POST'])
 def register():
     error = ""
@@ -119,11 +117,10 @@ def register():
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try:
-        email = s.loads(token, salt='email-confirm', max_age=36000)
+        email = s.loads(token, salt='email-confirm', max_age=300)
         return redirect(url_for('updatepass', email=email))
     except SignatureExpired:
         return render_template('overtime_mail.html')
-
 
 # Update password when verify link gmail
 @app.route('/updatepass', methods=['GET', 'POST'])
@@ -142,8 +139,9 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email)
+            return redirect(url_for('home'))
     return render_template("update_password.html", email =email,error = error)
+
 
 # forgot password 
 @app.route('/forgotpassword', methods=['GET','POST'])
@@ -167,19 +165,15 @@ def forgotpassword():
     return render_template("forgot_password.html", error=error)
 
 # Accept link mail forgot password
-
-
 @app.route('/forgot_email/<token>')
 def forgot_email(token):
     try:
-        email = s.loads(token, salt='email-confirm', max_age=36000)
+        email = s.loads(token, salt='email-confirm', max_age=300)
         return redirect(url_for('updatepassforgot', email=email))
     except SignatureExpired:
         return render_template('overtime_mail.html')
 
 # Update Password forgot
-
-
 @app.route('/updatepassforgot', methods=['GET', 'POST'])
 def updatepassforgot():
     error = ""
@@ -192,13 +186,12 @@ def updatepassforgot():
         else:
             passhash = hashlib.md5(password.encode()).hexdigest()
             cur = mysql.connection.cursor()
-            value = (email, passhash)
-            cur.execute(SQL.SQLUPDATEPSW, (value))
+            value =(passhash, email)
+            cur.execute(SQL.SQLUPDATEPSW,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email=email)
-    return render_template("update_password.html", email=email, error=error)
-
+            return redirect(url_for('home'))
+    return render_template("update_password.html", email =email,error = error)
 
 # Admin Block Account
 @app.route("/blockuser/<string:id_user>", methods=["GET"])
@@ -218,10 +211,6 @@ def unlockuser(id_user):
     mysql.connection.commit()
     return redirect(url_for('usermanagement'))
 
-# Form forgot password when verify link Gmail
-# @app.route('/verifyforgot')
-# def verifyforgot():
-#     return render_template('verifyforgot.html')
 
 
 # Admin Management Mission
@@ -336,6 +325,7 @@ def deletemission(id):
 @app.route('/usermanagement')
 def usermanagement():
   
+
     return render_template("usermanagement.html")
 
 
@@ -349,18 +339,25 @@ def managementward():
 
  # Fuction User
  # User's mission
-
-
 @app.route('/usermission')
 def usermission():
-    return render_template("usermission.html")
- # Mission avaiable
+    cursor = mysql.connection.cursor()
+    cursor.execute(SQL.SQLMISSIONUSER,(iduser,))
+    mission = cursor.fetchall()
+    return render_template("usermission.html",mission = mission)
 
-
-@app.route('/usermissionavaiable')
+# Mission avaiable
+@app.route('/usermissionavaiable',methods=['GET', 'POST'])
 def usermissionavaiable():
-    return render_template("usermissionavaiable.html")
-# User profile
-# @app.route('/userprofile')
-# def userprofile():
-#     return render_template("userprofile.html")
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM mission")
+    mission = cursor.fetchall()
+    return render_template("usermissionavaiable.html",mission = mission)
+
+#Cancle Mission User 
+@app.route('/canclemission/<string:id_process>',methods=['GET', 'POST'])
+def canclemission(id_process):
+    cursor = mysql.connection.cursor()
+    cursor.execute(SQL.SQLCANCLEMISSION,(id_process,))
+    mysql.connection.commit()
+    return redirect(url_for('usermission'))

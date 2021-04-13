@@ -50,7 +50,7 @@
             <input type="password" value="{{
                 request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
           </div>
-          
+          <input type="checkbox" onclick="myFunction()">Hiển thị mật khẩu
 
           {% if error %}
           <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
@@ -121,6 +121,15 @@
   }
 </style>
 <script>
+  function myFunction() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
   function myFunction() {
     var x = document.getElementById("password");
     if (x.type === "password") {

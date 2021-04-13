@@ -70,7 +70,7 @@ $(document).ready(function(){
                     
                     <tr style="text-align: center;">
                         
-                        <th>ID nhiệm vụ</th>
+                        <!-- <th>STT</th> -->
                         <th>Tên nhiệm vụ</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
@@ -81,27 +81,34 @@ $(document).ready(function(){
                   
                 </thead>
                 <tbody>
-                    {% for a in x %}
+                    {% for a in mission %}
                     <tr>
-                    
-                        <td>{{a.1}}</td>
+                        <td hidden="true">{{a.8}}</td>
                         <td>{{a.2}}</td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.4}}" readonly></td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.5}}"readonly></td>
-                        <td style="text-align: center;">{{a.6}}</td>
-                        <td style="text-align: center;">{{a.7}}</td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.5}}" readonly></td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.6}}"readonly></td>
+                        <td style="text-align: center;">{{a.3}}</td>
+                        {%if a.4 == 0 %}
+                        <td style="text-align: center;">Hủy</td>
+                        {%elif a.4 == 1 %}
+                        <td style="text-align: center;">Đang làm</td>
+                        {%elif a.4 == 2 %}
+                        <td style="text-align: center;">Hoàn thành</td>
+                        {% endif %}
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}"  data-toggle="modal" data-target="#modalview{{a.0}}" class="view" title="Xem" ><i class="material-icons">remove_red_eye</i></a>
                             <a href="/done"  data-toggle="modal" data-target="#modaldone{{a.0}}"  class="done" title="Hoàn thành" ><i class="material-icons">done</i></a>
                             <!-- <a href="/done/{{a.0}}"   data-toggle="tooltip" data-target="#modaldone{{a.0}}"  class="done" title="Hoàn thành" ><i class="material-icons">done</i></a> -->
-                            <a href="/"  data-toggle="modal" class="delete" title="Hủy" ><i class="material-icons">cancel</i></a>
+                            <a href="/canclemission/{{a.8}}"
+                                        onclick="return confirm('Bạn có muốn hủy nhiệm vụ này?')" class="delete"
+                                        title="Hủy nhiệm vụ"><i class="fas fa-minus-circle"></i></a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
 
               <!-- Modal VIEW -->
-              {% for a in x %}
+              {% for a in mission %}
               <div id="modalview{{a.0}}" class="modal fade" role="dialog">
                 <div class="modal-dialog">   
                    <div class="modal-content">    
@@ -122,7 +129,7 @@ $(document).ready(function(){
                             <div class="form-group">      
                                 <label>Mô tả:</label>
                                  
-                                <textarea type="text" style="text-align: left;"  class="form-control" name="address" readonly>{{a.3}}  
+                                <textarea type="text"  class="form-control" name="address" readonly>{{a.7}}  
                                   
                                 </textarea>
                              </div>
@@ -131,11 +138,11 @@ $(document).ready(function(){
                                     <div class="col">
                                         <label>Ngày bắt đầu:</label>
                                         
-                                        <input type="date" class="form-control" value="{{a.4}}"readonly >
+                                        <input type="date" class="form-control" value="{{a.5}}"readonly >
                                     </div>
                                     <div class="col">
                                         <label>Ngày kết thúc:</label>
-                                        <input type="date" class="form-control" value="{{a.5}}"readonly >
+                                        <input type="date" class="form-control" value="{{a.6}}"readonly >
                                     </div>
                                 </div>        	
                             </div>
@@ -145,7 +152,7 @@ $(document).ready(function(){
                                     <div class="col">
                                         <label>Điểm:</label>
                                         
-                                        <input type="text" class="form-control" value="{{a.6}}"readonly >
+                                        <input type="text" class="form-control" value="{{a.3}}"readonly >
                                     </div>
                                    
                                 </div>        	
@@ -153,7 +160,13 @@ $(document).ready(function(){
                             <div class="form-group">           
                                 <label>Trạng thái:</label>
                                 <select class="form-control" name="trangthai" readonly > 
-                                    <option value="1">{{a.7}}</option>   
+                                    {%if a.4 == 0 %}
+                                    <option value="1">Hủy</option>   
+                                    {%elif a.4 == 1 %}
+                                    <option value="1">Đang làm</option>   
+                                    {%elif a.4 == 2%}
+                                    <option value="1">Hoàn thành</option> 
+                                    {%endif%}
                                     </select>
                              </div>        
                          </form>        
