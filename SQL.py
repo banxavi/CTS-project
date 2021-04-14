@@ -59,3 +59,12 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+#SHOW MISSION OF USER by ID
+SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
+                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
+	                    From((cts.employee\
+	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
+	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
+                        where employee.Employee_Id = %s"
+SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"
+       

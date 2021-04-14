@@ -334,6 +334,17 @@ def usermissionavaiable():
     cursor.execute(SQL.SQLMISSION1)
     mission = cursor.fetchall()
     return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
+    
+#Research MissionofUser
+@app.route('/missionsearch/<id>',methods=['GET','POST'])
+def missionsearch(id):
+   
+        cursor = mysql.connection.cursor()
+        cursor.execute(SQL.SQLSHOWUSERMISSION,(id,))
+        listEmployee = cursor.fetchall()
+        cursor.execute(SQL.SQLSHOWNAMEOFUSER,(id,))
+        NameEmployee = cursor.fetchall()
+        return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee)
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
