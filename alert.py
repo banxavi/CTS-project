@@ -1,26 +1,39 @@
 # Alert Login
-loginsucc = "Đăng nhập thành công"
-loginfailemail = "Email không chính xác"
-loginfailpassword = "Mật khẩu không chính xác"
+LOGINSUCC = "Đăng nhập thành công"
+LOGINFAILEMAIL = "Email không chính xác"
+LOGINFAILPASSWORD = "Mật khẩu không chính xác"
+#Alert Register
+COMFIRMFAILPASSWORD = "Mật khẩu nhập lại không chính xác"
 # Alert register and forgot pass
-registerfailemail = "Email đã có trong hệ thống"
-forgotfailemail = "Email không tồn tại hệ thống"
+REGISTERFAILEMAIL = "Email đã có trong hệ thống"
+FORGOTFAILEMAIL = "Email không tồn tại trong hệ thống"
 #Alert admin manage mission
-addmissonsucc = "Thêm nhiệm vụ thành công"
-addmissionfail = "Thêm nhiệm vụ thất bại"
-editmissionsucc = "Sửa nhiệm vụ thành công"
-deletemissionsucc = "Xóa nhiệm vụ thành công"
+ADDMISSONSUCC = "Thêm nhiệm vụ thành công"
+ADDMISSIONFAIL = "Thêm nhiệm vụ thất bại"
+ERRORDATE = "Sửa thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
+EDITMISSIONSUCC = "Sửa nhiệm vụ thành công"
+DELETEMISSIONSUCC = "Xóa nhiệm vụ thành công"
+USERTAKEMISSION = "Sửa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
+DELETEUSERMISSION =  "Xóa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
 #Alert block employee
-blockemployee = "Cấm nhân viên thành công"
+BLOCKEMPLOYEE = "Cấm nhân viên thành công"
 #Alert user's mission
-donemission = "Chúc mừng bạn đã hoàn thành nhiệm vụ"
-cancelmission = "Bạn đã hủy nhiệm vụ thành công"
+DONEMISSION = "Chúc mừng bạn đã hoàn thành nhiệm vụ"
+CANCELMISSION = "Bạn đã hủy nhiệm vụ thành công"
 #Alert mission avaiable
-takemission = "Bạn đã nhận nhiệm vụ thành công"
+TAKEMISSION = "Bạn đã nhận nhiệm vụ thành công"
 #Alert admin manage ward
-addwardsucc = "Thêm phần thưởng thành công"
-addwardfail = "Thêm phần thưởng thất bại"
-editwardsucc = "Sửa phần thưởng thành công"
-deletwardsucc = "Xóa phần thưởng thành công"
-
-
+ADDWARDSUCC = "Thêm phần thưởng thành công"
+ADDWARDFAIL = "Thêm phần thưởng thất bại"
+EDITWARDSUCC = "Sửa phần thưởng thành công"
+DELETWARDSUCC = "Xóa phần thưởng thành công"
+#Alert Login
+LOGINACCOUNT = "Tài khoản hoặc mật khẩu sai" 
+LOGINSTATUS = "Tài khoản đã bị khóa" 
+#Alert  Register
+REGISTERACCOUNT = "Tài khoản này đã tồn tại"
+#Edit profile
+UPDATESUCC = "Cập nhập thành công"
+IMAGEERROR = "Ảnh không hợp lệ"
+#Alert List user mission
+NOTTAKEMISSION = "Chưa có người nhận"

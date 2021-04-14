@@ -19,12 +19,12 @@
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
-        <li class="active"><a href="/">Trang chủ</a></li>
+        <li ><a href="/home">Trang chủ</a></li>
         <li><a href="/mission">Quản lí nhiệm vụ</a></li>
         <li><a href="/usermanagement">Quản lí nhân viên</a></li>
         <li><a href="/managementward">Quản lý đổi thưởng</a></li>
         <li><a href="#">Thông báo</a></li>
-        <li><a href="/logout">Đăng xuất</a></li>
+        <li><a  onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
       </ul>
       <div class="icon1 menu-btn">
         <i class="fas fa-bars"></i>
@@ -40,22 +40,23 @@
 
   <nav class="navbar">
     <div class="content">
+  
       <div class="logo">
         <a href="#">Hello Member</a>
-       
-          <img src="https://img4.thuthuatphanmem.vn/uploads/2020/03/23/anh-de-thuong-cua-rose-black-pink_051300075.jpg" alt="Avatar" style="width:50px;height:50px;border-radius: 25px;" class="avatar">
-       
+     <a href="/profile" title="Thông tin cá nhân">  <img src="{{ url_for('static',filename=img )}}" alt="Avatar" style="width:50px;height:50px;border-radius: 25px;"  class="avatar"></a>   
       </div>
+   
+
       <ul class="menu-list">
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
-        <li class="active" ><a  href="/">Trang chủ</a></li>
+        <li ><a  href="/">Trang chủ</a></li>
         <li><a href="/usermission">Danh sách nhiệm vụ</a></li>
         <li><a href="/doithuonguser">Đổi quà</a></li>
         <li><a href="#about">Thông báo</a></li>
-        <li><a href="/logout">Đăng xuất</a></li>
-        <li><a href ="#" style=" padding-left: 10px; color:#fff;">Điểm:235</a></li>
+        <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
+        <li><a href ="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
       </ul>
       
       <div class="icon1 menu-btn">

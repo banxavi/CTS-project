@@ -6,6 +6,7 @@
   font-family: 'Poppins', sans-serif;
 }
 html,body{
+  background-image: url("https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-03.jpg");
   display: grid;
   height: 100%;
   width: 100%;
@@ -192,5 +193,12 @@ form .btn input[type="submit"]{
   border-radius: 5px;
   font-size: 20px;
   font-weight: 500;
+  cursor: pointer;
+}
+span{
+  position: absolute;
+  right: 15px;
+  transform: translate(0,-50%);
+  top: 50%;
   cursor: pointer;
 }
