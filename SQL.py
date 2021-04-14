@@ -59,3 +59,8 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+#Take Mission and Validate
+SQLTAKEMISSION = 'INSERT INTO `cts`.`process` (`Employee_Id`, `Mission_Id`, `status`) VALUES (%s,%s,%s)'
+SQLVALIDATE = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s"
+SQLGETEMP_ID = "SELECT Employee_Id FROM cts.employee where Email=%s"
+SQLUPDATEMISSION = "UPDATE cts.mission SET mission.Limit=mission.Limit-1 where Mission_Id=%s"

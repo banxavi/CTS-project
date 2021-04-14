@@ -33,7 +33,6 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-
     database="cts"
     )
 

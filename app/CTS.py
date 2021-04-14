@@ -334,6 +334,25 @@ def usermissionavaiable():
     cursor.execute(SQL.SQLMISSION1)
     mission = cursor.fetchall()
     return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
+#Take Mission
+@app.route('/takemission/<id>/',methods=['GET','POST'])
+def takemission(id):
+    cursor = mysql.connection.cursor()
+    Employee_mail = session['idname']
+    cursor.execute(SQL.SQLGETEMP_ID,(Employee_mail,))
+    Employee_Id =cursor.fetchone()
+    cursor.execute(SQL.SQLVALIDATE,(Employee_Id[0],id))
+    Validate = cursor.fetchone()
+    if request.method == "GET":
+        if Validate:
+            flash(alert.TAKEMISSIONFAIL)
+            return redirect(url_for('usermissionavaiable'))
+        else:
+            cursor.execute(SQL.SQLTAKEMISSION,(Employee_Id[0],id,1,))
+            cursor.execute(SQL.SQLUPDATEMISSION,(id,))
+            mysql.connection.commit()
+            flash(alert.TAKEMISSION)
+            return redirect(url_for('usermissionavaiable'))
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
