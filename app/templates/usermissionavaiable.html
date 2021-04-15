@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Danh sách nhiệm vụ</title>
+    <title>{{constants_list.MISSION_LIST }} </title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -36,7 +36,7 @@
                             <div class="col-sm-8">
                                 <h1 style="   font-size: 50px;
                         font-weight: 700;
-                        color:red">CTS</h1>
+                        color:red">{{constants_list.NAME }}</h1>
                             </div>
 
 
@@ -45,15 +45,15 @@
 
                     </div>
 
-                    <label style="font-size: 30px; padding: 0 320px;
+                    <label style="font-size: 40px; padding: 0 320px;
                 font-weight: 30;
-                color:red">NHIỆM VỤ ĐANG CÓ TRÊN HỆ THỐNG </label>
-                    <label>Lựa chọn nhiệm vụ</label>
+                color:red">{{constants_list.AVAIABLE_MISSIONSYSTEM }}</label>
+                    <label>{{constants_list.CHOICE_MISSION }}</label>
                     <div id="example_length"></div>
-                    <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
+                    <a href="{{ url_for('usermission') }}">{{constants_list.YOUR_MISSION }}</a>
 
                     <div>
-                        <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ trên hệ thống</a>
+                        <a href="{{ url_for('usermissionavaiable') }}">{{constants_list.MISSIONSYSTEM }}</a>
                     </div>
                 </div>
 
@@ -78,13 +78,13 @@
 
                     <tr style="text-align: center;">
                         <th>#</th>
-                        <th>Tên nhiệm vụ</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày kết thúc</th>
-                        <th>Điểm<i class="fa fa-sort"></i></th>
-                        <th>Số lượng còn<i class="fa fa-sort"></i></th>
-                        <th>Trạng thái<i class="fa fa-sort"></i></th>
-                        <th>Tác vụ</th>
+                        <th>{{constants_list.NAME_MISSION }}</th>
+                        <th>{{constants_list.START_DATE }}</th>
+                        <th>{{constants_list.END_DATE }}</th>
+                        <th>{{constants_list.POINT }}<i class="fa fa-sort"></i></th>
+                        <th>{{constants_list.QUANTITY_REMAINING }}<i class="fa fa-sort"></i></th>
+                        <th>{{constants_list.STATUS}}<i class="fa fa-sort"></i></th>
+                        <th>{{constants_list.ACTION}}</th>
                     </tr>
 
                 </thead>
@@ -100,7 +100,7 @@
                         <td style="text-align: center;">{{a.7}}</td>
                         <td style="text-align: center;">{{a.6}}</td>
                         {% if a.5 == 1 %}
-                        <td style="text-align: center;">Còn</td>
+                        <td style="text-align: center;">{{constants_list.AVAIABLE}}</td>
                         {% endif %}
 
 
@@ -118,80 +118,68 @@
                 </tbody>
 
             </table>
-
-
-            {% if succ %}
-            <p style="Font-size: 20px;
-            font-weight: 5;
-            color:rgb(0, 255, 34)"><strong>Thông báo:</strong> {{ succ }}
-                {% endif %}
-
-                {% if ac %}
-                <p style="color: rgb(255, 0, 0);"><strong>Thông báo:</strong> {{ ac }}
-                    {% endif %}
-                    <!-- Modal VIEW -->
-                    {% for a in mission %}
-                    <div id="modalview{{a.0}}" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Chi tiết nhiệm vụ</h4>
+            <!-- Modal VIEW -->
+            {% for a in mission %}
+            <div id="modalview{{a.0}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{constants_list.MISSION_DETAIL}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/view" method="POST">
+                                <div class="form-group">
+                                    <label>{{constants_list.ID}}:</label>
+                                    <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
                                 </div>
-                                <div class="modal-body">
-                                    <form action="/view" method="POST">
-                                        <div class="form-group">
-                                            <label>ID:</label>
-                                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tên nhiệm vụ:</label>
+                                <div class="form-group">
+                                    <label>{{constants_list.NAME_MISSION}}:</label>
 
-                                            <input type="text" class="form-control" name="name" value="{{a.1}}"
-                                                readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Mô tả:</label>
+                                    <input type="text" class="form-control" name="name" value="{{a.1}}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{constants_list.DESCRIPTION}}:</label>
 
-                                            <textarea type="text" style="text-align: left;" class="form-control"
-                                                name="address" readonly>{{a.2}}  
+                                    <textarea type="text" style="text-align: left;" class="form-control" name="address"
+                                        readonly>{{a.2}}  
                      
                                 </textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Ngày bắt đầu:</label>
-
-                                                    <input type="date" class="form-control" value="{{a.3}}" readonly>
-                                                </div>
-                                                <div class="col">
-                                                    <label>Ngày kết thúc:</label>
-                                                    <input type="date" class="form-control" value="{{a.4}}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Điểm:</label>
-
-                                                    <input type="text" class="form-control" value="{{a.7}}" readonly>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                    </form>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>{{constants_list.START_DATE}}:</label>
+
+                                            <input type="date" class="form-control" value="{{a.3}}" readonly>
+                                        </div>
+                                        <div class="col">
+                                            <label>{{constants_list.END_DATE}}c:</label>
+                                            <input type="date" class="form-control" value="{{a.4}}" readonly>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>{{constants_list.POINT}}:</label>
+
+                                            <input type="text" class="form-control" value="{{a.7}}" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
 
 
 </body>

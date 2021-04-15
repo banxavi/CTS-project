@@ -2,6 +2,7 @@ from typing import ContextManager
 from flask.globals import g
 from flask.templating import render_template
 from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
+from mysql.connector import constants
 from app import app
 from flask_mysqldb import MySQL
 import hashlib
@@ -19,6 +20,7 @@ from flask_mail import Mail, Message
 import alert
 import SQL
 import configadmin
+import constants
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 
@@ -333,7 +335,8 @@ def usermissionavaiable():
     cursor = mysql.connection.cursor()
     cursor.execute(SQL.SQLMISSION1)
     mission = cursor.fetchall()
-    return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
+    constants_list = constants
+    return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1],constants_list=constants_list)
 #Take Mission
 @app.route('/takemission/<id>/',methods=['GET','POST'])
 def takemission(id):
