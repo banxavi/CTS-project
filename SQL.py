@@ -59,3 +59,4 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
