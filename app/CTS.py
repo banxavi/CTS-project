@@ -18,6 +18,7 @@ from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
 import SQL
+import constants
 import configadmin
 from datetime import date, datetime,timedelta
 import pyautogui as pag
@@ -344,7 +345,8 @@ def missionsearch(id):
         listEmployee = cursor.fetchall()
         cursor.execute(SQL.SQLSHOWNAMEOFUSER,(id,))
         NameEmployee = cursor.fetchall()
-        return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee)
+        constants_list  = constants
+        return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
 # User profile
 # @app.route('/userprofile')
 # def userprofile():
