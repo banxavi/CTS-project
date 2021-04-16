@@ -33,7 +33,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-
+    password="123456",
     database="cts"
     )
 
@@ -114,7 +114,35 @@ def event_stream(client):
             a=1
 
 
-# Admin management user
+# def setschedule():
+#     mycursor = mydb.cursor()
+#     sql = 'select * from schedule'
+#     mycursor.execute(sql)
+#     show = mycursor.fetchall()
+#     for a in show:
+#         if a[2]!=0 and a[3]!=0:
+#             sql = 'select * from mission where Mission_Id=%s'
+#             mycursor.execute(sql,(a[1],))
+#             miss = mycursor.fetchone()
+#             state1 = 1 
+#             name = miss[1]
+#             descr = miss[2]
+#             startdate = miss[3]
+#             enddate = miss[4]
+#             limit = miss[5]
+#             point = miss[6]
+#             val = (state1,name,descr,startdate,enddate,limit,point,a[1])
+
+#             sqlin =" UPDATE `cts`.`mission`  \
+#             SET State =%s, `Title` = %s, `Description` = %s, \
+#              `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
+#                 WHERE (`Mission_Id` = %s)"
+#             mycursor.execute(sqlin,val)
+#             mydb.commit()
+#             print("Record thành công")
+            
+# setschedule()
+
 @app.route('/usermanagement')
 def usermanagement():
     mycursor = mydb.cursor(buffered=True)

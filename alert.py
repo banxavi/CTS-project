@@ -37,3 +37,5 @@ UPDATESUCC = "Cập nhập thành công"
 IMAGEERROR = "Ảnh không hợp lệ"
 #Alert List user mission
 NOTTAKEMISSION = "Chưa có người nhận"
+#Alert update loop task
+LOOPTASK = "Thời gian của nhiệm vụ được lặp thành công"

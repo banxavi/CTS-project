@@ -1,5 +1,5 @@
 #Mission management
-SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission'
+SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id DESC ) as STT,curdate()  from mission '
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
@@ -9,12 +9,13 @@ SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employ
 employee.POINT,process.status,mission.Title ,employee.Image from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
 
-SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s, %s, %s,%s,%s,%s)'
+SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (Mission_Id,`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s,%s, %s, %s,%s,%s,%s)'
 SQLUPDATEMISS1 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
                 WHERE (`Mission_Id` = %s)'
 SQLUPDATEMISS0 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
                 WHERE (`Mission_Id` = %s)'
 SQLDELETEMISS = 'DELETE from mission WHERE Mission_Id=%s'
+SQLDELETESCHE = 'DELETE FROM `cts`.`schedule` WHERE `Mission_Id` = %s'
 # REGISTER
 SQLREGISTER = 'INSERT INTO employee (Email,Password) VALUES (%s,%s)'
 SQLSELECTEMAIL = 'SELECT Email FROM Employee WHERE Email = %s'
@@ -51,7 +52,8 @@ SQLHOMECOUNTMISS='select count(mission.Mission_Id) from mission'
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 # SHOW MISSION AVAIABLE
-SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1'
+SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point, \
+    ROW_NUMBER() OVER(Order by mission.Mission_Id DESC) as STT from mission where State=1 and curdate()<=EndDate'
 # SHOW MISSION OF USER
 SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
                 ,mission.Description,mission.StartDate,mission.EndDate , mission.Point , \
@@ -59,3 +61,16 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+
+# SCHEDULE LOOP TASK
+SQLTASKSCHEDULE = "select mission.Mission_Id, Mission.Title , \
+schedule.Schedule_Id, schedule.DateLoop, schedule.UnitLoop from mission ,\
+ schedule where schedule.Mission_Id = mission.Mission_Id"
+# UPDATE SCHEDULE
+SQLUPDATESCHEDULE='update schedule set DateLoop = %s , UnitLoop = %s \
+     where Mission_Id = %s'
+# MAX ID
+SQLMAXID='SELECT MAX(Mission_Id) AS MAXID FROM Mission'
+# ADD SCHEDULE NEW TASK
+SQLINSERTSCHEDULE = 'INSERT INTO `cts`.`schedule` \
+     (`Mission_Id`, `DateLoop`, `UnitLoop`) VALUES (%s,%s,%s)'

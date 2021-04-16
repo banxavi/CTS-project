@@ -55,7 +55,7 @@
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Điểm<i class="fa fa-sort"></i></th>
-                                <th>Số lượng <i class="fa fa-sort"></i></th>
+                                <th>Số lượng còn <i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
 
                                 <th>Tác vụ</th>
@@ -74,14 +74,16 @@
                                         value="{{a.4}}" readonly></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
-                      
-                                {% if a.5 == 1 %}
+                                {% if a.9 >= a.4 %} 
+                                <td style="text-align: center;">Quá hạn</td>
+                            
+                                {% elif a.5 == 1 %}
                                 <td style="text-align: center;">Còn</td>
-                                {% endif %}
-                                  {% if a.5 == 0 %}      
+                            
+                                  {% else %}      
                                   <td style="text-align: center;">Hết</td>
                                   {% endif %}
-                                  
+                             
                                 <td style="text-align: center;">
                                   
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
@@ -91,6 +93,10 @@
                                     <a  onclick="return confirm('Bạn có chắc xóa nhiệm  này?')" href="/deletemission/{{a.0}}" 
                                     class="delete" title="Xóa" data-toggle="tooltip">
                                     <i class="material-icons">delete</i></a>
+
+                                    <a href="/"  data-toggle="modal" data-target="#modalloop{{a.0}}"  title="Thời gian lặp nhiệm vụ">
+                                        <i class="material-icons">Loop</i></a>
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -101,10 +107,7 @@
 
                     {% with messages = get_flashed_messages() %}         
                     {% if messages %} 
-                    <div style="width: 150px;" class="alert alert-info">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong >Thông báo:</strong>
-                </div>
+                 
                       {% for message in messages %}
                         <div style="width: 500px;" class="alert alert-secondary  alert-dismissible">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -262,6 +265,8 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                    
                                         <div class="form-group">
                                             <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
                                         </div>
@@ -276,9 +281,77 @@
                     {% endfor %}
                     </table>
                 </div>
-                <!-- Modal Add Employee-->
+
+                {% for a in schedule %}
+                <div id="modalloop{{a.0}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Lặp nhiệm vụ</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/schedule" method="POST">
+
+                                    <div class="form-group">
+                                        <label>ID:</label>
+                                        <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tên nhiệm vụ:</label>
+
+                                        <input type="text" class="form-control" name="name" value="{{a.1}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Thời gian lặp lại nhiệm vụ:</label>
+                                            <input type="number"  name="loop" value="{{a.3}}"
+                                            min="1" max="30" >                                                   
+                                                <select name="unitloop">
+                                                    {%if a.4 ==0 %}
+                                                    <option value="0">Không lặp</option>
+
+                                                    {% elif a.4 ==1 %}
+                                                    <option value="1">Ngày</option>
+                                                    {% elif a.4 ==7%}
+                                                    <option value="7">Tuần</option>
+                                                    {% else %}
+                                                    <option value="30">Tháng</option>
+                                                    {% endif %}
+
+                                                    <option value="1">Ngày</option>
+                                                    
+                                                    <option value="7">Tuần</option>
+                                                  
+                                                    <option value="30">Tháng</option>
+
+                                                    </select>    
+                                                   
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </table>
+            </div>
 
 
+
+                <!-- Modal loop -->
+     
+            <!-- Modal Add Employee-->
                 <div id="mymodal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -287,10 +360,25 @@
                             </div>
                             <div class="modal-body">
                                 <form action="/addmission" method="POST">
+
                                     <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                
+                                        <label>ID:</label>
+                                
+                                        {% if maxid==None %}  
+                                        <input type="text" value="{{1}}" class="form-control" name="id" readonly>
+                                        {% else %}
+                                        <input type="text" value="{{maxid+1}}" class="form-control" name="id" readonly>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col">
                                         <label>Tên nhiệm vụ:</label>
 
                                         <input type="text" class="form-control" name="name" required>
+                                    </div>
+                                    </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Mô tả:</label>
@@ -320,7 +408,28 @@
                                             </div>
                                             <div class="col">
                                                 <label>Số lượng:</label>
-                                                <input type="number"   min="0" max="100" name="limit" class="form-control" required>
+                                                <input type="number"  min="0" max="100" name="limit" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Thời gian lặp lại nhiệm vụ:</label>
+                                            <input type="number" value="0"   name="loop"
+                                            min="0" max="30" >                                                   
+                                                <select name="unitloop">
+                                                    <option value="0">Không lặp</option>
+
+                                                    <option value="1">Ngày</option>
+                                                  
+                                                    <option value="7">Tuần</option>
+                                                  
+                                                    <option value="30">Tháng</option>
+                           
+
+                                                    </select>    
+                                                   
                                             </div>
                                         </div>
                                     </div>
