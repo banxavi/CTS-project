@@ -52,6 +52,7 @@ SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 # SHOW MISSION AVAIABLE
 SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1'
+
 # SHOW MISSION OF USER
 SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
                 ,mission.Description,mission.StartDate,mission.EndDate , mission.Point , \
@@ -60,3 +61,16 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
 SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
+SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
+SQLUPDATELIMIT = "UPDATE mission inner join process\
+                        on process.Mission_Id = mission.Mission_Id\
+                        set mission.Limit = mission.Limit + 1 where process.Process_Id = %s"
+SQLUPDATEPOINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point - mission.Point*0.1 where process.Process_Id = %s"
+SQLCOMPLETEMISSION ="UPDATE process set Status = 2 where Process_Id = %s"
+SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
