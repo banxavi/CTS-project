@@ -4,8 +4,8 @@ from hashlib import sha1
 from shutil import rmtree
 from stat import S_ISREG, ST_CTIME, ST_MODE
 import json
- 
-import os
+import io
+import os,xlwt
 import time
 from app import app
 from PIL import Image, ImageFile
@@ -13,7 +13,7 @@ from gevent.event import AsyncResult
 from gevent.queue import Empty, Queue
 from gevent.timeout import Timeout
 import flask 
-from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
+from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions,Response
 from flask.templating import render_template 
 from flask_mysqldb import MySQL 
 import MySQLdb.cursors
@@ -33,7 +33,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-
+   
     database="cts"
     )
 
@@ -206,3 +206,41 @@ def updateprofile():
         mydb.commit()
         flash(alert.UPDATESUCC)
         return redirect(url_for('profile'))
+
+    
+# Export Excel
+@app.route('/download/report/excel')
+def download_report():
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLEXPORTEXCEL)
+    result = cursor.fetchall()
+    #output in bytes
+    output = io.BytesIO()
+    #create WorkBook object
+    workbook = xlwt.Workbook()
+    #add a sheet
+    sh = workbook.add_sheet('Employee Report')
+    #add headers
+    sh.write(0, 0, 'ID nhân viên')
+    sh.write(0, 1, 'Email nhân viên')
+    sh.write(0, 2, 'Họ tên nhân viên')
+    sh.write(0, 3, 'Điểm')
+    sh.write(0, 4, 'Trạng thái tài khoản')
+    
+    idx = 0
+    for row in result:
+        sh.write(idx+1, 0, str(row[0]))
+        sh.write(idx+1, 1, row[1])
+        sh.write(idx+1, 2, row[2])
+        sh.write(idx+1, 3, row[3])
+        if row[4] == 1:
+            sh.write(idx+1, 4, "Hoạt động")
+        else: 
+            sh.write(idx+1, 4, "Đã bị khóa")
+        idx += 1
+    
+    workbook.save(output)
+    output.seek(0)
+    return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
+        
+    
