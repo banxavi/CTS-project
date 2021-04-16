@@ -59,6 +59,7 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+<<<<<<< HEAD
 #SHOW MISSION OF USER by ID
 SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
                         ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
@@ -68,3 +69,6 @@ SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Tit
                         where employee.Employee_Id = %s"
 SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"
        
+=======
+SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
+>>>>>>> babd344e0a532047488cf7fb5e106fd916b9109b
