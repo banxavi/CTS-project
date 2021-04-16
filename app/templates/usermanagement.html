@@ -33,6 +33,11 @@
                             <div style="padding-left:1%">
                                 <h1 style="font-size: 50px; font-weight: 700; color: red">CTS</h1>
                             </div>
+                            <div>
+                        
+                        <h1 align="center" style="font-size: 30px; font-weight: 100; color: red">Quản Lý Nhân Viên</h1>
+                        
+                    </div>
                             <div style="padding-right:5%">
                                 <a style="color: green; font-size:250%" href="{{ url_for('.download_report') }}"
                                     title="Xuất file Excel">
@@ -50,7 +55,6 @@
 
                             <tr style="text-align: center">
                                 <th>STT</th>
-                                <th>Hình</th>
                                 <th>Tên</th>
                                 <th>Điểm<i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
@@ -61,8 +65,7 @@
                             <tr>
 
                                 <td>{{a.6}}</td>
-                                <td><img src="{{ url_for('static',filename=a.3 )}}"
-                                        style="height: 50px; width: 50px;" /></td>
+
                                 <td style="text-align: center">{{a.1}}</td>
                                 <td style="text-align: center">{{a.5}}</td>
                                 {% if a.4 == 1  %}
