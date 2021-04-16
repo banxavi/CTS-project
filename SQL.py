@@ -74,3 +74,7 @@ SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
                         on employee.Employee_Id = process.Employee_Id\
                         inner join cts.mission on mission.Mission_Id = process.Mission_Id\
                         set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
+
+#UPDATE PASSOWRD
+SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
+SQLUPDATEPASSWORD = 'UPDATE employee SET Password= %s WHERE Email= %s'
