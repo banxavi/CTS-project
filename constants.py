@@ -20,6 +20,7 @@ STATUS ="Trạng Thái"
 ACTION ="Tác Vụ"
 DESCRIPTION = "Mô Tả"
 TIME_REMAINING ="Thời Gian Còn Lại"
+STT = "STT"
 #Notification
 AVAIABLE = "Còn"
 UNAVAIABLE ="Không"
@@ -29,5 +30,8 @@ DOING ="Đang Làm"
 COMPLETE ="Hoàn Thành"
 BACK_SIDE ="Quay lại trang trước"
 DAY = "Ngày"
+CLOSE ="Đóng"
 #Mission Search
 MISSION_LIST_OF = "Danh Sách Nhiệm Vụ Của"
+#User Mission
+YOUR_MISSION_BOL = "NHIỆM VỤ CỦA BẠN"

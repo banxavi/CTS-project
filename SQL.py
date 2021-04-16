@@ -52,13 +52,28 @@ SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 # SHOW MISSION AVAIABLE
 SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1'
+
 # SHOW MISSION OF USER
 SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
                 ,mission.Description,mission.StartDate,mission.EndDate , mission.Point , \
                 process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
-                and employee.Email = %s'
+                and employee.Email = %s'  
+SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
+SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
+SQLUPDATELIMIT = "UPDATE mission inner join process\
+                        on process.Mission_Id = mission.Mission_Id\
+                        set mission.Limit = mission.Limit + 1 where process.Process_Id = %s"
+SQLUPDATEPOINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point - mission.Point*0.1 where process.Process_Id = %s"
+SQLCOMPLETEMISSION ="UPDATE process set Status = 2 where Process_Id = %s"
+SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
 #SHOW MISSION OF USER by ID
 SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
                         ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
@@ -66,6 +81,4 @@ SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Tit
 	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
 	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
                         where employee.Employee_Id = %s"
-SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"
-       
-SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
+SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"   
