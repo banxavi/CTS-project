@@ -37,3 +37,7 @@ UPDATESUCC = "Cập nhập thành công"
 IMAGEERROR = "Ảnh không hợp lệ"
 #Alert List user mission
 NOTTAKEMISSION = "Chưa có người nhận"
+#UPDATE PASSOWRD
+UPDATEPASSWORD = "Cập nhật mật khẩu thành công"
+PASSWORD = "Mật khẩu và xác nhận mật khẩu không khớp"
+PASSWORDOLD = "Mật khẩu cũ không chính xác"

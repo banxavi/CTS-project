@@ -75,32 +75,34 @@ def logout():
 @app.route('/logi',methods=['GET','POST'])
 def login():
     error = ""
-    global image
-   
+    global Employee_Id
+    # try:
     if request.method == 'POST':
-        cursor = mysql.connection.cursor() 
+        cursor = mysql.connection.cursor()
         user = request.form['idname']
-        psw = request.form['password']
-        passhash = hashlib.md5(psw.encode()).hexdigest() 
+        password = request.form['password']
+        passhash = hashlib.md5(password.encode()).hexdigest() 
+
+        cursor.execute(SQL.SQLSELECTACCOUNT, (user,  passhash,))
+        account = cursor.fetchone() 
+
         cursor.execute(SQL.SQLCHECKBLOCK, (user, passhash)) 
         checkblock = cursor.fetchone()
-        cursor.execute(SQL.SQLCHECKPASS,(user,passhash,))
-        check = cursor.fetchone()
-        if configadmin.username==user and configadmin.password==psw:
+
+        if user==configadmin.username and password==configadmin.password:
             session['idname'] = request.form['idname']  
-            return redirect(url_for('homeadmin'))
-            # return render_template('home.html')
+            return render_template('/home.html' )
 
         elif checkblock:
-            error = alert.LOGINSTATUS  
-        elif check:
-            session['idname'] = request.form['idname']  
-            cursor.execute(SQL.SQLIMAGE,(user,))
-            image = cursor.fetchone()
-            return redirect(url_for('home'))       
-        else :
-             error = alert.LOGINACCOUNT
-    return render_template("login.html",error=error)
+            error = alert.LOGINSTATUS   
+
+        elif account:
+            Employee_Id = account[0]
+            session['idname'] = request.form['idname']     
+            return render_template('/home.html',id=id)
+        else:
+            error = alert.LOGINACCOUNT
+    return render_template("login.html", error = error)
 
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
@@ -120,8 +122,7 @@ def register():
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", error = error)     
-
+    return render_template("login.html", errorres = error) 
 #Accept link gmail
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -149,7 +150,7 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point=image[1])
+            return render_template('/home.html', email = email)
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
@@ -326,7 +327,7 @@ def usermission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLMISSIONUSER,(email,))
         missionuser = cursor.fetchall()
-        return render_template("usermission.html",missionuser=missionuser,img=image[0],point=image[1])
+        return render_template("usermission.html",missionuser=missionuser)
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():

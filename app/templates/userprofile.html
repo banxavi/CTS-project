@@ -6,7 +6,7 @@
   
    <div class="form-group">
     <div class="col-md-8 text-right">
-      <h1 >CTS TMA</h1>
+      <h1 >CTS </h1>
     
     </div>
     </div>
@@ -71,6 +71,9 @@
         <div class="col-md-6.5 text-right">
         <a for="pwd" href="" data-toggle="modal" data-target="#myModal">Đổi mật khẩu</a>
         </div >
+        {% if error %}
+          <p style="color: red;"><strong>{{ error }}</strong> </p>
+        {% endif %}
       </form>
 
 
@@ -86,21 +89,22 @@
           <h4 class="modal-title" align = "center">Đổi Mật Khẩu</h4>
         </div>
         <div class="modal-body">
-          <form action="/" method="POST">
+          <form action="/changepassword" method="POST">
            <div class="form-group">
                 <label for="usr">Mật Khẩu Cũ:</label>
-                <input type="password" class="form-control"name="editmkcu">
+                <input type="password" class="form-control"name="oldpassword">
             </div>
             <div class="form-group">
                 <label for="usr">Mật Khẩu Mới:</label>
-                <input type="password" class="form-control" name="editmkcu">
+                <input type="password" class="form-control" name="password"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Mật khẩu phải chứa ít nhất một số, một kí tự hoa, kí tự thường và tối thiếu 8 kí tự">
             </div>
             <div class="form-group">
                 <label for="usr">Nhập Lại Mật Khẩu Mới:</label>
-                <input type="password" class="form-control" name="editmkcu">
+                <input type="password" class="form-control" name="confirm_password">
             </div>
 
         </div>
+     
         <div class="modal-footer">
           <button class="btn btn-primary" type='submit'>Cập Nhật</button>
           <button type="button"class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -114,6 +118,7 @@
   </form>
 </div>
 </body>
+
 
 <script>
   function sse() {

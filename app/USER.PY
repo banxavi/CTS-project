@@ -4,7 +4,6 @@ from hashlib import sha1
 from shutil import rmtree
 from stat import S_ISREG, ST_CTIME, ST_MODE
 import json
- 
 import os
 import time
 from app import app
@@ -21,6 +20,8 @@ import alert
 from app import CTS
 import SQL
 import mysql.connector
+import hashlib
+
 DATA_DIR = 'app/static/css'
 KEEP_ALIVE_DELAY = 25
 MAX_IMAGE_SIZE = 800, 600
@@ -33,7 +34,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-
+  
     database="cts"
     )
 
@@ -188,11 +189,11 @@ def profile():
             continue
         images.append('<div><img alt="User uploaded image" src="{}" /></div>'
                       .format(path))
-    mycursor = mydb.cursor(buffered=True)
+    mycursor = mydb.cursor()
     id = CTS.session['idname']
     mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
     myresult = mycursor.fetchall()
-    return render_template("userprofile.html",data = myresult,img=CTS.image[0],point=CTS.image[1])
+    return render_template("userprofile.html",data = myresult)
  
 
 @app.route('/updateprofile',methods=['GET','POST'])
@@ -206,27 +207,28 @@ def updateprofile():
         mydb.commit()
         flash(alert.UPDATESUCC)
         return redirect(url_for('profile'))
-        
+
 @app.route('/changepassword', methods=['GET', 'POST'])
 def changepassword():
     error = ""
     if request.method == "POST":
         email = CTS.session['idname']
         old = request.form['oldpassword']
+        oldmd5 =  hashlib.md5(old.encode()).hexdigest()
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         mycursor = mydb.cursor()
         mycursor.execute(SQL.SQLPASSWORD, (email,))
         user = mycursor.fetchone()
-        if old != user[0]:
-            error = alert.PASSOWRDOLD
+        if oldmd5 != user[0]:
+            flash('{}'.format(alert.PASSWORDOLD))
         elif password != confirm_password:
-            error = alert.PASSOWRD
+            flash('{}'.format(alert.PASSWORD))
         else:
             passhash = hashlib.md5(password.encode()).hexdigest()
-            mycursor.execute(SQL.UPDATEPASSOWRD, (passhash, Email))
+            mycursor.execute(SQL.SQLUPDATEPASSWORD, (passhash, email))
             mydb.commit()
-            mycursor.close()
+            flash('{}'.format(alert.UPDATEPASSWORD))
             return redirect(url_for('profile'))
-            error = alert.UPDATEPASSOWRD
     return redirect(url_for('profile'))
+    

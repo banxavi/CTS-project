@@ -59,6 +59,9 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+
+#UPDATE PASSOWRD
+
 #UPDATE PASSOWRD
 SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
 SQLUPDATEPASSWORD = 'UPDATE employee SET Password= %s WHERE Email= %s'
