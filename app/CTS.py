@@ -21,13 +21,13 @@ import SQL
 import configadmin
 from datetime import date, datetime,timedelta
 import pyautogui as pag
-
+import constants
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
+app.config['MYSQL_PASSWORD']='mickey321654'
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -326,7 +326,39 @@ def usermission():
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLMISSIONUSER,(email,))
         missionuser = cursor.fetchall()
-        return render_template("usermission.html",missionuser=missionuser,img=image[0],point=image[1])
+        cursor.execute(SQL.SQLIMAGE,(email,))
+        image1 = cursor.fetchone()
+        constants_list = constants
+        return render_template("usermission.html",missionuser=missionuser,img=image[0],point=image1[1],constants_list=constants_list)
+#Cancel Mission
+@app.route('/cancelmission/<id>/',methods=['GET','POST'])
+def cancelmission(id):
+    cursor = mysql.connection.cursor()
+    if request.method == "GET":
+        cursor.execute(SQL.SQLCANCELMISSION,(id,))
+        cursor.execute(SQL.SQLUPDATELIMIT,(id,))
+        cursor.execute(SQL.SQLUPDATEPOINT,(id,))
+        mysql.connection.commit()
+        if 'idname' in session: 
+            email = session['idname']
+            cursor.execute(SQL.SQLIMAGE,(email,))
+            image1 = cursor.fetchone()
+            flash(alert.CANCELMISSION)
+            return redirect(url_for('usermission',point=image1[1]))
+#Complete Mission
+@app.route('/donemission/<id>/',methods=['GET','POST'])
+def donemission(id):
+    cursor = mysql.connection.cursor()
+    if request.method == "GET":
+        cursor.execute(SQL.SQLCOMPLETEMISSION,(id,))
+        cursor.execute(SQL.SQLUPDATEDONE_POINT,(id,))
+        mysql.connection.commit()
+        if 'idname' in session: 
+            email = session['idname']
+            cursor.execute(SQL.SQLIMAGE,(email,))
+            image1 = cursor.fetchone()
+            flash(alert.DONEMISSION)
+            return redirect(url_for('usermission',point=image1[1]))
  # Mission avaiable
 @app.route('/usermissionavaiable')
 def usermissionavaiable():

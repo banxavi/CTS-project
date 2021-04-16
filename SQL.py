@@ -59,3 +59,16 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s'
+SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
+SQLUPDATELIMIT = "UPDATE mission inner join process\
+                        on process.Mission_Id = mission.Mission_Id\
+                        set mission.Limit = mission.Limit + 1 where process.Process_Id = %s"
+SQLUPDATEPOINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point - mission.Point*0.1 where process.Process_Id = %s"
+SQLCOMPLETEMISSION ="UPDATE process set Status = 2 where Process_Id = %s"
+SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
+                        on employee.Employee_Id = process.Employee_Id\
+                        inner join cts.mission on mission.Mission_Id = process.Mission_Id\
+                        set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
