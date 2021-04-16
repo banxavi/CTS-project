@@ -1,5 +1,5 @@
 #Mission management
-SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission'
+SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT,curdate() from mission'
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
@@ -9,7 +9,7 @@ SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employ
 employee.POINT,process.status,mission.Title ,employee.Image from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
 
-SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s, %s, %s,%s,%s,%s)'
+SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (Mission_Id,`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s,%s, %s, %s,%s,%s,%s)'
 SQLUPDATEMISS1 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
                 WHERE (`Mission_Id` = %s)'
 SQLUPDATEMISS0 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
@@ -74,3 +74,15 @@ SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
                         on employee.Employee_Id = process.Employee_Id\
                         inner join cts.mission on mission.Mission_Id = process.Mission_Id\
                         set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
+# SCHEDULE MISSION
+SQLTASKSCHEDULE = "select mission.Mission_Id, Mission.Title , \
+schedule.Schedule_Id, schedule.DateLoop, schedule.UnitLoop from mission ,\
+ schedule where schedule.Mission_Id = mission.Mission_Id"
+# UPDATE SCHEDULE
+SQLUPDATESCHEDULE='update schedule set DateLoop = %s , UnitLoop = %s \
+     where Mission_Id = %s'
+# MAX ID
+SQLMAXID='SELECT MAX(Mission_Id) AS MAXID FROM Mission'
+# ADD SCHEDULE NEW TASK
+SQLINSERTSCHEDULE = 'INSERT INTO `cts`.`schedule` \
+     (`Mission_Id`, `DateLoop`, `UnitLoop`) VALUES (%s,%s,%s)'
