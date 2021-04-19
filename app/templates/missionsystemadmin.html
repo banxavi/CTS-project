@@ -83,19 +83,19 @@
                                   {% else %}      
                                   <td style="text-align: center;">Hết</td>
                                   {% endif %}
-                             
-                                <td style="text-align: center;">
+                    
+                                <td>
                                   
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
                                     <a href="#" data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit"
                                         title="Sửa"><i class="material-icons">edit</i></a>
+                                    <a href="/"  data-toggle="modal" data-target="#modalloop{{a.0}}"  title="Thời gian lặp nhiệm vụ">
+                                        <i class="material-icons">loop</i></a>
                                     <a  onclick="return confirm('Bạn có chắc xóa nhiệm  này?')" href="/deletemission/{{a.0}}" 
                                     class="delete" title="Xóa" data-toggle="tooltip">
                                     <i class="material-icons">delete</i></a>
 
-                                    <a href="/"  data-toggle="modal" data-target="#modalloop{{a.0}}"  title="Thời gian lặp nhiệm vụ">
-                                        <i class="material-icons">Loop</i></a>
 
                                 </td>
                             </tr>
@@ -305,11 +305,10 @@
                                             <div class="col">
                                                 <label>Thời gian lặp lại nhiệm vụ:</label>
                                             <input type="number"  name="loop" value="{{a.3}}"
-                                            min="1" max="30" >                                                   
+                                            min="0" max="30" >                                                   
                                                 <select name="unitloop">
                                                     {%if a.4 ==0 %}
                                                     <option value="0">Không lặp</option>
-
                                                     {% elif a.4 ==1 %}
                                                     <option value="1">Ngày</option>
                                                     {% elif a.4 ==7%}
@@ -317,7 +316,8 @@
                                                     {% else %}
                                                     <option value="30">Tháng</option>
                                                     {% endif %}
-
+                                                    <option value="0">Không lặp</option>
+                                                    
                                                     <option value="1">Ngày</option>
                                                     
                                                     <option value="7">Tuần</option>
@@ -415,9 +415,9 @@
                                         <div class="row">
                                             <div class="col">
                                                 <label>Thời gian lặp lại nhiệm vụ:</label>
-                                            <input type="number" value="0"   name="loop"
+                                            <input type="number" value="0" placeholder="Số"   name="loop"
                                             min="0" max="30" >                                                   
-                                                <select name="unitloop">
+                                                <select name="unitloop" required>
                                                     <option value="0">Không lặp</option>
 
                                                     <option value="1">Ngày</option>
@@ -425,7 +425,6 @@
                                                     <option value="7">Tuần</option>
                                                   
                                                     <option value="30">Tháng</option>
-                           
 
                                                     </select>    
                                                    

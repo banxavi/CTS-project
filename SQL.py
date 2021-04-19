@@ -1,5 +1,5 @@
 #Mission management
-SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT,curdate() from mission'
+SQLMISSION = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id desc) as STT,curdate() from mission'
 
 SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email, \
  employee.POINT, process.status from process,employee where process.Employee_Id=employee.Employee_Id   \
@@ -86,3 +86,7 @@ SQLMAXID='SELECT MAX(Mission_Id) AS MAXID FROM Mission'
 # ADD SCHEDULE NEW TASK
 SQLINSERTSCHEDULE = 'INSERT INTO `cts`.`schedule` \
      (`Mission_Id`, `DateLoop`, `UnitLoop`) VALUES (%s,%s,%s)'
+#LOOP AUTO
+SQLLOOP = 'SELECT  Schedule_Id , Mission_Id, DateLoop, UnitLoop, DateLoop*UnitLoop as Numberday from schedule '
+SQLLOOPMISSION = 'SELECT  Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point ,datediff(EndDate,StartDate) from mission where  Mission_Id= %s'
+SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `State` = %s, `Limit` = %s WHERE (`Mission_Id` = %s)'

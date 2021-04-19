@@ -21,6 +21,8 @@ import alert
 from app import CTS
 import SQL
 import mysql.connector
+from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime,timedelta
 DATA_DIR = 'app/static/css'
 KEEP_ALIVE_DELAY = 25
 MAX_IMAGE_SIZE = 800, 600
@@ -33,7 +35,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
- 
+    password="123456",
     database="cts"
     )
 
@@ -242,5 +244,36 @@ def download_report():
     workbook.save(output)
     output.seek(0)
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
-        
+
+def loopschedule():
+    global loopall
+    mycursor = mydb.cursor()
+    mycursor.execute(SQL.SQLLOOP)
+    loopall = mycursor.fetchall()
+    sql = 'select *,datediff(EndDate,StartDate)  from mission'
+    mycursor.execute(sql)
+    fetchall = mycursor.fetchall()
+    now = datetime.now()
+    state = 1
+    limit = 1
     
+    for loop in loopall:        
+        if loop[3] != 0:
+            date = loop[1]
+            amountday = loop[4]
+            mycursor.execute(SQL.SQLLOOPMISSION,(date,))
+            loopmission = mycursor.fetchall()
+            for mission in loopmission:
+                startdate = now
+                peroid = mission[8]
+                enddate = startdate + timedelta(peroid)
+               
+                valloop = (startdate,enddate,state,limit,mission[0])
+                mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
+             
+                sched = BackgroundScheduler(daemon=True)
+                sched.add_job('cron',day=amountday)
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(loopschedule,'interval',seconds=20)
+sched.start() 

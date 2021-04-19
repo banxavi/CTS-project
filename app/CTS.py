@@ -24,10 +24,9 @@ import pyautogui as pag
 import constants
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
+app.config['MYSQL_PASSWORD'] = '123456'
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -257,9 +256,19 @@ def addmission():
         limit = request.form['limit']
         start = datetime.strptime(startdate,"%Y-%m-%d" )
         end = datetime.strptime(enddate,"%Y-%m-%d")
-
+        date = 0
+        unit = 0
         if start >= end:
-            flash("{}".format(alert.ERRORDATE))
+            flash("{}".format(alert.ADDERRORDATE))
+            return redirect(url_for('mission'))
+        elif int(dateloop)==0 or int(unitloop)==0:
+            val = (id,name,descr,startdate,enddate,limit,point)
+            cursor.execute(SQL.SQLINSERTMISSION,val)
+            mysql.connection.commit()
+            valschedule = (id,date,unit)
+            cursor.execute(SQL.SQLINSERTSCHEDULE,valschedule)
+            mysql.connection.commit()
+            flash("{}".format(alert.ADDMISSONSUCC)) 
             return redirect(url_for('mission'))
         else :
             val = (id,name,descr,startdate,enddate,limit,point)
@@ -308,6 +317,10 @@ def editmission():
             mysql.connection.commit()
             flash("{}".format(alert.EDITMISSIONSUCC))
             return redirect(url_for('mission'))
+        else:
+            flash("{}".format(alert.ERRORSYSTEM))
+            return redirect(url_for('mission'))
+
 
 # Admin edit mission
 @app.route('/deletemission/<id>/',methods=["GET","POST"])
@@ -326,17 +339,24 @@ def deletemission(id):
         return redirect(url_for('mission'))
 # Update schedule
 @app.route('/schedule',methods=["GET","POST"])
-def schedule():
+def updateschedule():
     cursor = mysql.connection.cursor()
     if request.method == 'POST':
         id = request.form['id']
         dateloop = request.form['loop']
         unitloop = request.form['unitloop']
-        val = (dateloop,unitloop,id)
-        cursor.execute(SQL.SQLUPDATESCHEDULE,val)
-        mysql.connection.commit()
-        flash("{}".format(alert.LOOPTASK))
-        return redirect(url_for('mission'))
+        if int(dateloop)==0 or int(unitloop)==0:
+            val = (0,0,id)
+            cursor.execute(SQL.SQLUPDATESCHEDULE,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.LOOPTASK))
+            return redirect(url_for('mission'))
+        else:
+            val = (dateloop,unitloop,id)
+            cursor.execute(SQL.SQLUPDATESCHEDULE,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.LOOPTASK))
+            return redirect(url_for('mission'))
 # Management ward admin
 @app.route('/managementward')
 def managementward():
