@@ -90,3 +90,7 @@ SQLINSERTSCHEDULE = 'INSERT INTO `cts`.`schedule` \
 SQLLOOP = 'SELECT  Schedule_Id , Mission_Id, DateLoop, UnitLoop, DateLoop*UnitLoop as Numberday from schedule '
 SQLLOOPMISSION = 'SELECT  Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point ,datediff(EndDate,StartDate) from mission where  Mission_Id= %s'
 SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `State` = %s, `Limit` = %s WHERE (`Mission_Id` = %s)'
+
+#UPDATE PASSOWRD
+SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
+SQLUPDATEPASSWORD = 'UPDATE employee SET Password= %s WHERE Email= %s'

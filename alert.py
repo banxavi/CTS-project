@@ -41,3 +41,9 @@ NOTTAKEMISSION = "Chưa có người nhận"
 #Alert update loop task
 LOOPTASK = "Thời gian của nhiệm vụ được lặp thành công"
 ERRORSYSTEM = "Lỗi chưa được xác định"
+
+
+#UPDATE PASSOWRD
+UPDATEPASSWORD = "Cập nhật mật khẩu thành công"
+PASSWORD = "Mật khẩu và xác nhận mật khẩu không khớp"
+PASSWORDOLD = "Mật khẩu cũ không chính xác"

@@ -7,6 +7,7 @@ import json
 import io
 import os,xlwt
 import time
+import hashlib
 from app import app
 from PIL import Image, ImageFile
 from gevent.event import AsyncResult
@@ -245,35 +246,61 @@ def download_report():
     output.seek(0)
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
 
-def loopschedule():
-    global loopall
-    mycursor = mydb.cursor()
-    mycursor.execute(SQL.SQLLOOP)
-    loopall = mycursor.fetchall()
-    sql = 'select *,datediff(EndDate,StartDate)  from mission'
-    mycursor.execute(sql)
-    fetchall = mycursor.fetchall()
-    now = datetime.now()
-    state = 1
-    limit = 1
+# def loopschedule():
+#     global loopall
+#     mycursor = mydb.cursor()
+#     mycursor.execute(SQL.SQLLOOP)
+#     loopall = mycursor.fetchall()
+#     sql = 'select *,datediff(EndDate,StartDate)  from mission'
+#     mycursor.execute(sql)
+#     fetchall = mycursor.fetchall()
+#     now = datetime.now()
+#     state = 1
+#     limit = 1
     
-    for loop in loopall:        
-        if loop[3] != 0:
-            date = loop[1]
-            amountday = loop[4]
-            mycursor.execute(SQL.SQLLOOPMISSION,(date,))
-            loopmission = mycursor.fetchall()
-            for mission in loopmission:
-                startdate = now
-                peroid = mission[8]
-                enddate = startdate + timedelta(peroid)
+#     for loop in loopall:        
+#         if loop[3] != 0:
+#             date = loop[1]
+#             amountday = loop[4]
+#             mycursor.execute(SQL.SQLLOOPMISSION,(date,))
+#             loopmission = mycursor.fetchall()
+#             for mission in loopmission:
+#                 startdate = now
+#                 peroid = mission[8]
+#                 enddate = startdate + timedelta(peroid)
                
-                valloop = (startdate,enddate,state,limit,mission[0])
-                mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
+#                 valloop = (startdate,enddate,state,limit,mission[0])
+#                 mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
              
-                sched = BackgroundScheduler(daemon=True)
-                sched.add_job('cron',day=amountday)
+#                 sched = BackgroundScheduler(daemon=True)
+#                 sched.add_job('cron',day=amountday)
 
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(loopschedule,'interval',seconds=20)
-sched.start() 
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(loopschedule,'interval',seconds=20)
+# sched.start() 
+
+@app.route('/changepassword', methods=['GET', 'POST'])
+def changepassword():
+    error = ""
+    if request.method == "POST":
+        email = CTS.session['idname']
+        old = request.form['oldpassword']
+        oldmd5 =  hashlib.md5(old.encode()).hexdigest()
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        mycursor = mydb.cursor()
+        mycursor.execute(SQL.SQLPASSWORD, (email,))
+        user = mycursor.fetchone()
+        if oldmd5 != user[0]:
+            flash('{}'.format(alert.PASSWORDOLD))
+        elif password != confirm_password:
+            flash('{}'.format(alert.PASSWORD))
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest()
+            mycursor.execute(SQL.SQLUPDATEPASSWORD, (passhash, email))
+            mydb.commit()
+            flash('{}'.format(alert.UPDATEPASSWORD))
+            return redirect(url_for('profile'))
+    return redirect(url_for('profile'))
+        
+    
