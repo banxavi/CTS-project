@@ -242,5 +242,30 @@ def download_report():
     workbook.save(output)
     output.seek(0)
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
+
+
+@app.route('/changepassword', methods=['GET', 'POST'])
+def changepassword():
+    error = ""
+    if request.method == "POST":
+        email = CTS.session['idname']
+        old = request.form['oldpassword']
+        oldmd5 =  hashlib.md5(old.encode()).hexdigest()
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        mycursor = mydb.cursor()
+        mycursor.execute(SQL.SQLPASSWORD, (email,))
+        user = mycursor.fetchone()
+        if oldmd5 != user[0]:
+            flash('{}'.format(alert.PASSWORDOLD))
+        elif password != confirm_password:
+            flash('{}'.format(alert.PASSWORD))
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest()
+            mycursor.execute(SQL.SQLUPDATEPASSWORD, (passhash, email))
+            mydb.commit()
+            flash('{}'.format(alert.UPDATEPASSWORD))
+            return redirect(url_for('profile'))
+    return redirect(url_for('profile'))
         
     
