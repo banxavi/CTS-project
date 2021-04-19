@@ -82,3 +82,7 @@ SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Tit
 	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
                         where employee.Employee_Id = %s"
 SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"   
+
+#UPDATE PASSOWRD
+SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
+SQLUPDATEPASSWORD = 'UPDATE employee SET Password= %s WHERE Email= %s'
