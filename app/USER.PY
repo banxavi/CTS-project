@@ -246,38 +246,32 @@ def download_report():
     output.seek(0)
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
 
-# def loopschedule():
-#     global loopall
-#     mycursor = mydb.cursor()
-#     mycursor.execute(SQL.SQLLOOP)
-#     loopall = mycursor.fetchall()
-#     sql = 'select *,datediff(EndDate,StartDate)  from mission'
-#     mycursor.execute(sql)
-#     fetchall = mycursor.fetchall()
-#     now = datetime.now()
-#     state = 1
-#     limit = 1
+def loopschedule():
+    global loopall
+    mycursor = mydb.cursor()
+    mycursor.execute(SQL.SQLLOOP)
+    loopall = mycursor.fetchall()
+    now = datetime.now()
+    state = 1
+    limit = 1
     
-#     for loop in loopall:        
-#         if loop[3] != 0:
-#             date = loop[1]
-#             amountday = loop[4]
-#             mycursor.execute(SQL.SQLLOOPMISSION,(date,))
-#             loopmission = mycursor.fetchall()
-#             for mission in loopmission:
-#                 startdate = now
-#                 peroid = mission[8]
-#                 enddate = startdate + timedelta(peroid)
-               
-#                 valloop = (startdate,enddate,state,limit,mission[0])
-#                 mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
-             
-#                 sched = BackgroundScheduler(daemon=True)
-#                 sched.add_job('cron',day=amountday)
+    for loop in loopall:        
+        if loop[3] != 0:
+            date = loop[1]
+            amountday = loop[4]
+            mycursor.execute(SQL.SQLLOOPMISSION,(date,))
+            loopmission = mycursor.fetchall()
+            for mission in loopmission:
+                startdate = now
+                enddate = startdate + timedelta(1)           
+                valloop = (startdate,enddate,state,limit,mission[0])
+                mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
+                mydb.commit()
 
-# sched = BackgroundScheduler(daemon=True)
-# sched.add_job(loopschedule,'interval',seconds=20)
-# sched.start() 
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(loopschedule,'interval',seconds=20)
+sched.start() 
+
 
 @app.route('/changepassword', methods=['GET', 'POST'])
 def changepassword():

@@ -238,13 +238,13 @@
                                                 <div class="col">
                                                     <label>Ngày bắt đầu:</label>
 
-                                                    <input type="date" name="startdate" min={{min}} class="form-control"
+                                                    <input type="date" name="startdate" id='start' min={{min}} class="form-control"
                                                         value="{{a.3}}">
                                                 </div>
                                                 <div class="col">
                                                     <label>Ngày kết thúc:</label>
-                                                    <input type="date" name="enddate"  min={{max}} class="form-control"
-                                                        value="{{a.4}}">
+                                                    <input type="date" name="enddate" id='end'  min={{max}} class="form-control"
+                                                        value="{{a.4}}" onchange="handleredit(event)";>
                                                 </div>
                                             </div>
                                         </div>
@@ -389,15 +389,50 @@
                                         <div class="row">
                                             <div class="col">
                                                 <label>Ngày bắt đầu:</label>
-                                                <input type="date" name="startdate" class="form-control" min={{min}} required>
+                                                <input type="date" id='start1' name="startdate" class="form-control" min={{min}} required>
                                             </div>
                                             <div class="col">
                                                 <label>Ngày kết thúc:</label>
-                                                <input type="date" name="enddate"  min={{max}}  class="form-control" required>
+                                                <input type="date" id='end1' name="enddate"  min={{max}}  class="form-control" onchange="handler(event)"; required>
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        function handler(e){
+                                            var dateone = new Date(document.getElementById('start1').value);
+                                            var datetwo = new Date(document.getElementById('end1').value);
+                                         
+                                            if(dateone>datetwo)
+                                            {
+                                                result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
+                                                alert(result);
+                                            }
+                                            else
+                                            {
+                                                result = "Ngày hợp lệ";
+                                                alert(result);
+                                        
+                                            }            
+                                            }   
 
+                                            function handleredit(e){
+                                            var dateone = new Date(document.getElementById('start').value);
+                                            var datetwo = new Date(document.getElementById('end').value);
+                                         
+                                            if(dateone>datetwo)
+                                            {
+                                                result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
+                                                alert(result);
+                                            }
+                                            else
+                                            {
+                                                result = "Ngày hợp lệ";
+                                                alert(result);
+                                        
+                                            }            
+                                            }   
+                                    
+                                    </script>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col">
