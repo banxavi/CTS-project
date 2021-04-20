@@ -379,8 +379,13 @@ def takemission(id):
     Employee_Id =cursor.fetchone()
     cursor.execute(SQL.SQLVALIDATE,(Employee_Id[0],id))
     Validate = cursor.fetchone()
+    cursor.execute(SQL.SQLVALIDATE_CANCEL,(Employee_Id[0],id,))
+    Validate_cancel = cursor.fetchone()
     if request.method == "GET":
-        if Validate:
+        if Validate_cancel:
+            flash(alert.TAKEMISSIONFAIL_CANCEL)
+            return redirect(url_for('usermissionavaiable'))
+        elif Validate:
             flash(alert.TAKEMISSIONFAIL)
             return redirect(url_for('usermissionavaiable'))
         else:
