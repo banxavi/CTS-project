@@ -59,7 +59,7 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
-                and employee.Email = %s'
+                and employee.Email = %s'  
 SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
 SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
 SQLUPDATELIMIT = "UPDATE mission inner join process\
@@ -74,6 +74,14 @@ SQLUPDATEDONE_POINT = "Update cts.process inner join cts.employee\
                         on employee.Employee_Id = process.Employee_Id\
                         inner join cts.mission on mission.Mission_Id = process.Mission_Id\
                         set employee.Point = employee.Point + mission.Point where process.Process_Id = %s"
+#SHOW MISSION OF USER by ID
+SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
+                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
+	                    From((cts.employee\
+	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
+	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
+                        where employee.Employee_Id = %s"
+SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"   
 
 #UPDATE PASSOWRD
 SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
