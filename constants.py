@@ -1,5 +1,6 @@
 #General
 NAME = "CTS"
+USER_MANAGEMENT="Quản lý nhân viên"
 #Mission avaiable
 AVAIABLE_MISSIONSYSTEM = "Nhiệm vụ đang có trên hệ thống"
 CHOICE_MISSION = "Lựa chọn nhiệm vụ"
@@ -18,7 +19,19 @@ QUANTITY_REMAINING ="Số Lượng Còn"
 STATUS ="Trạng Thái"
 ACTION ="Tác Vụ"
 DESCRIPTION = "Mô Tả"
+TIME_REMAINING ="Thời Gian Còn Lại"
+STT = "STT"
 #Notification
 AVAIABLE = "Còn"
 UNAVAIABLE ="Không"
 NOTIFICATION ="Thông Báo"
+CANCEL ="Hủy"
+DOING ="Đang Làm"
+COMPLETE ="Hoàn Thành"
+BACK_SIDE ="Quay lại trang trước"
+DAY = "Ngày"
+CLOSE ="Đóng"
+#Mission Search
+MISSION_LIST_OF = "Danh Sách Nhiệm Vụ Của"
+#User Mission
+YOUR_MISSION_BOL = "NHIỆM VỤ CỦA BẠN"
