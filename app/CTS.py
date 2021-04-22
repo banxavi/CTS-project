@@ -18,6 +18,7 @@ from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
 import SQL
+import constants
 import configadmin
 from datetime import date, datetime,timedelta
 import pyautogui as pag
@@ -262,7 +263,7 @@ def addmission():
             flash("{}".format(alert.ADDERRORDATE))
             return redirect(url_for('mission'))
         elif int(dateloop)==0 or int(unitloop)==0:
-            val = (id,name,descr,startdate,enddate,limit,point)
+            val = (id,name,descr,startdate,enddate,limit,point,limit)
             cursor.execute(SQL.SQLINSERTMISSION,val)
             mysql.connection.commit()
             valschedule = (id,date,unit)
@@ -271,7 +272,7 @@ def addmission():
             flash("{}".format(alert.ADDMISSONSUCC)) 
             return redirect(url_for('mission'))
         else :
-            val = (id,name,descr,startdate,enddate,limit,point)
+            val = (id,name,descr,startdate,enddate,limit,point,limit)
             cursor.execute(SQL.SQLINSERTMISSION,val)
             mysql.connection.commit()
             valschedule = (id,dateloop,unitloop)
@@ -412,6 +413,18 @@ def usermissionavaiable():
     cursor.execute(SQL.SQLMISSION1)
     mission = cursor.fetchall()
     return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
+    
+#Research MissionofUser
+@app.route('/missionsearch/<id>',methods=['GET','POST'])
+def missionsearch(id):
+   
+        cursor = mysql.connection.cursor()
+        cursor.execute(SQL.SQLSHOWUSERMISSION,(id,))
+        listEmployee = cursor.fetchall()
+        cursor.execute(SQL.SQLSHOWNAMEOFUSER,(id,))
+        NameEmployee = cursor.fetchall()
+        constants_list  = constants
+        return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
 # User profile
 # @app.route('/userprofile')
 # def userprofile():

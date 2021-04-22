@@ -9,11 +9,12 @@ SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employ
 employee.POINT,process.status,mission.Title ,employee.Image from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
 
-SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (Mission_Id,`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`)  VALUES (%s,%s, %s, %s,%s,%s,%s)'
-SQLUPDATEMISS1 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
-                WHERE (`Mission_Id` = %s)'
-SQLUPDATEMISS0 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s \
-                WHERE (`Mission_Id` = %s)'
+SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (Mission_Id,`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`,LimitDefault) \
+  VALUES (%s,%s, %s, %s,%s,%s,%s,%s)'
+SQLUPDATEMISS1 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s, \
+               State=1 WHERE (`Mission_Id` = %s)'
+SQLUPDATEMISS0 = 'UPDATE `cts`.`mission` SET State =%s, `Title` = %s, `Description` = %s, `StartDate` = %s, `EndDate` = %s, `Limit` = %s, `Point` = %s ,\
+                State=0 WHERE (`Mission_Id` = %s)'
 SQLDELETEMISS = 'DELETE from mission WHERE Mission_Id=%s'
 # REGISTER
 SQLREGISTER = 'INSERT INTO employee (Email,Password) VALUES (%s,%s)'
@@ -59,7 +60,7 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
-                and employee.Email = %s'
+                and employee.Email = %s'  
 SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
 SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
 SQLUPDATELIMIT = "UPDATE mission inner join process\
@@ -87,9 +88,18 @@ SQLMAXID='SELECT MAX(Mission_Id) AS MAXID FROM Mission'
 SQLINSERTSCHEDULE = 'INSERT INTO `cts`.`schedule` \
      (`Mission_Id`, `DateLoop`, `UnitLoop`) VALUES (%s,%s,%s)'
 #LOOP AUTO
-SQLLOOP = 'SELECT  Schedule_Id , Mission_Id, DateLoop, UnitLoop, DateLoop*UnitLoop as Numberday from schedule '
-SQLLOOPMISSION = 'SELECT  Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point ,datediff(EndDate,StartDate) from mission where  Mission_Id= %s'
-SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `State` = %s, `Limit` = %s WHERE (`Mission_Id` = %s)'
+SQLLOOP = 'select mission.Mission_Id,DateLoop*UnitLoop as NumberDay, CurrentDate,datediff(EndDate,StartDate) from Mission \
+inner join Schedule where mission.Mission_Id=Schedule.Mission_Id and DateLoop >0 '
+SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `State` = %s, mission.Limit=mission.LimitDefault   WHERE (`Mission_Id` = %s)'
+SQLCURRENTDATE = 'UPDATE `cts`.`schedule` SET `CurrentDate` = CurrentDate+1 where Mission_Id=%s '
+#SHOW MISSION OF USER by ID
+SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
+                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
+	                    From((cts.employee\
+	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
+	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
+                        where employee.Employee_Id = %s"
+SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Employee_Id=%s"   
 
 #UPDATE PASSOWRD
 SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'

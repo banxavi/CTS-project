@@ -12,17 +12,30 @@
     
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-       <script>
-        $(document).ready(function() {
-           $('#example').DataTable({     
-             "aLengthMenu": [[10,15, 20, 25, -1], [10,15, 20, 25, "All"]],
-               "iDisplayLength": 10
-              } 
-           );
-       } );
-        </script> 
+      <script>
+  $(document).ready(function () {
+    $('#example').DataTable({
+      "oLanguage": {
+        "sLengthMenu": "Hiển thị _MENU_ ",
+        "sSearch": "Tìm kiếm:",
+        "sInfo": "Bảng có _TOTAL_ dữ liệu(_START_ đến _END_)",
+        "oPaginate": {
+          "sNext": "Tiếp",
+          "sPrevious": "Lùi",   
+        }
+      },
+      "aLengthMenu": [
+        [10, 15, 20, 25, -1],
+        [10, 15, 20, 25, "All"]
+      ],
+      "iDisplayLength": 10
+    });
+  });
+</script>
+
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
           <link rel="stylesheet" href="assets/css/style.css">
-    
+          <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
 </html>
+

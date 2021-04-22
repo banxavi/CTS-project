@@ -247,30 +247,29 @@ def download_report():
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
 
 def loopschedule():
-    global loopall
     mycursor = mydb.cursor()
     mycursor.execute(SQL.SQLLOOP)
     loopall = mycursor.fetchall()
     now = datetime.now()
     state = 1
-    limit = 1
-    
-    for loop in loopall:        
-        if loop[3] != 0:
-            date = loop[1]
-            amountday = loop[4]
-            mycursor.execute(SQL.SQLLOOPMISSION,(date,))
-            loopmission = mycursor.fetchall()
-            for mission in loopmission:
-                startdate = now
-                enddate = startdate + timedelta(1)           
-                valloop = (startdate,enddate,state,limit,mission[0])
-                mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
-                mydb.commit()
-
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(loopschedule,'interval',seconds=20)
-sched.start() 
+    for mission in loopall:
+        Idmission = mission[0]
+        mycursor.execute(SQL.SQLCURRENTDATE,(Idmission,))
+        mydb.commit()
+        totaldate = mission[1]
+        currentdate = mission[2]
+        if currentdate % totaldate == 0:
+            startdate = now
+            peroid = mission[1]
+            enddate = startdate + timedelta(peroid)             
+            valloop = (startdate,enddate,state,Idmission)
+            mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
+            mydb.commit()
+            print("Mission", Idmission, " đã được reset thành công" )
+loopschedule()
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(loopschedule,'interval',seconds=20)
+# sched.start() 
 
 
 @app.route('/changepassword', methods=['GET', 'POST'])
