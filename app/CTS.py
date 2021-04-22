@@ -28,7 +28,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
+app.config['MYSQL_PASSWORD'] = "123456"
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -117,11 +117,11 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = alert.REGISTERACCOUNT 
+            errores = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", error = error)     
+    return render_template("login.html", errores = errores)     
 
 #Accept link gmail
 @app.route('/confirm_email/<token>')

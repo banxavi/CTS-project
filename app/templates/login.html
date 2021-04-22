@@ -24,94 +24,105 @@
   style="background-image: url(https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-03.jpg);">
   <div style="padding: 0 20px;" class="wrapper">
     <div class="title-text">
-      <div  class="title login">
+      {%if errores%}
+      <div class="title login" style="margin-left: -50%;">
+      {%else%}
+        <div class="title login">
+      {%endif%}
         CTS INTERNSHIP</div>
       <div class="title signup">
         CTS INTERNSHIP</div>
-    </div>
-    <div class="form-container">
-      <div class="slide-controls">
-        <input type="radio" name="slide" id="login" checked>
-        <input type="radio" name="slide" id="signup">
-        <label for="login" class="slide login">Đăng nhập</label>
-        <label for="signup" class="slide signup">Đăng ký</label>
-        <div class="slider-tab">
-        </div>
       </div>
+      <div class="form-container">
+        <div class="slide-controls">
+          <input type="radio" name="slide" id="login" checked>
+          {%if errores%}
+          <input type="radio" name="slide" id="signup" checked>
+          {%else%}
+          <input type="radio" name="slide" id="signup">
+          {%endif%}
+          <label for="login" class="slide login">Đăng nhập</label>
 
-      <div class="form-inner">
+          <label for="signup" class="slide signup">Đăng ký</label>
+          <div class="slider-tab">
+          </div>
+        </div>
 
-        <form action="/logi" method="POST" class="login">
-          <div class="field">
-            <input type="text" value="{{
+        <div class="form-inner">
+          {%if errores%}
+          <form action="/logi" method="POST" class="login" style="margin-left: -50%;">
+            {%else%}
+            <form action="/logi" method="POST" class="login">
+              {%endif%}
+              <div class="field">
+                <input type="text" value="{{
                 request.form.idname }}" name="idname" placeholder="Email hoặc tài khoản" required>
-          </div>
-          <div class="field">
-            <input type="password" value="{{
+              </div>
+              <div class="field">
+                <input type="password" value="{{
                 request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
-          </div>
-          
+              </div>
 
-          {% if error %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
-            {% endif %}
-            <!-- <div class="row align-items-center remember">
+
+              {% if error %}
+              <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
+                {% endif %}
+                <!-- <div class="row align-items-center remember">
                 <input type="checkbox" name="check" value="check" checked>Remember Me
             </div> -->
 
-            <div class="">
-              <a href="/forgotpassword" style="color: blue;">Bạn quên mật khẩu?</a></div>
-            <div class="field btn">
-              <div class="btn-layer">
-              </div>
-              <input type="submit" value="Xác nhận">
-            </div>
-            <div class="signup-link">
-              Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></div>
-        </form>
-        
-        <form action="/notiregister" method="POST" class="signup">
-          <div class="field">
-            <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-          </div>
-          {% if error %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
-            {% endif %}
+                <div class="">
+                  <a href="/forgotpassword" style="color: blue;">Bạn quên mật khẩu?</a></div>
+                <div class="field btn">
+                  <div class="btn-layer">
+                  </div>
+                  <input type="submit" value="Xác nhận">
+                </div>
+                <div class="signup-link">
+                  Chưa có tài khoản? <a style="color: blue;" href="#">Đăng ký ngay</a></div>
+            </form>
 
-            <div class="field btn">
-              <div class="btn-layer">
+            <form action="/notiregister" method="POST" class="signup">
+              <div class="field">
+                <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
               </div>
-      <input type="submit" class="signup" value="Tiếp tục">
-            </div>
-        </form>
+              {% if errores %}
+              <p style="color: red;"><strong>Thông báo:</strong> {{ errores }}
+                {% endif %}
 
+                <div class="field btn">
+                  <div class="btn-layer">
+                  </div>
+                  <input type="submit" class="signup" value="Tiếp tục">
+                </div>
+            </form>
+
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    
-    const loginText = document.querySelector(".title-text .login");
-    const loginForm = document.querySelector("form.login");
-    const loginBtn = document.querySelector("label.login");
-    const signupBtn = document.querySelector("label.signup");
-    const signupLink = document.querySelector("form .signup-link a");
+    <script>
+      const loginText = document.querySelector(".title-text .login");
+      const loginForm = document.querySelector("form.login");
+      const loginBtn = document.querySelector("label.login");
+      const signupBtn = document.querySelector("label.signup");
+      const signupLink = document.querySelector("form .signup-link a");
 
 
 
-    signupBtn.onclick = (() => {
-      loginForm.style.marginLeft = "-50%";
-      loginText.style.marginLeft = "-50%";
-    });
-    loginBtn.onclick = (() => {
-      loginForm.style.marginLeft = "0%";
-      loginText.style.marginLeft = "0%";
-    });
-    signupLink.onclick = (() => {
-      signupBtn.click();
-      return false;
-    });
-  </script>
+      signupBtn.onclick = (() => {
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+      });
+      loginBtn.onclick = (() => {
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+      });
+      signupLink.onclick = (() => {
+        signupBtn.click();
+        return false;
+      });
+    </script>
 
 </body>
 

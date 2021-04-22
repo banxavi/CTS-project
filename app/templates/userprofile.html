@@ -18,14 +18,18 @@
         <h1 style="text-align: center;">Thông Tin Cá Nhân</h1>
         {% for a in data %}
      <div style="padding: 0 200px;" class="form-group" >
-        <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
-
-        <fieldset>
-            <!-- <div  id="progressbar"> -->
-            <input  style="height: 50px; width: 100px;border: 1px dashed #BBB; cursor:pointer;" 
-             value ="{{request.form['file']}}}" name="file" id="file" title="Chọn file" type="file" />
-
-          </fieldset>
+      {% if filename%}
+      <img src="{{ url_for('display_image', filename=filename) }}" style="height: 100px; width: 100px; border-radius: 25px;" />
+      {%else%}
+       <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
+      {%endif%}
+      <form method="post" action="/" enctype="multipart/form-data">
+        <dl>
+        <p>
+          <input type="file" name="file" autocomplete="off" onchange="this.form.submit()" required>
+        </p>
+        </dl>
+    </form>
     
       </div>
       <div id="images"></div>
