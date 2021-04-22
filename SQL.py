@@ -52,7 +52,7 @@ SQLHOMECOUNTMISS='select count(mission.Mission_Id) from mission'
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 # SHOW MISSION AVAIABLE
-SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1'
+SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1 and `Limit` > 0'
 
 # SHOW MISSION OF USER
 SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
@@ -60,7 +60,7 @@ SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title 
                 process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
-                and employee.Email = %s'  
+                and employee.Email = %s' 
 SQLEXPORTEXCEL = "SELECT Employee_Id,Email,Name,Point,Status FROM employee"
 SQLCANCELMISSION = "UPDATE process set Status = 0 where Process_Id = %s"
 SQLUPDATELIMIT = "UPDATE mission inner join process\
@@ -104,3 +104,10 @@ SQLSHOWNAMEOFUSER = "Select employee.Name from cts.employee where employee.Emplo
 #UPDATE PASSOWRD
 SQLPASSWORD = 'SELECT employee.Password FROM employee WHERE Email= %s'
 SQLUPDATEPASSWORD = 'UPDATE employee SET Password= %s WHERE Email= %s'
+#Take Mission and Validate
+SQLTAKEMISSION = 'INSERT INTO `cts`.`process` (`Employee_Id`, `Mission_Id`, `status`) VALUES (%s,%s,%s)'
+SQLVALIDATE = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s"
+SQLVALIDATE_CANCEL = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s and Status =0"
+SQLVALIDATE_COMPLETE = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s and Status =2"
+SQLGETEMP_ID = "SELECT Employee_Id FROM cts.employee where Email=%s"
+SQLUPDATEMISSION = "UPDATE cts.mission SET mission.Limit=mission.Limit-1 where Mission_Id=%s"  

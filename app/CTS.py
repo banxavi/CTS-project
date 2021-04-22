@@ -2,6 +2,7 @@ from typing import ContextManager
 from flask.globals import g
 from flask.templating import render_template
 from flask import Flask, render_template, redirect, url_for, request, flash, session, sessions
+from mysql.connector import constants
 from app import app
 from flask_mysqldb import MySQL
 import hashlib
@@ -20,6 +21,7 @@ import alert
 import SQL
 import constants
 import configadmin
+import constants
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 import constants
@@ -412,6 +414,32 @@ def usermissionavaiable():
     cursor = mysql.connection.cursor()
     cursor.execute(SQL.SQLMISSION1)
     mission = cursor.fetchall()
+    constants_list = constants
+    return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1],constants_list=constants_list)
+#Take Mission
+@app.route('/takemission/<id>/',methods=['GET','POST'])
+def takemission(id):
+    cursor = mysql.connection.cursor()
+    Employee_mail = session['idname']
+    cursor.execute(SQL.SQLGETEMP_ID,(Employee_mail,))
+    Employee_Id =cursor.fetchone()
+    cursor.execute(SQL.SQLVALIDATE,(Employee_Id[0],id))
+    Validate = cursor.fetchone()
+    cursor.execute(SQL.SQLVALIDATE_CANCEL,(Employee_Id[0],id,))
+    Validate_cancel = cursor.fetchone()
+    if request.method == "GET":
+        if Validate_cancel:
+            flash(alert.TAKEMISSIONFAIL_CANCEL)
+            return redirect(url_for('usermissionavaiable'))
+        elif Validate:
+            flash(alert.TAKEMISSIONFAIL)
+            return redirect(url_for('usermissionavaiable'))
+        else:
+            cursor.execute(SQL.SQLTAKEMISSION,(Employee_Id[0],id,1,))
+            cursor.execute(SQL.SQLUPDATEMISSION,(id,))
+            mysql.connection.commit()
+            flash(alert.TAKEMISSION)
+            return redirect(url_for('usermissionavaiable'))
     return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1])
     
 #Research MissionofUser
