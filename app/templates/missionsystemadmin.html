@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="/viewmission" method="POST">
-                                        <div class="form-group">
+                                        <div class="form-group" hidden>
                                             <label>ID:</label>
                                             <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
                                         </div>
@@ -215,7 +215,7 @@
                                 <div class="modal-body">
                                     <form action="/editmission" method="POST">
 
-                                        <div class="form-group">
+                                        <div class="form-group" hidden>
                                             <label>ID:</label>
                                             <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
                                         </div>
@@ -361,8 +361,8 @@
                                 <form action="/addmission" method="POST">
 
                                     <div class="form-group">
-                                        <div class="row">
-                                            <div class="col">
+                                        <div class="row" hidden>
+                                    
                                                 
                                         <label>ID:</label>
                                 
@@ -372,6 +372,7 @@
                                         <input type="text" value="{{maxid+1}}" class="form-control" name="id" readonly>
                                         {% endif %}
                                     </div>
+                                    <div class="row">
                                     <div class="col">
                                         <label>Tên nhiệm vụ:</label>
 

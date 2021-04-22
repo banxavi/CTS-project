@@ -36,7 +36,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="123456",
+
     database="cts"
     )
 
@@ -258,7 +258,7 @@ def loopschedule():
         mydb.commit()
         totaldate = mission[1]
         currentdate = mission[2]
-        if currentdate % totaldate == 0:
+        if currentdate % totaldate == 0 and currentdate!=0:
             startdate = now
             peroid = mission[1]
             enddate = startdate + timedelta(peroid)             

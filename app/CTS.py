@@ -29,7 +29,7 @@ app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
+
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -234,7 +234,7 @@ def viewmission():
     if request.method == 'POST':
         id = request.form['id']
         cursor = mysql.connection.cursor()
-        cursor.execute(SQL.SQLVIEWMISS,id)
+        cursor.execute(SQL.SQLVIEWMISS,(id,))
         view = cursor.fetchall()
         Title = alert.NOTTAKEMISSION
         for a in view:
