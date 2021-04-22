@@ -21,7 +21,9 @@ BLOCKEMPLOYEE = "Cấm nhân viên thành công"
 DONEMISSION = "Chúc mừng bạn đã hoàn thành nhiệm vụ"
 CANCELMISSION = "Bạn đã hủy nhiệm vụ thành công"
 #Alert mission avaiable
-TAKEMISSION = "Bạn đã nhận nhiệm vụ thành công"
+TAKEMISSION = "Nhận nhiệm vụ thành công!"
+TAKEMISSIONFAIL ="Bạn đã nhận nhiệm vụ này rồi!"
+TAKEMISSIONFAIL_CANCEL = "Bạn vừa hủy nhiệm vụ này, không nhận được nữa"
 #Alert admin manage ward
 ADDWARDSUCC = "Thêm phần thưởng thành công"
 ADDWARDFAIL = "Thêm phần thưởng thất bại"
