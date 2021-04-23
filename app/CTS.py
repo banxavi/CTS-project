@@ -119,11 +119,11 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = alert.REGISTERACCOUNT 
+            errores = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", error = error)     
+    return render_template("login.html", errores = errores)     
 
 #Accept link gmail
 @app.route('/confirm_email/<token>')

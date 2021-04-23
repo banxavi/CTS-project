@@ -32,12 +32,15 @@
             <div>
                 <div class="table-wrapper">
                     <div class="table-title">
-                        <div class="row" style="margin-top: 55px;">
-                            <div class="col-sm-8">
-                                <h1 style="font-size: 50px;
-                        font-weight: 700;
-                        color:red">CTS</h1>
+                        <div class="row" style="margin-top: 55px;display:flex; justify-content: space-between;">
+                            <div style="padding-left: 1%;">
+                                <h1 style="font-size: 50px; font-weight: 700; color: red">CTS</h1>
                             </div>
+                            <div>
+                                <h1 align="center" style="font-size: 30px; font-weight: 100; color: red">
+                                Quản Lý Nhiệm Vụ</h1>
+                            </div>
+
                             <div style="padding-bottom: 0 60px;" data-toggle="modal" data-target="#mymodal"
                                 class="alert alert-success alert-dismissable" role="alert">
                                 <a href="#">Thêm nhiệm vụ mới</a>
@@ -50,7 +53,7 @@
                         <thead>
 
                             <tr style="text-align: center;">
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Tên nhiệm vụ</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
@@ -67,279 +70,276 @@
                             <tr>
                                 <td>{{a.8}}</td>
                                 <td>{{a.1}}</td>
-                            
+
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
                                         value="{{a.3}}" readonly></td>
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
                                         value="{{a.4}}" readonly></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
-                      
+
                                 {% if a.5 == 1 %}
                                 <td style="text-align: center;">Còn</td>
                                 {% endif %}
-                                  {% if a.5 == 0 %}      
-                                  <td style="text-align: center;">Hết</td>
-                                  {% endif %}
-                                  
+                                {% if a.5 == 0 %}
+                                <td style="text-align: center;">Hết</td>
+                                {% endif %}
+
                                 <td style="text-align: center;">
-                                  
+
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
                                     <a href="#" data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit"
                                         title="Sửa"><i class="material-icons">edit</i></a>
-                                    <a  onclick="return confirm('Bạn có chắc xóa nhiệm  này?')" href="/deletemission/{{a.0}}" 
-                                    class="delete" title="Xóa" data-toggle="tooltip">
-                                    <i class="material-icons">delete</i></a>
+                                    <a onclick="return confirm('Bạn có chắc xóa nhiệm  này?')"
+                                        href="/deletemission/{{a.0}}" class="delete" title="Xóa" data-toggle="tooltip">
+                                        <i class="material-icons">delete</i></a>
                                 </td>
                             </tr>
                             {% endfor %}
-                            
+
                         </tbody>
 
                     </table>
 
-                    {% with messages = get_flashed_messages() %}         
-                    {% if messages %} 
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
                     <div style="width: 150px;" class="alert alert-info">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong >Thông báo:</strong>
+                        <strong>Thông báo:</strong>
+                    </div>
+                    {% for message in messages %}
+                    <div style="width: 500px;" class="alert alert-secondary  alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+
+    </form>
+    {% for a in task %}
+    <div id="modalview{{a.0}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chi tiết nhiệm vụ</h4>
                 </div>
-                      {% for message in messages %}
-                        <div style="width: 500px;" class="alert alert-secondary  alert-dismissible">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                             {{message}}
-                          </div>              
-                      {% endfor %} 
-                    {% endif %} 
-                  {% endwith %}
+                <div class="modal-body">
+                    <form action="/viewmission" method="POST">
+                        <div class="form-group">
+                            <label>ID:</label>
+                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên nhiệm vụ:</label>
 
-                          
-                    </form>
-                        {% for a in task %}
-                    <div id="modalview{{a.0}}" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Chi tiết nhiệm vụ</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="/viewmission" method="POST">
-                                        <div class="form-group">
-                                            <label>ID:</label>
-                                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tên nhiệm vụ:</label>
+                            <input type="text" class="form-control" name="name" value="{{a.1}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Mô tả:</label>
 
-                                            <input type="text" class="form-control" name="name" value="{{a.1}}"
-                                                readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Mô tả:</label>
-
-                                            <textarea type="text" style="text-align: left;" class="form-control"
-                                                name="address" readonly>{{a.2}}  
+                            <textarea type="text" style="text-align: left;" class="form-control" name="address"
+                                readonly>{{a.2}}  
 
                                 </textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Ngày bắt đầu:</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Ngày bắt đầu:</label>
 
-                                                    <input type="date" class="form-control" value="{{a.3}}" readonly>
-                                                </div>
-                                                <div class="col">
-                                                    <label>Ngày kết thúc:</label>
-                                                    <input type="date" class="form-control" value="{{a.4}}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Điểm:</label>
-
-                                                    <input type="text" class="form-control" value="{{a.7}}" readonly>
-                                                </div>
-                                                <div class="col">
-                                                    <label>Số lượng:</label>
-                                                    <input type="text" class="form-control" value="{{a.6}}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Trạng thái:</label>
-                                            {% if a.5 == 1 %}
-                                            <input type="text" class="form-control" value="Còn" readonly></td>
-                                            {% endif %}
-                                              {% if a.5 == 0 %}      
-                                              <input type="text" class="form-control" value="Hết" readonly></td>
-                                              {% endif %}
-
-                                    
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Những người đã nhận:</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <button class="btn btn-primary" type="submit">Xem</button>
-                                        </div>
-                                    </form>
+                                    <input type="date" class="form-control" value="{{a.3}}" readonly>
                                 </div>
-                                <div class="modal-footer">
-                              
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-
+                                <div class="col">
+                                    <label>Ngày kết thúc:</label>
+                                    <input type="date" class="form-control" value="{{a.4}}" readonly>
                                 </div>
                             </div>
                         </div>
-                    </div>
-     
-                    {% endfor %}
-                   
-                    <!-- Modal update -->
-                    {% for a in task %}
-                    <div id="modaledit{{a.0}}" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Sửa nhiệm vụ</h4>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Điểm:</label>
+
+                                    <input type="text" class="form-control" value="{{a.7}}" readonly>
                                 </div>
-                                <div class="modal-body">
-                                    <form action="/editmission" method="POST">
+                                <div class="col">
+                                    <label>Số lượng:</label>
+                                    <input type="text" class="form-control" value="{{a.6}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái:</label>
+                            {% if a.5 == 1 %}
+                            <input type="text" class="form-control" value="Còn" readonly></td>
+                            {% endif %}
+                            {% if a.5 == 0 %}
+                            <input type="text" class="form-control" value="Hết" readonly></td>
+                            {% endif %}
 
-                                        <div class="form-group">
-                                            <label>ID:</label>
-                                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tên nhiệm vụ:</label>
 
-                                            <input type="text" class="form-control" name="name" value="{{a.1}}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Mô tả:</label>
-                                            <!-- <input type="" style="text-align: left;" value="{{a.2}}"
+                        </div>
+
+                        <div class="form-group">
+                            <label>Những người đã nhận:</label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Xem</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    <!-- Modal update -->
+    {% for a in task %}
+    <div id="modaledit{{a.0}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Sửa nhiệm vụ</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/editmission" method="POST">
+
+                        <div class="form-group">
+                            <label>ID:</label>
+                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên nhiệm vụ:</label>
+
+                            <input type="text" class="form-control" name="name" value="{{a.1}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Mô tả:</label>
+                            <!-- <input type="" style="text-align: left;" value="{{a.2}}"
                                                 class="form-control" name="descr">
 
                                             </input> -->
-                                            <textarea style="text-align: left;" class="form-control"
-                                           name="descr"> {{a.2}}
+                            <textarea style="text-align: left;" class="form-control" name="descr"> {{a.2}}
                                             </textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Ngày bắt đầu:</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Ngày bắt đầu:</label>
 
-                                                    <input type="date" name="startdate" min={{min}} class="form-control"
-                                                        value="{{a.3}}">
-                                                </div>
-                                                <div class="col">
-                                                    <label>Ngày kết thúc:</label>
-                                                    <input type="date" name="enddate"  min={{max}} class="form-control"
-                                                        value="{{a.4}}">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Điểm:</label>
-
-                                                    <input type="number" name="point"  class="form-control"
-                                                    min="1" max="10000"   value="{{a.7}}">
-                                                </div>
-                                                <div class="col">
-                                                    <label>Số lượng:</label>
-                                                    <input type="number" name="limit" class="form-control"
-                                                    min="0" max="100"     value="{{a.6}}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
-                                        </div>
-                                    </form>
+                                    <input type="date" name="startdate" min={{min}} class="form-control"
+                                        value="{{a.3}}">
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <div class="col">
+                                    <label>Ngày kết thúc:</label>
+                                    <input type="date" name="enddate" min={{max}} class="form-control" value="{{a.4}}">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                    </table>
-                </div>
-                <!-- Modal Add Employee-->
 
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Điểm:</label>
 
-                <div id="mymodal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Thêm nhiệm vụ mới</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/addmission" method="POST">
-                                    <div class="form-group">
-                                        <label>Tên nhiệm vụ:</label>
-
-                                        <input type="text" class="form-control" name="name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Mô tả:</label>
-
-                                        <textarea class="form-control" name="descr" required>
-                        </textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>Ngày bắt đầu:</label>
-                                                <input type="date" name="startdate" class="form-control" min={{min}} required>
-                                            </div>
-                                            <div class="col">
-                                                <label>Ngày kết thúc:</label>
-                                                <input type="date" name="enddate"  min={{max}}  class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>Điểm:</label>
-
-                                                <input type="number"  min="1" max="1000" name="point" class="form-control" required>
-                                            </div>
-                                            <div class="col">
-                                                <label>Số lượng:</label>
-                                                <input type="number"   min="0" max="100" name="limit" class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-primary" type="submit">Lưu</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <input type="number" name="point" class="form-control" min="1" max="10000"
+                                        value="{{a.7}}">
+                                </div>
+                                <div class="col">
+                                    <label>Số lượng:</label>
+                                    <input type="number" name="limit" class="form-control" min="0" max="100"
+                                        value="{{a.6}}">
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
+                        </div>
+                    </form>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
+    </div>
+    {% endfor %}
+    </table>
+    </div>
+    <!-- Modal Add Employee-->
+
+
+    <div id="mymodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm nhiệm vụ mới</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/addmission" method="POST">
+                        <div class="form-group">
+                            <label>Tên nhiệm vụ:</label>
+
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mô tả:</label>
+
+                            <textarea class="form-control" name="descr" required>
+                        </textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Ngày bắt đầu:</label>
+                                    <input type="date" name="startdate" class="form-control" min={{min}} required>
+                                </div>
+                                <div class="col">
+                                    <label>Ngày kết thúc:</label>
+                                    <input type="date" name="enddate" min={{max}} class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Điểm:</label>
+
+                                    <input type="number" min="1" max="1000" name="point" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label>Số lượng:</label>
+                                    <input type="number" min="0" max="100" name="limit" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
         </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
     </form>
 
 
