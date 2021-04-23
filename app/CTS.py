@@ -10,7 +10,6 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
-# import DTO
 import SQL
 import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
