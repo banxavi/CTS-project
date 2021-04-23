@@ -267,9 +267,9 @@ def loopschedule():
             mydb.commit()
             print("Mission", Idmission, " đã được reset thành công" )
 loopschedule()
-# sched = BackgroundScheduler(daemon=True)
-# sched.add_job(loopschedule,'interval',seconds=20)
-# sched.start() 
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(loopschedule,'cron',day=1)
+sched.start()
 
 
 @app.route('/changepassword', methods=['GET', 'POST'])
