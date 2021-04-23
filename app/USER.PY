@@ -131,6 +131,7 @@ def blockuser(id_user):
     cursor = mydb.cursor()
     cursor.execute(SQL.SQLUNLOCKACC, ("0",id_user,))
     mydb.commit()
+    flash(alert.BLOCKEMPLOYEE)
     return redirect(url_for('usermanagement'))
 
 # Admin Unlock Account
@@ -139,6 +140,7 @@ def unlockuser(id_user):
     cursor = mydb.cursor()
     cursor.execute(SQL.SQLUNLOCKACC, ("1",id_user,))
     mydb.commit()
+    flash(alert.UNBLOCKEMPLOYEE)
     return redirect(url_for('usermanagement'))
 
 

@@ -17,7 +17,8 @@ DELETEMISSIONSUCC = "Xóa nhiệm vụ thành công"
 USERTAKEMISSION = "Sửa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
 DELETEUSERMISSION =  "Xóa thất bại! Vì đã có người nhận nhiệm vụ này rồi"
 #Alert block employee
-BLOCKEMPLOYEE = "Cấm nhân viên thành công"
+BLOCKEMPLOYEE = "Cấm tài khoản thành công"
+UNBLOCKEMPLOYEE="Mở khóa tài khoản thành công"
 #Alert user's mission
 DONEMISSION = "Chúc mừng bạn đã hoàn thành nhiệm vụ"
 CANCELMISSION = "Bạn đã hủy nhiệm vụ thành công"

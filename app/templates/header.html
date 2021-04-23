@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <!-- Created By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
+
 <head>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
 </head>
 
 {% if session['idname'] =="administrator"%}
 <header>
-<body>
-  <nav class="navbar">
-    <div class="content">
-      <div class="logo">
-        <a href="#">Hello Admin</a>
-      </div>
-      <ul class="menu-list">
-        <div class="icon1 cancel-btn">
-          <i class="fas fa-times"></i>
+
+  <body>
+    <nav class="navbar">
+      <div class="content">
+        <div class="logo">
+          <a href="#">Hello Admin</a>
         </div>
-        <li ><a href="/home">Trang chủ</a></li>
-        <li><a href="/mission">Quản lí nhiệm vụ</a></li>
-        <li><a href="/usermanagement">Quản lí nhân viên</a></li>
-        <li><a href="/managementward">Quản lý đổi thưởng</a></li>
-        <li><a href="#">Thông báo</a></li>
-        <li><a  onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
-      </ul>
-      <div class="icon1 menu-btn">
-        <i class="fas fa-bars"></i>
+        <ul class="menu-list">
+          <div class="icon1 cancel-btn">
+            <i class="fas fa-times"></i>
+          </div>
+          <li><a href="/home">Trang chủ</a></li>
+          <li><a href="/mission">Quản lí nhiệm vụ</a></li>
+          <li><a href="/usermanagement">Quản lí nhân viên</a></li>
+          <li><a href="/managementward">Quản lý đổi thưởng</a></li>
+          <li><a href="#">Thông báo</a></li>
+          <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
+        </ul>
+        <div class="icon1 menu-btn">
+          <i class="fas fa-bars"></i>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 </header>
 
 {% endif %}
@@ -40,54 +42,121 @@
 
   <nav class="navbar">
     <div class="content">
-  
+
       <div class="logo">
         <a href="#">Hello Member</a>
-     <a href="/profile" title="Thông tin cá nhân">  <img src="{{ url_for('static',filename=img)}}" alt="Avatar" style="width:50px;height:50px;border-radius: 25px;"  class="avatar"></a>   
+        <a href="/profile" title="Thông tin cá nhân"> <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
+            style="width:50px;height:50px;border-radius: 25px;" class="avatar"></a>
       </div>
-   
+
 
       <ul class="menu-list">
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
-        <li ><a  href="/">Trang chủ</a></li>
-        <li><a href="/usermission">Danh sách nhiệm vụ</a></li>
+        <li><a href="/">Trang chủ</a></li>
+        <li class="dropdown">
+          <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button"
+            href="{{ url_for('usermission') }}">Danh sách nhiệm vụ</a>
+          <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+            <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
+            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>
+          </div>
+        </li>
         <li><a href="/doithuonguser">Đổi quà</a></li>
         <li><a href="#about">Thông báo</a></li>
         <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
-        <li><a href ="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
+        <li><a href="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
       </ul>
-      
+
       <div class="icon1 menu-btn">
         <i class="fas fa-bars"></i>
       </div>
     </div>
-    
+
   </nav>
 </header>
 
 {% endif %}
-  <script>
-    const body = document.querySelector("body");
-    const navbar = document.querySelector(".navbar");
-    const menuBtn = document.querySelector(".menu-btn");
-    const cancelBtn = document.querySelector(".cancel-btn");
-    menuBtn.onclick = ()=>{
-      navbar.classList.add("show");
-      menuBtn.classList.add("hide");
-      body.classList.add("disabled");
-    }
-    cancelBtn.onclick = ()=>{
-      body.classList.remove("disabled");
-      navbar.classList.remove("show");
-      menuBtn.classList.remove("hide");
-    }
-  </script>
-
-  <script type="text/javascript">
-    $(document).on('click','ul li', function(){
-      $(this).addClass('active').siblings().removeClass('active')
-    })
-  </script>
-
+<script>
+  const body = document.querySelector("body");
+  const navbar = document.querySelector(".navbar");
+  const menuBtn = document.querySelector(".menu-btn");
+  const cancelBtn = document.querySelector(".cancel-btn");
+  menuBtn.onclick = () => {
+    navbar.classList.add("show");
+    menuBtn.classList.add("hide");
+    body.classList.add("disabled");
+  }
+  cancelBtn.onclick = () => {
+    body.classList.remove("disabled");
+    navbar.classList.remove("show");
+    menuBtn.classList.remove("hide");
+  }
+</script>
+<style>
+  .dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #000000;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 10px 10px;
+    margin-right: 20px;
+    text-decoration: none;
+    display: block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: rgba(255, 255, 255, 0.116);
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    background-color: #000000;
+  }
+  .dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #000000;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 10px 10px;
+    margin-right: 20px;
+    text-decoration: none;
+    display: block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: rgba(255, 255, 255, 0.116);
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    background-color: #000000;
+  }
+</style>

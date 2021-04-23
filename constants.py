@@ -2,7 +2,7 @@
 NAME = "CTS"
 USER_MANAGEMENT="Quản lý nhân viên"
 #Mission avaiable
-AVAIABLE_MISSIONSYSTEM = "Nhiệm vụ đang có trên hệ thống"
+AVAIABLE_MISSIONSYSTEM = "NHIỆM VỤ ĐANG CÓ TRÊN HỆ THỐNG"
 CHOICE_MISSION = "Lựa chọn nhiệm vụ"
 YOUR_MISSION ="Nhiệm vụ của bạn"
 MISSIONSYSTEM ="Nhiệm vụ trên hệ thống"
