@@ -23,6 +23,9 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+
+
 </head>
 
 
@@ -205,6 +208,7 @@
                     {% endfor %}
                    
                     <!-- Modal update -->
+                    
                     {% for a in task %}
                     <div id="modaledit{{a.0}}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -222,7 +226,8 @@
                                         <div class="form-group">
                                             <label>Tên nhiệm vụ:</label>
 
-                                            <input type="text" class="form-control" name="name" value="{{a.1}}">
+                                            <input type="text" class="form-control" id="name" name="name" value="{{a.1}}"
+                                            oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  required>
                                         </div>
                                         <div class="form-group">
                                             <label>Mô tả:</label>
@@ -230,7 +235,8 @@
                                                 class="form-control" name="descr">
                                             </input> -->
                                             <textarea style="text-align: left;" class="form-control"
-                                           name="descr"> {{a.2}}
+                                            id="descr"   name="descr"
+                                            oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  required> {{a.2}}
                                             </textarea>
                                         </div>
                                         <div class="form-group">
@@ -239,12 +245,12 @@
                                                     <label>Ngày bắt đầu:</label>
 
                                                     <input type="date" name="startdate" id='start' min={{min}} class="form-control"
-                                                        value="{{a.3}}" required>
+                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   value="{{a.3}}" required>
                                                 </div>
                                                 <div class="col">
                                                     <label>Ngày kết thúc:</label>
                                                     <input type="date" name="enddate" id='end'  min={{max}} class="form-control"
-                                                        value="{{a.4}}" onchange="handleredit(event)"; required>
+                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"     value="{{a.4}}" onchange="handleredit(event)"; required>
                                                 </div>
                                             </div>
                                         </div>
@@ -254,13 +260,13 @@
                                                 <div class="col">
                                                     <label>Điểm:</label>
 
-                                                    <input type="number" name="point"  class="form-control"
-                                                    min="1" max="10000"   value="{{a.7}}" required>
+                                                    <input type="number" name="point" id="point" class="form-control"
+                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   min="1" max="10000"   value="{{a.7}}" required>
                                                 </div>
                                                 <div class="col">
                                                     <label>Số lượng:</label>
-                                                    <input type="number" name="limit" class="form-control"
-                                                    min="0" max="100"     value="{{a.6}}" required>
+                                                    <input type="number" id="limit" name="limit" class="form-control"
+                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   min="0" max="100"     value="{{a.6}}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,7 +283,9 @@
                             </div>
                         </div>
                     </div>
+                  
                     {% endfor %}
+                  
                     </table>
                 </div>
 
@@ -305,7 +313,7 @@
                                             <div class="col">
                                                 <label>Thời gian lặp lại nhiệm vụ:</label>
                                             <input type="number"  name="loop" value="{{a.3}}"
-                                            min="0" max="30" required >                                                   
+                                            oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"        min="0" max="30" required >                                                   
                                                 <select name="unitloop">
                                                     {%if a.4 ==0 %}
                                                     <option value="0">Không lặp</option>
@@ -376,25 +384,29 @@
                                     <div class="col">
                                         <label>Tên nhiệm vụ:</label>
 
-                                        <input type="text" class="form-control" name="name" required>
+                                        <input type="text" class="form-control" 
+                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  name="name" required>
                                     </div>
                                     </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Mô tả:</label>
 
-                                        <textarea class="form-control" name="descr" required>
+                                        <textarea class="form-control" name="descr"
+                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  required>
                         </textarea>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col">
                                                 <label>Ngày bắt đầu:</label>
-                                                <input type="date" id='start1' name="startdate" class="form-control" min={{min}} required>
+                                                <input type="date" id='start1' name="startdate"
+                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" min={{min}} required>
                                             </div>
                                             <div class="col">
                                                 <label>Ngày kết thúc:</label>
-                                                <input type="date" id='end1' name="enddate"  min={{max}}  class="form-control" onchange="handler(event)"; required>
+                                                <input type="date" id='end1' name="enddate"
+                                                min={{max}}  class="form-control" onchange="handler(event)"; required>
                                             </div>
                                         </div>
                                     </div>
@@ -439,11 +451,13 @@
                                             <div class="col">
                                                 <label>Điểm:</label>
 
-                                                <input type="number"  min="1" max="1000" name="point" class="form-control" required>
+                                                <input type="number"  min="1" max="1000" name="point"
+                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" required>
                                             </div>
                                             <div class="col">
                                                 <label>Số lượng:</label>
-                                                <input type="number"  min="1" max="100" name="limit" class="form-control" required>
+                                                <input type="number"  min="1" max="100" name="limit" 
+                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
@@ -451,7 +465,8 @@
                                         <div class="row">
                                             <div class="col">
                                                 <label>Thời gian lặp lại nhiệm vụ:</label>
-                                            <input type="number" value="0" placeholder="Số"   name="loop"
+                                            <input type="number" value="0" placeholder="Số"  
+                                            oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  name="loop"
                                             min="0" max="30"required>                                                   
                                                 <select name="unitloop" required>
                                                     <option value="0">Không lặp</option>
@@ -483,6 +498,7 @@
             </div>
         </div>
         </div>
+      
     </form>
 
 

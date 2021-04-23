@@ -10,7 +10,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
-import DTO
+# import DTO
 import SQL
 import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
@@ -40,7 +40,7 @@ def home():
     global image
     if 'idname' not in session:
         return render_template("login.html")
-    elif session['idname']=="abc":
+    elif session['idname']=="administator":
         
         return render_template('home.html')
     elif 'idname' in session: 
