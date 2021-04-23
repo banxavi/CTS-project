@@ -40,8 +40,7 @@ def home():
     global image
     if 'idname' not in session:
         return render_template("login.html")
-    elif session['idname']=="administator":
-        
+    elif session['idname']=="administrator":   
         return render_template('home.html')
     elif 'idname' in session: 
         email = session['idname']
@@ -107,7 +106,7 @@ def login():
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
 def register():
-    error = ""
+    errores = ""
     if request.method == 'POST':
         email = request.form['email']
         token = s.dumps(email, salt='email-confirm')
@@ -118,11 +117,11 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            error = alert.REGISTERACCOUNT 
+            errores = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", error = error)     
+    return render_template("login.html", errores = errores)     
 
 #Accept link gmail
 @app.route('/confirm_email/<token>')
@@ -393,7 +392,7 @@ def cancelmission(id):
             cursor.execute(SQL.SQLIMAGE,(email,))
             image1 = cursor.fetchone()
             flash(alert.CANCELMISSION)
-            return redirect(url_for('usermission',point=image1[1]))
+            return redirect(url_for('usermission'))
 #Complete Mission
 @app.route('/donemission/<id>/',methods=['GET','POST'])
 def donemission(id):

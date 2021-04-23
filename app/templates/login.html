@@ -48,25 +48,27 @@
           </div>
         </div>
 
-      <div class="form-inner">
-
-        <form action="/logi" method="POST" class="login">
-          <div class="field">
-            <input type="text" value="{{
-                request.form.idname }}" name="idname"
-                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  placeholder="Email hoặc tài khoản" required>
-          </div>
-          <div class="field">
-            <input type="password" value="{{
-                request.form.password }}" id="password"
-                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  name="password" placeholder="Mật khẩu" required>
-          </div>
-          
-
-          {% if error %}
-          <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
-            {% endif %}
-            <!-- <div class="row align-items-center remember">
+        <div class="form-inner">
+          {%if errores%}
+          <form action="/logi" method="POST" class="login" style="margin-left: -50%;">
+            {%else%}
+            <form action="/logi" method="POST" class="login">
+              {%endif%}
+              <div class="field">
+                <input type="text" value="{{
+                request.form.idname }}" name="idname" placeholder="Email hoặc tài khoản" required>
+              </div>
+              <div class="field">
+                <input type="password" value="{{
+                request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
+              </div>
+              <div>
+              {% if error %}
+                <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
+              {% endif %}
+            </div>
+              <input type="checkbox" onclick="myFunction()">Hiện mật khẩu
+                <!-- <div class="row align-items-center remember">
                 <input type="checkbox" name="check" value="check" checked>Remember Me
             </div> -->
 
