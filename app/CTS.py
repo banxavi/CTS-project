@@ -10,6 +10,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
+# import DTO
 import SQL
 import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
@@ -117,11 +118,11 @@ def register():
         cursor.execute(SQL.SQLSELECTEMAIL,(email,))
         account = cursor.fetchone()
         if account:
-            errores = alert.REGISTERACCOUNT 
+            error = alert.REGISTERACCOUNT 
         else:
             mail.send(msg)
             return render_template('notification_register.html')
-    return render_template("login.html", errores = errores)     
+    return render_template("login.html", error = error)     
 
 #Accept link gmail
 @app.route('/confirm_email/<token>')

@@ -35,15 +35,12 @@
             <div>
                 <div class="table-wrapper">
                     <div class="table-title">
-                        <div class="row" style="margin-top: 55px;display:flex; justify-content: space-between;">
-                            <div style="padding-left: 1%;">
-                                <h1 style="font-size: 50px; font-weight: 700; color: red">CTS</h1>
+                        <div class="row" style="margin-top: 55px;">
+                            <div class="col-sm-8">
+                                <h1 style="font-size: 50px;
+                        font-weight: 700;
+                        color:red">CTS</h1>
                             </div>
-                            <div>
-                                <h1 align="center" style="font-size: 30px; font-weight: 100; color: red">
-                                Quản Lý Nhiệm Vụ</h1>
-                            </div>
-
                             <div style="padding-bottom: 0 60px;" data-toggle="modal" data-target="#mymodal"
                                 class="alert alert-success alert-dismissable" role="alert">
                                 <a href="#">Thêm nhiệm vụ mới</a>
@@ -56,7 +53,7 @@
                         <thead>
 
                             <tr style="text-align: center;">
-                                <th>STT</th>
+                                <th>#</th>
                                 <th>Tên nhiệm vụ</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
@@ -73,7 +70,7 @@
                             <tr>
                                 <td>{{a.8}}</td>
                                 <td>{{a.1}}</td>
-
+                            
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
                                         value="{{a.3}}" readonly></td>
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
@@ -106,7 +103,7 @@
                                 </td>
                             </tr>
                             {% endfor %}
-
+                            
                         </tbody>
 
                     </table>
@@ -151,17 +148,58 @@
                                                 name="address" readonly>{{a.2}}  
 
                                 </textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label>Ngày bắt đầu:</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>Ngày bắt đầu:</label>
 
-                                    <input type="date" class="form-control" value="{{a.3}}" readonly>
+                                                    <input type="date" class="form-control" value="{{a.3}}" readonly>
+                                                </div>
+                                                <div class="col">
+                                                    <label>Ngày kết thúc:</label>
+                                                    <input type="date" class="form-control" value="{{a.4}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>Điểm:</label>
+
+                                                    <input type="text" class="form-control" value="{{a.7}}" readonly>
+                                                </div>
+                                                <div class="col">
+                                                    <label>Số lượng:</label>
+                                                    <input type="text" class="form-control" value="{{a.6}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Trạng thái:</label>
+                                            {% if a.5 == 1 %}
+                                            <input type="text" class="form-control" value="Còn" readonly></td>
+                                            {% endif %}
+                                              {% if a.5 == 0 %}      
+                                              <input type="text" class="form-control" value="Hết" readonly></td>
+                                              {% endif %}
+
+                                    
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Những người đã nhận:</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" type="submit">Xem</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col">
-                                    <label>Ngày kết thúc:</label>
-                                    <input type="date" class="form-control" value="{{a.4}}" readonly>
+                                <div class="modal-footer">
+                              
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+
                                 </div>
                             </div>
                         </div>
@@ -239,9 +277,8 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col">
-                                    <label>Ngày kết thúc:</label>
-                                    <input type="date" name="enddate" min={{max}} class="form-control" value="{{a.4}}">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                 </div>
                             </div>
                         </div>
@@ -317,10 +354,6 @@
                 </table>
             </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label>Điểm:</label>
 
 
                 <!-- Modal loop -->
@@ -373,7 +406,7 @@
                                             <div class="col">
                                                 <label>Ngày kết thúc:</label>
                                                 <input type="date" id='end1' name="enddate"
-                                                min={{max}}  class="form-control" onchange="handler(event)"; required>
+                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"   min={{max}}  class="form-control" onchange="handler(event)"; required>
                                             </div>
                                         </div>
                                     </div>
@@ -455,30 +488,13 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label>Điểm:</label>
-
-                                    <input type="number" min="1" max="1000" name="point" class="form-control" required>
-                                </div>
-                                <div class="col">
-                                    <label>Số lượng:</label>
-                                    <input type="number" min="0" max="100" name="limit" class="form-control" required>
-                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <button class="btn btn-primary" type="submit">Lưu</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
             </div>
         </div>
         </div>
