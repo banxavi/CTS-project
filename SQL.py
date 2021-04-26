@@ -39,14 +39,11 @@ SQLUSERMANA = 'Select Employee_Id, Name, Email,Image,Status,Point, ROW_NUMBER() 
 # HOME USER SELECT
 SQLHOMEUSER1 ='SELECT count(process.Process_Id) \
 from process inner join \
-employee on employee.Employee_Id = process.Employee_Id where process.Status = "1" \
+employee on employee.Employee_Id = process.Employee_Id where process.Status = %s \
 and employee.Email = %s'
-SQLHOMEUSER2 ='SELECT count(process.Process_Id) \
-from process inner join \
-employee on employee.Employee_Id = process.Employee_Id where process.Status = "2" \
-and employee.Email = %s'
+SQLMAXPOINT = 'SELECT max(Point) from employee'
 #HOME ADMIN SQL SELECT 
-SQLHOMECOUNTEMPL = 'select count(employee.Employee_Id) from Employee'
+SQLHOMECOUNTEMPL = 'select  count(employee.Employee_Id),sum(Point)  from Employee'
 SQLHOMECOUNTMISS='select count(mission.Mission_Id) from mission'
 #MANAGEMENT LOCK ACCOUNT
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'

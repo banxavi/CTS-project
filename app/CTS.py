@@ -47,11 +47,13 @@ def home():
         cursor = mysql.connection.cursor() 
         cursor.execute(SQL.SQLIMAGE,(email,))
         image = cursor.fetchone()
-        cursor.execute(SQL.SQLHOMEUSER1,(email,))
+        cursor.execute(SQL.SQLHOMEUSER1,(1,email))
         homeuser = cursor.fetchone()
-        cursor.execute(SQL.SQLHOMEUSER2,(email,))
+        cursor.execute(SQL.SQLHOMEUSER1,(2,email))
         homeuser1 = cursor.fetchone()
-        return render_template('home.html',img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
+        cursor.execute(SQL.SQLMAXPOINT)
+        homeuser2 = cursor.fetchone()
+        return render_template('home.html',homeuser2=homeuser2[0],img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
     else:
         return render_template("login.html")
 
@@ -63,7 +65,7 @@ def homeadmin():
         countempl = cursor.fetchone()
         cursor.execute(SQL.SQLHOMECOUNTMISS)
         countmiss = cursor.fetchone()
-        return render_template('home.html',countempl=countempl[0],countmiss=countmiss[0])
+        return render_template('home.html',countpoint=countempl[1],countempl=countempl[0],countmiss=countmiss[0])
     else:
         return render_template("login.html")
 # Logout account
@@ -137,6 +139,7 @@ def confirm_email(token):
 @app.route('/updatepass',methods=['GET','POST'])
 def updatepass():
     error = ""
+    img ="download.jpg"
     email = request.args.get('email', None)
     if request.method == 'POST':
         password = request.form['password']
@@ -150,13 +153,14 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point=image[1])
+            return render_template('/home.html', email = email,img=img,point=0)
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
 @app.route('/forgotpassword', methods=['GET','POST'])
 def forgotpassword():
     error = ""
+
     if request.method == 'POST':
         email = request.form['email']
         token = s.dumps(email, salt='email-confirm')
@@ -185,6 +189,7 @@ def forgot_email(token):
 #Update Password forgot
 @app.route('/updatepassforgot',methods=['GET','POST'])
 def updatepassforgot():
+   
     error = ""
     email = request.args.get('email', None)
     if request.method == 'POST':
