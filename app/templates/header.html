@@ -12,7 +12,7 @@
 <header>
 
   <body>
-    <nav class="navbar">
+    <nav class="navbar" >
       <div class="content">
         <div class="logo">
           <a href="#">Hello Admin</a>
@@ -28,12 +28,23 @@
           <li><a href="#">Thông báo</a></li>
           <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
         </ul>
+        <script type="text/javascript">
+        const current = location.href;
+        const menuItem = document.querySelectorAll("a")
+        const menuLength = menuItem.length
+        for (let i=0; i<menuLength; i++){
+          if(menuItem[i].href===current){
+            menuItem[i].className ='active'
+          }
+        }
+        </script>
         <div class="icon1 menu-btn">
           <i class="fas fa-bars"></i>
         </div>
       </div>
     </nav>
 </header>
+
 
 {% endif %}
 
@@ -55,20 +66,27 @@
           <i class="fas fa-times"></i>
         </div>
         <li><a href="/">Trang chủ</a></li>
-        <li class="dropdown">
-          <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button"
-            href="{{ url_for('usermission') }}">Danh sách nhiệm vụ</a>
-          <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+        <li >        
             <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
-            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>
-          </div>
+          </li>
+            <li >
+            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>        
         </li>
         <li><a href="/doithuonguser">Đổi quà</a></li>
         <li><a href="#about">Thông báo</a></li>
         <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
         <li><a href="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
       </ul>
-
+      <script type="text/javascript">
+        const current = location.href;
+        const menuItem = document.querySelectorAll("a")
+        const menuLength = menuItem.length
+        for (let i=0; i<menuLength; i++){
+          if(menuItem[i].href===current){
+            menuItem[i].className ='active'
+          }
+        }
+        </script>
       <div class="icon1 menu-btn">
         <i class="fas fa-bars"></i>
       </div>
@@ -95,68 +113,11 @@
   }
 </script>
 <style>
-  .dropdown-content {
-    display: none;
-    position: fixed;
-    background-color: #000000;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
-    z-index: 1;
-  }
-  
-  .dropdown-content a {
-    color: black;
-    padding: 10px 10px;
-    margin-right: 20px;
-    text-decoration: none;
-    display: block;
-  }
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: rgba(255, 255, 255, 0.116);
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown:hover .dropbtn {
-    background-color: #000000;
-  }
-  .dropdown-content {
-    display: none;
-    position: fixed;
-    background-color: #000000;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
-    z-index: 1;
-  }
-  
-  .dropdown-content a {
-    color: black;
-    padding: 10px 10px;
-    margin-right: 20px;
-    text-decoration: none;
-    display: block;
-  }
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: rgba(255, 255, 255, 0.116);
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown:hover .dropbtn {
-    background-color: #000000;
+  ul li a.active{
+    width: 100%;
+    border-radius:6px;
+    background:#0f538b;
+    color: #fff;
+    width: 50px;
   }
 </style>

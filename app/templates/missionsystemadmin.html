@@ -251,12 +251,12 @@
                                                     <label>Ngày bắt đầu:</label>
 
                                                     <input type="date" name="startdate" id='start' min={{min}} class="form-control"
-                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   value="{{a.3}}" required>
+                                                    oninvalid="this.setCustomValidity('Ngày không hợp lệ')" onchange="this.setCustomValidity('')"   value="{{a.3}}" required>
                                                 </div>
                                                 <div class="col">
                                                     <label>Ngày kết thúc:</label>
                                                     <input type="date" name="enddate" id='end'  min={{max}} class="form-control"
-                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"     value="{{a.4}}" onchange="handleredit(event)"; required>
+                                                    oninvalid="this.setCustomValidity('Ngày không hợp lệ')"   value="{{a.4}}" onchange="handleredit(event),this.setCustomValidity('')"; required>
                                                 </div>
                                             </div>
                                         </div>
@@ -267,12 +267,12 @@
                                                     <label>Điểm:</label>
 
                                                     <input type="number" name="point" id="point" class="form-control"
-                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   min="1" max="10000"   value="{{a.7}}" required>
+                                                    oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')" onchange="this.setCustomValidity('')"   min="1" max="10000"   value="{{a.7}}" required>
                                                 </div>
                                                 <div class="col">
                                                     <label>Số lượng:</label>
                                                     <input type="number" id="limit" name="limit" class="form-control"
-                                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"   min="0" max="100"     value="{{a.6}}" required>
+                                                    oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')" onchange="this.setCustomValidity('')"   min="0" max="100"     value="{{a.6}}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -319,7 +319,7 @@
                                             <div class="col">
                                                 <label>Thời gian lặp lại nhiệm vụ:</label>
                                             <input type="number"  name="loop" value="{{a.3}}"
-                                            oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"        min="0" max="30" required >                                                   
+                                            oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')" onchange="this.setCustomValidity('')"  min="0" max="30" required >                                                   
                                                 <select name="unitloop">
                                                     {%if a.4 ==0 %}
                                                     <option value="0">Không lặp</option>
@@ -406,12 +406,12 @@
                                             <div class="col">
                                                 <label>Ngày bắt đầu:</label>
                                                 <input type="date" id='start1' name="startdate"
-                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" min={{min}} required>
+                                                oninvalid="this.setCustomValidity('Ngày không hợp lệ')" onchange="this.setCustomValidity('')"   class="form-control" min={{min}} required>
                                             </div>
                                             <div class="col">
                                                 <label>Ngày kết thúc:</label>
                                                 <input type="date" id='end1' name="enddate"
-                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"   min={{max}}  class="form-control" onchange="handler(event)"; required>
+                                                oninvalid="this.setCustomValidity('Ngày không hợp lệ')" min={{max}}  class="form-control" onchange="handler(event),this.setCustomValidity('')" required>
                                             </div>
                                         </div>
                                     </div>
@@ -424,13 +424,9 @@
                                             {
                                                 result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
                                                 alert(result);
+                                                
                                             }
-                                            else
-                                            {
-                                                result = "Ngày hợp lệ";
-                                                alert(result);
-                                        
-                                            }            
+                                                   
                                             }   
 
                                             function handleredit(e){
@@ -442,12 +438,7 @@
                                                 result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
                                                 alert(result);
                                             }
-                                            else
-                                            {
-                                                result = "Ngày hợp lệ";
-                                                alert(result);
-                                        
-                                            }            
+                                                  
                                             }   
                                     
                                     </script>
@@ -457,12 +448,12 @@
                                                 <label>Điểm:</label>
 
                                                 <input type="number"  min="1" max="1000" name="point"
-                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" required>
+                                                oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')" onchange="this.setCustomValidity('')"  class="form-control" required>
                                             </div>
                                             <div class="col">
                                                 <label>Số lượng:</label>
                                                 <input type="number"  min="1" max="100" name="limit" 
-                                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" required>
+                                                oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')" onchange="this.setCustomValidity('')"  class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
