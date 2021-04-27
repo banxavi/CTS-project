@@ -25,11 +25,12 @@ import constants
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 import constants
+import configpass
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
+app.config['MYSQL_PASSWORD'] = configpass.passwordmysql
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -153,7 +154,7 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=img,point=0)
+            return redirect(url_for('home', email = email,img=img,point=0))
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
@@ -204,7 +205,7 @@ def updatepassforgot():
             cur.execute(SQL.SQLUPDATEPSW,value)
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point=image[1])
+            return redirect(url_for('home', email = email,img=image[0],point=image[1]))
     return render_template("update_password.html",email =email,error = error)
 
 

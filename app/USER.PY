@@ -21,6 +21,7 @@ import MySQLdb.cursors
 import alert
 from app import CTS
 import SQL
+import configpass
 import mysql.connector
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime,timedelta
@@ -36,7 +37,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
- 
+    password = configpass.passwordmysql,
     database="cts"
     )
 
@@ -166,6 +167,7 @@ def post():
             broadcast(message)  # Notify subscribers of completion
     except Exception:  # Output errors
         return '{}'.format(alert.IMAGEERROR)
+        
     return redirect(url_for('profile'))
 
 
