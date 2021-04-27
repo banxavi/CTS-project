@@ -84,7 +84,7 @@
             <form action="/notiregister" method="POST" class="signup">
               <div class="field">
                 <input type="email" name="email" value="{{request.form['email']}}" placeholder="Nhập email"
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                oninvalid="this.setCustomValidity('Vui lòng nhập đúng định dạng Email')" onchange="this.setCustomValidity('')" required>
               </div>
               {% if errores %}
               <p style="color: red;"><strong>Thông báo:</strong> {{ errores }}
