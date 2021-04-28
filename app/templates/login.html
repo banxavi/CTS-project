@@ -56,11 +56,11 @@
               {%endif%}
               <div class="field">
                 <input type="text" value="{{
-                request.form.idname }}" name="idname" placeholder="Email hoặc tài khoản" required>
+                request.form.idname }}" name="idname" placeholder="Email hoặc tài khoản"   oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"required>
               </div>
               <div class="field">
                 <input type="password" value="{{
-                request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
+                request.form.password }}" id="password" name="password" placeholder="Mật khẩu"  oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" required>
               </div>
               <div>
               {% if error %}
