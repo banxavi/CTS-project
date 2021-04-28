@@ -101,14 +101,15 @@
                                         value="{{a.4}}" readonly></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
-                                {% if a.9 >= a.4 %}
+                                {% if a.5 == 0 or a.6 == 0%}
+                                <td style="text-align: center;">Hết</td>
+                                {% elif a.9 >= a.4 %}
                                 <td style="text-align: center;">Quá hạn</td>
 
-                                {% elif a.5 == 1 %}
+                                {% else %}
                                 <td style="text-align: center;">Còn</td>
 
-                                {% else %}
-                                <td style="text-align: center;">Hết</td>
+                               
                                 {% endif %}
 
                                 <td>

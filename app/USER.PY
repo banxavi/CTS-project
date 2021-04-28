@@ -167,7 +167,6 @@ def post():
             broadcast(message)  # Notify subscribers of completion
     except Exception:  # Output errors
         return '{}'.format(alert.IMAGEERROR)
-        
     return redirect(url_for('profile'))
 
 
@@ -272,7 +271,8 @@ def loopschedule():
             print("Mission", Idmission, " đã được reset thành công" )
 loopschedule()
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(loopschedule,'cron',day=1)
+sched.add_job(loopschedule,'cron',day_of_week='mon-sun', hour=0, 
+                    minute=0)
 sched.start()
 
 

@@ -19,8 +19,11 @@
         <label style="font-size: 30px; padding: 0 450px;
         font-weight: 30;
         color:red">THÔNG TIN CÁ NHÂN</label>
+    
         {% for a in data %}
+        
      <div style="padding: 0 200px;" class="form-group" >
+      <h5 style="color:skyblue;" >Tải ảnh real-time</h5>
         <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
       
         <fieldset>
@@ -31,7 +34,7 @@
           </fieldset>
     
       </div>
-      <div id="images"></div>
+   
     <form action= "/updateprofile" method="POST"> 
     <div style="padding: 0 200px;" class="form-group">
     <div class="col-md-6.5 text-right">
@@ -231,17 +234,25 @@
       });
       xhr.onreadystatechange = function(e1) {
           if (this.readyState == 4)  {
-              if (this.status == 200)            
-                  var text = 'upload complete: ' + this.responseText;
+              if (this.status == 200)  
+              {          
+                  var text = 'Đã thay đổi file thành công';
+                  alert(text)
+                  window.location = 'http://localhost:1200/profile';
+
+              }
               else
+              {
                   var text = 'upload failed: code ' + this.status;
+                  alert("Bạn đã chọn ảnh sai"); 
+              }
               status.html(text + '<br/>Select an image');
               progressbar.progressbar('destroy');
           }
       };
       xhr.open('POST', '/post', true);
-      
       xhr.send(to_upload);
+   
   };
   function handle_hover(e) {
       e.originalEvent.stopPropagation();
