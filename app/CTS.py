@@ -10,7 +10,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 from pymysql import cursors
 from werkzeug.utils import format_string
-import DTO
+# import DTO
 import SQL
 import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
@@ -25,12 +25,12 @@ import constants
 from datetime import date, datetime,timedelta
 import pyautogui as pag
 import constants
+import configpass
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-
+app.config['MYSQL_PASSWORD'] = configpass.passwordmysql
 app.config['MYSQL_DB'] = 'cts'
 mysql = MySQL(app) 
 mail = Mail(app)
@@ -41,19 +41,20 @@ def home():
     global image
     if 'idname' not in session:
         return render_template("login.html")
-    elif session['idname']=="abc":
-        
+    elif session['idname']=="administrator":   
         return render_template('home.html')
     elif 'idname' in session: 
         email = session['idname']
         cursor = mysql.connection.cursor() 
         cursor.execute(SQL.SQLIMAGE,(email,))
         image = cursor.fetchone()
-        cursor.execute(SQL.SQLHOMEUSER1,(email,))
+        cursor.execute(SQL.SQLHOMEUSER1,(1,email))
         homeuser = cursor.fetchone()
-        cursor.execute(SQL.SQLHOMEUSER2,(email,))
+        cursor.execute(SQL.SQLHOMEUSER1,(2,email))
         homeuser1 = cursor.fetchone()
-        return render_template('home.html',img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
+        cursor.execute(SQL.SQLMAXPOINT)
+        homeuser2 = cursor.fetchone()
+        return render_template('home.html',homeuser2=homeuser2[0],img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
     else:
         return render_template("login.html")
 
@@ -65,7 +66,7 @@ def homeadmin():
         countempl = cursor.fetchone()
         cursor.execute(SQL.SQLHOMECOUNTMISS)
         countmiss = cursor.fetchone()
-        return render_template('home.html',countempl=countempl[0],countmiss=countmiss[0])
+        return render_template('home.html',countpoint=countempl[1],countempl=countempl[0],countmiss=countmiss[0])
     else:
         return render_template("login.html")
 # Logout account
@@ -108,7 +109,7 @@ def login():
 # Notification register
 @app.route('/notiregister',methods=['GET','POST'])
 def register():
-    error = ""
+    errores = ""
     if request.method == 'POST':
         email = request.form['email']
         token = s.dumps(email, salt='email-confirm')
@@ -139,6 +140,7 @@ def confirm_email(token):
 @app.route('/updatepass',methods=['GET','POST'])
 def updatepass():
     error = ""
+    img ="download.jpg"
     email = request.args.get('email', None)
     if request.method == 'POST':
         password = request.form['password']
@@ -152,13 +154,14 @@ def updatepass():
             cur.execute(SQL.SQLREGISTER,(value))
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point=image[1])
+            return redirect(url_for('home', email = email,img=img,point=0))
     return render_template("update_password.html", email =email,error = error)
 
 # forgot password 
 @app.route('/forgotpassword', methods=['GET','POST'])
 def forgotpassword():
     error = ""
+
     if request.method == 'POST':
         email = request.form['email']
         token = s.dumps(email, salt='email-confirm')
@@ -187,6 +190,7 @@ def forgot_email(token):
 #Update Password forgot
 @app.route('/updatepassforgot',methods=['GET','POST'])
 def updatepassforgot():
+   
     error = ""
     email = request.args.get('email', None)
     if request.method == 'POST':
@@ -201,7 +205,7 @@ def updatepassforgot():
             cur.execute(SQL.SQLUPDATEPSW,value)
             mysql.connection.commit()
             session['idname'] = email
-            return render_template('/home.html', email = email,img=image[0],point=image[1])
+            return redirect(url_for('home', email = email,img=image[0],point=image[1]))
     return render_template("update_password.html",email =email,error = error)
 
 
@@ -216,12 +220,18 @@ def updatepassforgot():
 # Admin Management Mission
 @app.route('/mission',methods=['GET','POST'])
 def mission():
+    global maxid
     cursor = mysql.connection.cursor()
     cursor.execute(SQL.SQLMISSION)
     task = cursor.fetchall()
+    cursor.execute(SQL.SQLTASKSCHEDULE)
+    schedule = cursor.fetchall()
     min = datetime.now()
     max = min + timedelta(1)
-    return render_template('missionsystemadmin.html',task=task,min=min,max=max)
+    cursor.execute(SQL.SQLMAXID)
+    max0 = cursor.fetchone()
+    maxid = max0[0]
+    return render_template('missionsystemadmin.html',maxid=maxid,task=task,schedule=schedule,min=min,max=max)
 
 # Show users take mission
 @app.route('/viewmission', methods=['GET','POST'])
@@ -229,7 +239,7 @@ def viewmission():
     if request.method == 'POST':
         id = request.form['id']
         cursor = mysql.connection.cursor()
-        cursor.execute(SQL.SQLVIEWMISS,id)
+        cursor.execute(SQL.SQLVIEWMISS,(id,))
         view = cursor.fetchall()
         Title = alert.NOTTAKEMISSION
         for a in view:
@@ -241,7 +251,11 @@ def viewmission():
 @app.route('/addmission',methods=["GET","POST"])
 def addmission():
     cursor = mysql.connection.cursor()
+   
     if request.method == 'POST':
+        id = request.form['id']
+        dateloop = request.form['loop']
+        unitloop = request.form['unitloop']
         name = request.form['name']
         descr = request.form['descr']
         startdate = request.form['startdate']
@@ -250,14 +264,28 @@ def addmission():
         limit = request.form['limit']
         start = datetime.strptime(startdate,"%Y-%m-%d" )
         end = datetime.strptime(enddate,"%Y-%m-%d")
+        date = 0
+        unit = 0
         if start >= end:
-            flash("{}".format(alert.ERRORDATE))
+            flash("{}".format(alert.ADDERRORDATE))
             return redirect(url_for('mission'))
-        else :
-            val = (name,descr,startdate,enddate,limit,point)
+        elif int(dateloop)==0 or int(unitloop)==0:
+            val = (id,name,descr,startdate,enddate,limit,point,limit)
             cursor.execute(SQL.SQLINSERTMISSION,val)
             mysql.connection.commit()
-            flash("{}".format(alert.ADDMISSONSUCC))
+            valschedule = (id,date,unit)
+            cursor.execute(SQL.SQLINSERTSCHEDULE,valschedule)
+            mysql.connection.commit()
+            flash("{}".format(alert.ADDMISSONSUCC)) 
+            return redirect(url_for('mission'))
+        else :
+            val = (id,name,descr,startdate,enddate,limit,point,limit)
+            cursor.execute(SQL.SQLINSERTMISSION,val)
+            mysql.connection.commit()
+            valschedule = (id,dateloop,unitloop)
+            cursor.execute(SQL.SQLINSERTSCHEDULE,valschedule)
+            mysql.connection.commit()
+            flash("{}".format(alert.ADDMISSONSUCC)) 
             return redirect(url_for('mission'))
         
 # Admin edit mission
@@ -297,6 +325,10 @@ def editmission():
             mysql.connection.commit()
             flash("{}".format(alert.EDITMISSIONSUCC))
             return redirect(url_for('mission'))
+        else:
+            flash("{}".format(alert.ERRORSYSTEM))
+            return redirect(url_for('mission'))
+
 
 # Admin edit mission
 @app.route('/deletemission/<id>/',methods=["GET","POST"])
@@ -313,7 +345,26 @@ def deletemission(id):
         mysql.connection.commit()
         flash("{}".format(alert.DELETEMISSIONSUCC))
         return redirect(url_for('mission'))
-
+# Update schedule
+@app.route('/schedule',methods=["GET","POST"])
+def updateschedule():
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        id = request.form['id']
+        dateloop = request.form['loop']
+        unitloop = request.form['unitloop']
+        if int(dateloop)==0 or int(unitloop)==0:
+            val = (0,0,id)
+            cursor.execute(SQL.SQLUPDATESCHEDULE,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.LOOPTASK))
+            return redirect(url_for('mission'))
+        else:
+            val = (dateloop,unitloop,id)
+            cursor.execute(SQL.SQLUPDATESCHEDULE,val)
+            mysql.connection.commit()
+            flash("{}".format(alert.LOOPTASK))
+            return redirect(url_for('mission'))
 # Management ward admin
 @app.route('/managementward')
 def managementward():
@@ -347,7 +398,7 @@ def cancelmission(id):
             cursor.execute(SQL.SQLIMAGE,(email,))
             image1 = cursor.fetchone()
             flash(alert.CANCELMISSION)
-            return redirect(url_for('usermission',point=image1[1]))
+            return redirect(url_for('usermission'))
 #Complete Mission
 @app.route('/donemission/<id>/',methods=['GET','POST'])
 def donemission(id):

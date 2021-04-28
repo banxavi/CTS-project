@@ -6,6 +6,12 @@
 <html lang="en">
 
 <head>
+    <style>
+        .required:after {
+            content: " *";
+            color: red;
+        }
+    </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Employee Management</title>
@@ -23,6 +29,9 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+
+
 </head>
 
 
@@ -33,32 +42,47 @@
                 <div class="table-wrapper">
                     <div class="table-title">
                         <div class="row" style="margin-top: 55px;display:flex; justify-content: space-between;">
-                            <div style="padding-left: 1%;">
+                            <div style="padding-left:1%">
                                 <h1 style="font-size: 50px; font-weight: 700; color: red">CTS</h1>
                             </div>
                             <div>
-                                <h1 align="center" style="font-size: 30px; font-weight: 100; color: red">
-                                Quản Lý Nhiệm Vụ</h1>
+                                <h1 align="center" style="font-size: 30px; font-weight: 100; color: red">QUẢN LÍ NHIỆM
+                                    VỤ</h1>
+                            </div>
+                            <div data-toggle="modal" data-target="#mymodal" role="alert">
+                                <button class="btn btn-success" type="button" onclick="location.href='#'">THÊM NHIỆM
+                                    VỤ</button>
+
                             </div>
 
-                            <div style="padding-bottom: 0 60px;" data-toggle="modal" data-target="#mymodal"
-                                class="alert alert-success alert-dismissable" role="alert">
-                                <a href="#">Thêm nhiệm vụ mới</a>
-                            </div>
                         </div>
                     </div>
-
+                    <div class="form-group" align="right">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div style="width:100% ;text-align: center" class="alert alert-success alert-dismissable"
+                            role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{message}}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
                     <table id="example" class="table table-striped table-hover table-bordered">
 
                         <thead>
 
                             <tr style="text-align: center;">
-                                <th>STT</th>
+                                <th>#</th>
                                 <th>Tên nhiệm vụ</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Điểm<i class="fa fa-sort"></i></th>
-                                <th>Số lượng <i class="fa fa-sort"></i></th>
+                                <th>Số lượng còn <i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
 
                                 <th>Tác vụ</th>
@@ -77,23 +101,31 @@
                                         value="{{a.4}}" readonly></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
-
-                                {% if a.5 == 1 %}
-                                <td style="text-align: center;">Còn</td>
-                                {% endif %}
-                                {% if a.5 == 0 %}
+                                {% if a.5 == 0 or a.6 == 0%}
                                 <td style="text-align: center;">Hết</td>
+                                {% elif a.9 >= a.4 %}
+                                <td style="text-align: center;">Quá hạn</td>
+
+                                {% else %}
+                                <td style="text-align: center;">Còn</td>
+
+                               
                                 {% endif %}
 
-                                <td style="text-align: center;">
+                                <td>
 
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
                                     <a href="#" data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit"
                                         title="Sửa"><i class="material-icons">edit</i></a>
+                                    <a href="/" data-toggle="modal" data-target="#modalloop{{a.0}}"
+                                        title="Thời gian lặp nhiệm vụ">
+                                        <i class="material-icons">loop</i></a>
                                     <a onclick="return confirm('Bạn có chắc xóa nhiệm  này?')"
                                         href="/deletemission/{{a.0}}" class="delete" title="Xóa" data-toggle="tooltip">
                                         <i class="material-icons">delete</i></a>
+
+
                                 </td>
                             </tr>
                             {% endfor %}
@@ -102,20 +134,7 @@
 
                     </table>
 
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    <div style="width: 150px;" class="alert alert-info">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <strong>Thông báo:</strong>
-                    </div>
-                    {% for message in messages %}
-                    <div style="width: 500px;" class="alert alert-secondary  alert-dismissible">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    {% endwith %}
+
 
 
     </form>
@@ -128,7 +147,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="/viewmission" method="POST">
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>ID:</label>
                             <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
                         </div>
@@ -204,6 +223,7 @@
     {% endfor %}
 
     <!-- Modal update -->
+
     {% for a in task %}
     <div id="modaledit{{a.0}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -214,6 +234,93 @@
                 <div class="modal-body">
                     <form action="/editmission" method="POST">
 
+                        <div class="form-group" hidden>
+                            <label>ID:</label>
+                            <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Tên nhiệm vụ:</label>
+
+                            <input type="text" class="form-control" id="name" name="name" value="{{a.1}}"
+                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                onchange="this.setCustomValidity('')" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mô tả:</label>
+                            <!-- <input type="" style="text-align: left;" value="{{a.2}}"
+                                                class="form-control" name="descr">
+                                            </input> -->
+                            <textarea style="text-align: left;" class="form-control" id="descr" name="descr"
+                                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                onchange="this.setCustomValidity('')" required> {{a.2}}
+                                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="required">Ngày bắt đầu:</label>
+
+                                    <input type="date" name="startdate" id='start' min={{min}} class="form-control"
+                                        oninvalid="this.setCustomValidity('Ngày không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" value="{{a.3}}" required>
+                                </div>
+                                <div class="col">
+                                    <label class="required">Ngày kết thúc:</label>
+                                    <input type="date" name="enddate" id='end' min={{max}} class="form-control"
+                                        oninvalid="this.setCustomValidity('Ngày không hợp lệ')" value="{{a.4}}"
+                                        onchange="handleredit(event),this.setCustomValidity('')" ; required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="required">Điểm:</label>
+
+                                    <input type="number" name="point" id="point" class="form-control"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" min="1" max="10000" value="{{a.7}}"
+                                        required>
+                                </div>
+                                <div class="col">
+                                    <label class="required">Số lượng:</label>
+                                    <input type="number" id="limit" name="limit" class="form-control"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" min="0" max="100" value="{{a.6}}"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    </table>
+    </div>
+
+    {% for a in schedule %}
+    <div id="modalloop{{a.0}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Lặp nhiệm vụ</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/schedule" method="POST">
+
                         <div class="form-group">
                             <label>ID:</label>
                             <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
@@ -221,47 +328,40 @@
                         <div class="form-group">
                             <label>Tên nhiệm vụ:</label>
 
-                            <input type="text" class="form-control" name="name" value="{{a.1}}">
-                        </div>
-                        <div class="form-group">
-                            <label>Mô tả:</label>
-                            <!-- <input type="" style="text-align: left;" value="{{a.2}}"
-                                                class="form-control" name="descr">
-
-                                            </input> -->
-                            <textarea style="text-align: left;" class="form-control" name="descr"> {{a.2}}
-                                            </textarea>
+                            <input type="text" class="form-control" name="name" value="{{a.1}}" readonly>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
-                                    <label>Ngày bắt đầu:</label>
+                                    <label>Thời gian lặp lại nhiệm vụ:</label>
+                                    <input type="number" name="loop" value="{{a.3}}"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" min="0" max="30" required>
+                                    <select name="unitloop">
+                                        {%if a.4 ==0 %}
+                                        <option value="0">Không lặp</option>
+                                        {% elif a.4 ==1 %}
+                                        <option value="1">Ngày</option>
+                                        {% elif a.4 ==7%}
+                                        <option value="7">Tuần</option>
+                                        {% else %}
+                                        <option value="30">Tháng</option>
+                                        {% endif %}
+                                        <option value="0">Không lặp</option>
 
-                                    <input type="date" name="startdate" min={{min}} class="form-control"
-                                        value="{{a.3}}">
-                                </div>
-                                <div class="col">
-                                    <label>Ngày kết thúc:</label>
-                                    <input type="date" name="enddate" min={{max}} class="form-control" value="{{a.4}}">
+                                        <option value="1">Ngày</option>
+
+                                        <option value="7">Tuần</option>
+
+                                        <option value="30">Tháng</option>
+
+                                    </select>
+
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label>Điểm:</label>
 
-                                    <input type="number" name="point" class="form-control" min="1" max="10000"
-                                        value="{{a.7}}">
-                                </div>
-                                <div class="col">
-                                    <label>Số lượng:</label>
-                                    <input type="number" name="limit" class="form-control" min="0" max="100"
-                                        value="{{a.6}}">
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
                         </div>
@@ -276,9 +376,12 @@
     {% endfor %}
     </table>
     </div>
+
+
+
+    <!-- Modal loop -->
+
     <!-- Modal Add Employee-->
-
-
     <div id="mymodal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -287,40 +390,110 @@
                 </div>
                 <div class="modal-body">
                     <form action="/addmission" method="POST">
-                        <div class="form-group">
-                            <label>Tên nhiệm vụ:</label>
 
-                            <input type="text" class="form-control" name="name" required>
-                        </div>
                         <div class="form-group">
-                            <label>Mô tả:</label>
+                            <div class="row" hidden>
 
-                            <textarea class="form-control" name="descr" required>
-                        </textarea>
-                        </div>
-                        <div class="form-group">
+
+                                <label>ID:</label>
+
+                                {% if maxid==None %}
+                                <input type="text" value="{{1}}" class="form-control" name="id" readonly>
+                                {% else %}
+                                <input type="text" value="{{maxid+1}}" class="form-control" name="id" readonly>
+                                {% endif %}
+                            </div>
                             <div class="row">
                                 <div class="col">
-                                    <label>Ngày bắt đầu:</label>
-                                    <input type="date" name="startdate" class="form-control" min={{min}} required>
-                                </div>
-                                <div class="col">
-                                    <label>Ngày kết thúc:</label>
-                                    <input type="date" name="enddate" min={{max}} class="form-control" required>
+                                    <label class="required">Tên nhiệm vụ:</label>
+
+                                    <input type="text" class="form-control"
+                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                        onchange="this.setCustomValidity('')" name="name" required>
                                 </div>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label>Mô tả:</label>
+                            <textarea class="form-control" name="descr"></textarea>
+                        </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
-                                    <label>Điểm:</label>
-
-                                    <input type="number" min="1" max="1000" name="point" class="form-control" required>
+                                    <label class="required">Ngày bắt đầu:</label>
+                                    <input type="date" id='start1' name="startdate"
+                                        oninvalid="this.setCustomValidity('Ngày không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" class="form-control" min={{min}} required>
                                 </div>
                                 <div class="col">
-                                    <label>Số lượng:</label>
-                                    <input type="number" min="0" max="100" name="limit" class="form-control" required>
+                                    <label class="required">Ngày kết thúc:</label>
+                                    <input type="date" id='end1' name="enddate"
+                                        oninvalid="this.setCustomValidity('Ngày không hợp lệ')" min={{max}}
+                                        class="form-control" onchange="handler(event),this.setCustomValidity('')"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function handler(e) {
+                                var dateone = new Date(document.getElementById('start1').value);
+                                var datetwo = new Date(document.getElementById('end1').value);
+
+                                if (dateone > datetwo) {
+                                    result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
+                                    alert(result);
+
+                                }
+
+                            }
+
+                            function handleredit(e) {
+                                var dateone = new Date(document.getElementById('start').value);
+                                var datetwo = new Date(document.getElementById('end').value);
+
+                                if (dateone > datetwo) {
+                                    result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
+                                    alert(result);
+                                }
+
+                            }
+
+                        </script>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="required">Điểm:</label>
+
+                                    <input type="number" min="1" max="1000" name="point"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="required">Số lượng:</label>
+                                    <input type="number" min="1" max="100" name="limit"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Thời gian lặp lại nhiệm vụ:</label>
+                                    <input type="number" value="0" placeholder="Số"
+                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30" required>
+                                    <select name="unitloop" required>
+                                        <option value="0">Không lặp</option>
+
+                                        <option value="1">Ngày</option>
+
+                                        <option value="7">Tuần</option>
+
+                                        <option value="30">Tháng</option>
+
+                                    </select>
+
                                 </div>
                             </div>
                         </div>
@@ -340,6 +513,7 @@
     </div>
     </div>
     </div>
+
     </form>
 
 
