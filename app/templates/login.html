@@ -62,9 +62,11 @@
                 <input type="password" value="{{
                 request.form.password }}" id="password" name="password" placeholder="Mật khẩu" required>
               </div>
+              <div>
               {% if error %}
                 <p style="color: red;"><strong>Thông báo:</strong> {{ error }}
               {% endif %}
+            </div>
               <input type="checkbox" onclick="myFunction()">Hiện mật khẩu
                 <!-- <div class="row align-items-center remember">
                 <input type="checkbox" name="check" value="check" checked>Remember Me

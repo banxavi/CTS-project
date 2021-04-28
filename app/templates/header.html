@@ -8,14 +8,59 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
 </head>
 
-{% if session['idname'] =="abc"%}
+{% if session['idname'] =="administrator"%}
 <header>
 
   <body>
-    <nav class="navbar">
+    <nav class="navbar" >
       <div class="content">
         <div class="logo">
-          <a href="#">Hello Admin</a>
+          
+              <a class="letters">Hello Admin</a>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+              <script>
+                // Wrap every letter in a span
+              var textWrapper = document.querySelector('.logo .letters');
+              textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+              
+              anime.timeline({loop: true})
+                .add({
+                  targets: '.logo .letter',
+                  translateY: ["1.1em", 0],
+                  translateZ: 0,
+                  duration: 750,
+                  delay: (el, i) => 50 * i
+                }).add({
+                  targets: '.logo',
+                  opacity: 0,
+                  duration: 1000,
+                  easing: "easeOutExpo",
+                  delay: 1000
+                });
+              </script>
+              <style>
+                .logo {
+                  
+                  color: #fff;
+                  font-size: 30px;
+                  font-weight: 600;
+                  text-decoration: none;;
+              }
+              
+              .logo .text-wrapper {
+                position: relative;
+                display: inline-block;
+                padding-top: 0.2em;
+                padding-right: 0.05em;
+                padding-bottom: 0.1em;
+                overflow: hidden;
+              }
+              
+              .logo .letter {
+                display: inline-block;
+                line-height: 1em;
+              }
+              </style>
         </div>
         <ul class="menu-list">
           <div class="icon1 cancel-btn">
@@ -24,10 +69,20 @@
           <li><a href="/home">Trang chủ</a></li>
           <li><a href="/mission">Quản lí nhiệm vụ</a></li>
           <li><a href="/usermanagement">Quản lí nhân viên</a></li>
-          <li><a href="/managementward">Quản lý đổi thưởng</a></li>
+          <li><a href="/managementward">Quản lí đổi thưởng</a></li>
           <li><a href="#">Thông báo</a></li>
           <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
         </ul>
+        <script type="text/javascript">
+        const current = location.href;
+        const menuItem = document.querySelectorAll("a")
+        const menuLength = menuItem.length
+        for (let i=0; i<menuLength; i++){
+          if(menuItem[i].href===current){
+            menuItem[i].className ='active'
+          }
+        }
+        </script>
         <div class="icon1 menu-btn">
           <i class="fas fa-bars"></i>
         </div>
@@ -35,40 +90,93 @@
     </nav>
 </header>
 
+
 {% endif %}
 
-{% if session['idname'] !="abc"%}
+{% if session['idname'] !="administrator"%}
 <header>
 
   <nav class="navbar">
     <div class="content">
 
       <div class="logo">
-        <a href="#">Hello Member</a>
-        <a href="/profile" title="Thông tin cá nhân"> <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
-            style="width:50px;height:50px;border-radius: 25px;" class="avatar"></a>
+        <a class="letters">Hello Member</a>
+  
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+            <script>
+              // Wrap every letter in a span
+            var textWrapper = document.querySelector('.logo .letters');
+            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+            
+            anime.timeline({loop: true})
+              .add({
+                targets: '.logo .letter',
+                translateY: ["1.1em", 0],
+                translateZ: 0,
+                duration: 750,
+                delay: (el, i) => 50 * i
+              }).add({
+                targets: '.logo',
+                opacity: 0,
+                duration: 1000,
+                easing: "easeOutExpo",
+                delay: 1000
+              });
+            </script>
+            <style>
+              .logo {  
+                              
+                color:#fff;
+                font-size: 30px;
+                font-weight: 600;
+                text-decoration: none;;
+            }
+            
+            .logo .text-wrapper {
+              position: relative;
+              display: inline-block;
+              padding-top: 0.2em;
+              padding-right: 0.05em;
+              padding-bottom: 0.1em;
+              overflow: hidden;
+            }
+            
+            .logo .letter {
+              display: inline-block;
+              line-height: 1em;
+            }
+            </style>
       </div>
 
+      <a style="padding-left: 10px;" href="/profile" title="Thông tin cá nhân"> <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
+        style="width:50px;height:50px;border-radius: 25px;" class="avatar"></a>
 
       <ul class="menu-list">
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
         <li><a href="/">Trang chủ</a></li>
-        <li class="dropdown">
-          <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button"
-            href="{{ url_for('usermission') }}">Danh sách nhiệm vụ</a>
-          <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+        <li >        
             <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
-            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>
-          </div>
+          </li>
+            <li >
+            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>        
         </li>
-        <li><a href="/doithuonguser">Đổi quà</a></li>
+        <li><a href="#ward">Đổi quà</a></li>
         <li><a href="#about">Thông báo</a></li>
         <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
         <li><a href="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
       </ul>
-
+      <script type="text/javascript">
+        const current = location.href;
+        const menuItem = document.querySelectorAll("a")
+        const menuLength = menuItem.length
+        for (let i=0; i<menuLength; i++){
+          if(menuItem[i].href===current){
+            menuItem[i].className ='active'
+          }
+        }
+        </script>
       <div class="icon1 menu-btn">
         <i class="fas fa-bars"></i>
       </div>
@@ -95,68 +203,11 @@
   }
 </script>
 <style>
-  .dropdown-content {
-    display: none;
-    position: fixed;
-    background-color: #000000;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
-    z-index: 1;
-  }
-  
-  .dropdown-content a {
-    color: black;
-    padding: 10px 10px;
-    margin-right: 20px;
-    text-decoration: none;
-    display: block;
-  }
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: rgba(255, 255, 255, 0.116);
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown:hover .dropbtn {
-    background-color: #000000;
-  }
-  .dropdown-content {
-    display: none;
-    position: fixed;
-    background-color: #000000;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(4, 110, 9, 0.2);
-    z-index: 1;
-  }
-  
-  .dropdown-content a {
-    color: black;
-    padding: 10px 10px;
-    margin-right: 20px;
-    text-decoration: none;
-    display: block;
-  }
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdown-content a:hover {
-    background-color: rgba(255, 255, 255, 0.116);
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown:hover .dropbtn {
-    background-color: #000000;
+  ul li a.active{
+    width: 100%;
+    border-radius:6px;
+    background:#0f538b;
+    color: #fff;
+    width: 50px;
   }
 </style>

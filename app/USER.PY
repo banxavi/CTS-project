@@ -7,6 +7,7 @@ import json
 import io
 import os,xlwt
 import time
+import hashlib
 from app import app
 from PIL import Image, ImageFile
 from gevent.event import AsyncResult
@@ -20,7 +21,10 @@ import MySQLdb.cursors
 import alert
 from app import CTS
 import SQL
+import configpass
 import mysql.connector
+from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime,timedelta
 DATA_DIR = 'app/static/css'
 KEEP_ALIVE_DELAY = 25
 MAX_IMAGE_SIZE = 800, 600
@@ -33,7 +37,7 @@ BROADCAST_QUEUE = Queue()
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
- 
+    password = configpass.passwordmysql,
     database="cts"
     )
 
@@ -244,6 +248,33 @@ def download_report():
     workbook.save(output)
     output.seek(0)
     return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
+
+def loopschedule():
+    mycursor = mydb.cursor()
+    mycursor.execute(SQL.SQLLOOP)
+    loopall = mycursor.fetchall()
+    now = datetime.now()
+    state = 1
+    for mission in loopall:
+        Idmission = mission[0]
+        mycursor.execute(SQL.SQLCURRENTDATE,(Idmission,))
+        mydb.commit()
+        totaldate = mission[1]
+        currentdate = mission[2]
+        if currentdate % totaldate == 0 and currentdate!=0:
+            startdate = now
+            peroid = mission[1]
+            enddate = startdate + timedelta(peroid)             
+            valloop = (startdate,enddate,state,Idmission)
+            mycursor.execute(SQL.SQLUPDATETLOOPMIS,valloop)
+            mydb.commit()
+            print("Mission", Idmission, " đã được reset thành công" )
+loopschedule()
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(loopschedule,'cron',day_of_week='mon-sun', hour=0, 
+                    minute=0)
+sched.start()
+
 
 
 @app.route('/changepassword', methods=['GET', 'POST'])

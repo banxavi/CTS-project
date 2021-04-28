@@ -2,7 +2,8 @@
 {% include 'header.html'%}
 {% block content %}
 <body>
-  
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
   
    <div class="form-group">
     <div class="col-md-8 text-right">
@@ -10,16 +11,21 @@
     
     </div>
     </div>
-
+    
     <h1 style="   font-size: 50px;
     font-weight: 700;
     color:red ; padding: 0 55px;" >CTS</h1>
     <div class="">
-        <h1 style="text-align: center;">Thông Tin Cá Nhân</h1>
+        <label style="font-size: 30px; padding: 0 450px;
+        font-weight: 30;
+        color:red">THÔNG TIN CÁ NHÂN</label>
+    
         {% for a in data %}
+        
      <div style="padding: 0 200px;" class="form-group" >
+      <h5 style="color:skyblue;" >Tải ảnh real-time</h5>
         <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
-
+      
         <fieldset>
             <!-- <div  id="progressbar"> -->
             <input  style=" width: 103px;    margin-top: 10px; cursor:pointer;" 
@@ -28,7 +34,7 @@
           </fieldset>
     
       </div>
-      <div id="images"></div>
+   
     <form action= "/updateprofile" method="POST"> 
     <div style="padding: 0 200px;" class="form-group">
     <div class="col-md-6.5 text-right">
@@ -47,7 +53,8 @@
 
     <div style="padding: 0 200px;" class="form-group">
       <label for="usr">Họ Tên:</label>
-      <input type="text" class="form-control" value="{{a.0}}" name="edithoten" required>
+      <input type="text"
+      oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')" onchange="this.setCustomValidity('')"  class="form-control" value="{{a.0}}" name="edithoten" required>
     </div>
   
        	
@@ -81,7 +88,63 @@
         <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+      <style>
+  
+      .login-left{width:44%; margin: 0 0 0 5%; display:inline-block; float:left;}
+      .login-right{width:44%; margin: 0 5% 0 0; display:inline-block; float:right;}
+      
+      @media screen and (max-width:767px) {
+      .login-width{width:95% !important;}
+      .login-left{width:90%; margin: 0 auto; display:block; float:none;}
+      .login-right{width:90%; margin: 0 auto; display:block; float:none;}
+      }
+      
+      .p-viewer {
+          position: relative;
+          margin: -35px 10px;
+          float: right;
+      }
+      
+      .fa-eye {
+        color: #000;
+      }
+      </style>      
+      <script>
+        function myFunction() {
+        const menu = document.getElementById("ipass")
+        var x = document.getElementById("passwordold");
+        if (x.type === "password") {
+          x.type = "text";
+          menu.className='fa fa-eye-slash'
+        } else {
+          x.type = "password";
+          menu.className ='fa fa-eye'
+        }
+      }
+      function myFunction1() {
+        const menu = document.getElementById("ipass1")
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+          x.type = "text";
+          menu.className='fa fa-eye-slash'
+        } else {
+          x.type = "password";
+          menu.className ='fa fa-eye'
+        }
+      }
+      function myFunction2() {
+        const menu = document.getElementById("ipass2")
+        var x = document.getElementById("passwordconf");
+        if (x.type === "password") {
+          x.type = "text";
+          menu.className='fa fa-eye-slash'
+        } else {
+          x.type = "password";
+          menu.className ='fa fa-eye'
+        }
+      }
+    </script>
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -91,16 +154,35 @@
         <div class="modal-body">
           <form action="/changepassword" method="POST">
            <div class="form-group">
-                <label for="usr">Mật Khẩu Cũ:</label>
-                <input type="password" class="form-control"name="oldpassword">
-            </div>
+           
+                <label for="usr">Mật Khẩu Cũ:</label>        
+
+                <input id="passwordold" type="password" class="form-control"
+                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                 onchange="this.setCustomValidity('')"  name="oldpassword" required >
+
+                <span for='icon' class="p-viewer">
+                  <i onclick="myFunction()"  id="ipass" class="fa fa-eye" aria-hidden="true"></i>
+                </span>
+                
+              </div>
             <div class="form-group">
                 <label for="usr">Mật Khẩu Mới:</label>
-                <input type="password" class="form-control" name="password"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Mật khẩu phải chứa ít nhất một số, một kí tự hoa, kí tự thường và tối thiếu 8 kí tự">
+                <input id="password"    
+                 type="password" class="form-control" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                 title="Mật khẩu phải chứa ít nhất một số, một kí tự hoa, kí tự thường và tối thiếu 8 kí tự" required>
+                 <span for='icon' class="p-viewer">
+                  <i onclick="myFunction1()"  id="ipass1" class="fa fa-eye" aria-hidden="true"></i>
+                </span>
             </div>
             <div class="form-group">
                 <label for="usr">Nhập Lại Mật Khẩu Mới:</label>
-                <input type="password" class="form-control" name="confirm_password">
+                <input  id="passwordconf"   type="password" class="form-control"
+                oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                 onchange="this.setCustomValidity('')"  name="confirm_password" required>
+                 <span for='icon' class="p-viewer">
+                  <i onclick="myFunction2()"  id="ipass2" class="fa fa-eye" aria-hidden="true"></i>
+                </span>
             </div>
 
         </div>
@@ -152,16 +234,25 @@
       });
       xhr.onreadystatechange = function(e1) {
           if (this.readyState == 4)  {
-              if (this.status == 200)
-                  var text = 'upload complete: ' + this.responseText;
+              if (this.status == 200)  
+              {          
+                  var text = 'Đã thay đổi file thành công';
+                  alert(text)
+                  window.location = 'http://localhost:1200/profile';
+
+              }
               else
+              {
                   var text = 'upload failed: code ' + this.status;
+                  alert("Bạn đã chọn ảnh sai"); 
+              }
               status.html(text + '<br/>Select an image');
               progressbar.progressbar('destroy');
           }
       };
       xhr.open('POST', '/post', true);
       xhr.send(to_upload);
+   
   };
   function handle_hover(e) {
       e.originalEvent.stopPropagation();

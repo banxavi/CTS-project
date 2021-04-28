@@ -10,6 +10,7 @@ FORGOTFAILEMAIL = "Email không tồn tại trong hệ thống"
 #Alert admin manage mission
 ADDMISSONSUCC = "Thêm nhiệm vụ thành công"
 ADDMISSIONFAIL = "Thêm nhiệm vụ thất bại"
+ADDERRORDATE = "Thêm thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
 ERRORDATE = "Sửa thất bại! Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
 EDITMISSIONSUCC = "Sửa nhiệm vụ thành công"
 DELETEMISSIONSUCC = "Xóa nhiệm vụ thành công"
@@ -40,6 +41,9 @@ UPDATESUCC = "Cập nhập thành công"
 IMAGEERROR = "Ảnh không hợp lệ"
 #Alert List user mission
 NOTTAKEMISSION = "Chưa có người nhận"
+#Alert update loop task
+LOOPTASK = "Thời gian của nhiệm vụ được lặp thành công"
+ERRORSYSTEM = "Lỗi chưa được xác định"
 
 
 #UPDATE PASSOWRD
