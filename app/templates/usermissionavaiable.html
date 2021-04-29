@@ -18,11 +18,10 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='missionsystemadmin.css') }}">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous">
     </script>
- 
+  
 
 </head>
 
@@ -95,12 +94,13 @@
 
 
                         <td style="text-align: center;">
-                            <td style="text-align: center;">
-                                <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
-                                    title="View"><i class="material-icons">remove_red_eye</i></a>
-                                <a href="/takemission/{{a.0}}" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')" class="accept"
-                                    title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
-                                        class="material-icons">add_shopping_cart</i></a>
+                            <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
+                                title="View"><i class="material-icons">remove_red_eye</i></a>
+                            <a href="/takemission/{{a.0}}" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')" class="accept"
+                                title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
+                                    class="material-icons">add_shopping_cart</i></a>
+                            <!-- <a href="/edit/{{a.0}}"  data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit" title="Edit" >Sửa</a>
+                            <a href="/delete/{{a.0}}" class="delete" title="Delete" data-toggle="tooltip">Xóa</a> -->
                             </td>
                         </tr>
                         {% endfor %}
