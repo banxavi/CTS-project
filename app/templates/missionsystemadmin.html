@@ -337,7 +337,7 @@
                                     <input id="loop" type="number" name="loop" value="{{a.3}}"
                                         oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
                                         onchange="this.setCustomValidity('')" min="0" max="30" required>
-                                    <select id="unitloop" onchange="myFunction()"  name="unitloop">
+                                    <select class="form-group" id="unitloop"  name="unitloop">
                                         {%if a.4 ==0 %}
                                         <option value="0">Không lặp</option>
                                         {% elif a.4 ==1 %}
@@ -356,13 +356,7 @@
                                         <option value="30">Tháng</option>
 
                                     </select>
-                                    <script>
-                                        function myFunction() {
-                                        var x = document.getElementById("unitloop").value;
-                                        alert(x);
-}
-                                    </script>
-
+                              
                                 </div>
                             </div>
                         </div>
