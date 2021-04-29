@@ -17,7 +17,12 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='missionsystemadmin.css') }}">
-
+<link rel="stylesheet" href="{{ url_for('static', filename='snackbar.css') }}">
+<script>
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </head>
 
   
@@ -43,13 +48,7 @@
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
-            <div style="width:100% ;text-align: center" class="alert alert-success alert-dismissable" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                    <span aria-hidden="true">x</span>
-
-                </button>
-                {{message}}
-            </div>
+            <div id="snackbar">{{message}}</div>
             {% endfor %}
             {% endif %}
             {% endwith %}
@@ -91,18 +90,8 @@
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="Xem"><i class="material-icons">remove_red_eye</i></a>
                             {% if a.7 == 1 %}
-                             <a href="/donemission/{{a.0}}" onclick="f()" class="done"
+                             <a href="/donemission/{{a.0}}" class="done"
                                 title="Hoàn thành"><i class="material-icons">done</i></a>
-                                <script>
-                                    var first = true;
-                                    function f() {
-                                        if ( first ) {
-                                            first = false;
-                                            alert("Bạn có muốn hoàn thành nhiệm vụ này?")
-                                            
-                                        }
-                                    }
-                                </script>
                             {% else %}
                                 <a href="/" onclick="return false;" class="done"  style="cursor: no-drop;"
                                 title="Hoàn thành"><i class="material-icons">done</i></a>
@@ -179,8 +168,17 @@
              {% endfor %}
   
 </form>
-
+<script>
+    $(function () {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function () {
+            x.className = x.className.replace("show", "");
+        }, 3000);
+    })
+</script>
 </body>
     </html>
     {% endblock %}
 
+  

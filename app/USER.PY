@@ -41,14 +41,15 @@ mydb = mysql.connector.connect(
     database="cts"
     )
 
-
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # try:  # Reset saved files on each start
 #     rmtree(DATA_DIR, True)
 #     os.mkdir(DATA_DIR)
 # except OSError:
 #     pass
 
-
+def allowed_file(filename):
+    	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 def broadcast(message):
     """Notify all waiting waiting gthreads of message."""
     waiting = []
@@ -118,59 +119,57 @@ def event_stream(client):
             a=1
 
 
-
+# Admin management user
+@app.route('/usermanagement')
+def usermanagement():
+    mycursor = mydb.cursor(buffered=True)
+    mycursor.execute(SQL.SQLUSERMANA)
+    data1 = mycursor.fetchall()
+    return render_template("usermanagement.html",data1 = data1)
 
 # Admin Block Account
 @app.route("/blockuser/<string:id_user>", methods=["GET"])
 def blockuser(id_user):
-    try:
-        cursor = mydb.cursor()
-        cursor.execute(SQL.SQLUNLOCKACC, ("0",id_user,))
-        mydb.commit()
-        flash(alert.BLOCKEMPLOYEE)
-        return redirect(url_for('usermanagement'))
-    except:
-        return redirect(url_for('errorpage'))
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLUNLOCKACC, ("0",id_user,))
+    mydb.commit()
+    flash(alert.BLOCKEMPLOYEE)
+    return redirect(url_for('usermanagement'))
 
 # Admin Unlock Account
 @app.route("/unlockuser/<string:id_user>", methods=["GET"])
 def unlockuser(id_user):
-    try:
-        cursor = mydb.cursor()
-        cursor.execute(SQL.SQLUNLOCKACC, ("1",id_user,))
-        mydb.commit()
-        flash(alert.UNBLOCKEMPLOYEE)
-        return redirect(url_for('usermanagement'))
-    except:
-        return redirect(url_for('errorpage'))
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLUNLOCKACC, ("1",id_user,))
+    mydb.commit()
+    flash(alert.UNBLOCKEMPLOYEE)
+    return redirect(url_for('usermanagement'))
 
 
 
 @app.route('/post', methods=['POST'])
 def post():
+    
+    """Handle image uploads."""
+    sha1sum = sha1(flask.request.data).hexdigest()
+    target = os.path.join(DATA_DIR, '{}.jpg'.format(sha1sum))
+    convert = '{}.jpg'.format(sha1sum)
+    message = json.dumps({'src': target,
+                          'ip_addr': safe_addr(flask.request.access_route[0])})
+
+    mycursor = mydb.cursor()
+
+    sql = 'UPDATE employee SET Image = %s WHERE Email = %s'
+    a= CTS.session['idname']
+    val = (convert,a)
+    mycursor.execute(sql,val)
+    mydb.commit()
     try:
-        """Handle image uploads."""
-        sha1sum = sha1(flask.request.data).hexdigest()
-        target = os.path.join(DATA_DIR, '{}.jpg'.format(sha1sum))
-        convert = '{}.jpg'.format(sha1sum)
-        message = json.dumps({'src': target,
-                            'ip_addr': safe_addr(flask.request.access_route[0])})
-
-        mycursor = mydb.cursor()
-
-        sql = 'UPDATE employee SET Image = %s WHERE Email = %s'
-        a= CTS.session['idname']
-        val = (convert,a)
-        mycursor.execute(sql,val)
-        mydb.commit()
-        try:
-            if save_normalized_image(target, flask.request.data):
-                broadcast(message)  # Notify subscribers of completion
-        except Exception:  # Output errors
-            return '{}'.format(alert.IMAGEERROR)
-        return redirect(url_for('profile'))
-    except:
-        return redirect(url_for('errorpage'))
+        if save_normalized_image(target, flask.request.data):
+            broadcast(message)  # Notify subscribers of completion
+    except Exception:  # Output errors
+        return '{}'.format(alert.IMAGEERROR)
+    return redirect(url_for('profile'))
 
 
 @app.route('/stream')
@@ -179,84 +178,79 @@ def stream():
     return flask.Response(event_stream(flask.request.access_route[0]),
                           mimetype='text/event-stream')
 
+
+
 @app.route('/profile')
 def profile():
-    try:
-        """Provide the primary view along with its javascript."""
-        image_infos = []
-        for filename in os.listdir(DATA_DIR):
-            filepath = os.path.join(DATA_DIR, filename)
-            file_stat = os.stat(filepath)
-            if S_ISREG(file_stat[ST_MODE]):
-                image_infos.append((file_stat[ST_CTIME], filepath))
-        images = []
-        for i, (_, path) in enumerate(sorted(image_infos, reverse=True)):
-            if i >= MAX_IMAGES:
-                os.unlink(path)
-                continue
-            images.append('<div><img alt="User uploaded image" src="{}" /></div>'
-                        .format(path))
-        mycursor = mydb.cursor(buffered=True)
-        id = CTS.session['idname']
-        mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
-        myresult = mycursor.fetchall()
-        return render_template("userprofile.html",data = myresult,img=CTS.image[0],point=CTS.image[1])
-    except:
-        return redirect(url_for('errorpage'))    
+    """Provide the primary view along with its javascript."""
+    image_infos = []
+    for filename in os.listdir(DATA_DIR):
+        filepath = os.path.join(DATA_DIR, filename)
+        file_stat = os.stat(filepath)
+        if S_ISREG(file_stat[ST_MODE]):
+            image_infos.append((file_stat[ST_CTIME], filepath))
+    images = []
+    for i, (_, path) in enumerate(sorted(image_infos, reverse=True)):
+        if i >= MAX_IMAGES:
+            os.unlink(path)
+            continue
+        images.append('<div><img alt="User uploaded image" src="{}" /></div>'
+                      .format(path))
+    mycursor = mydb.cursor(buffered=True)
+    id = CTS.session['idname']
+    mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
+    myresult = mycursor.fetchall()
+    return render_template("userprofile.html",data = myresult,img=CTS.image[0],point=CTS.image[1])
+ 
 
 @app.route('/updateprofile',methods=['GET','POST'])
 def updateprofile():
-    try:
-        if request.method=='POST':
-            name = request.form['edithoten']
-            mycursor = mydb.cursor()
-            email = CTS.session['idname']
-            val = (name,email)
-            mycursor.execute(SQL.SQLUPDATEPROFILE,val)
-            mydb.commit()
-            flash(alert.UPDATESUCC)
-            return redirect(url_for('profile'))
-    except:
-        return redirect(url_for('errorpage'))
+    if request.method=='POST':
+        name = request.form['edithoten']
+        mycursor = mydb.cursor()
+        email = CTS.session['idname']
+        val = (name,email)
+        mycursor.execute(SQL.SQLUPDATEPROFILE,val)
+        mydb.commit()
+        flash(alert.UPDATESUCC)
+        return redirect(url_for('profile'))
 
     
 # Export Excel
 @app.route('/download/report/excel')
 def download_report():
-    try:
-        cursor = mydb.cursor()
-        cursor.execute(SQL.SQLEXPORTEXCEL)
-        result = cursor.fetchall()
-        #output in bytes
-        output = io.BytesIO()
-        #create WorkBook object
-        workbook = xlwt.Workbook()
-        #add a sheet
-        sh = workbook.add_sheet('Employee Report')
-        #add headers
-        sh.write(0, 0, 'ID nhân viên')
-        sh.write(0, 1, 'Email nhân viên')
-        sh.write(0, 2, 'Họ tên nhân viên')
-        sh.write(0, 3, 'Điểm')
-        sh.write(0, 4, 'Trạng thái tài khoản')
-        
-        idx = 0
-        for row in result:
-            sh.write(idx+1, 0, str(row[0]))
-            sh.write(idx+1, 1, row[1])
-            sh.write(idx+1, 2, row[2])
-            sh.write(idx+1, 3, row[3])
-            if row[4] == 1:
-                sh.write(idx+1, 4, "Hoạt động")
-            else: 
-                sh.write(idx+1, 4, "Đã bị khóa")
-            idx += 1
-        
-        workbook.save(output)
-        output.seek(0)
-        return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
-    except:
-        return redirect(url_for('errorpage'))
+    cursor = mydb.cursor()
+    cursor.execute(SQL.SQLEXPORTEXCEL)
+    result = cursor.fetchall()
+    #output in bytes
+    output = io.BytesIO()
+    #create WorkBook object
+    workbook = xlwt.Workbook()
+    #add a sheet
+    sh = workbook.add_sheet('Employee Report')
+    #add headers
+    sh.write(0, 0, 'ID nhân viên')
+    sh.write(0, 1, 'Email nhân viên')
+    sh.write(0, 2, 'Họ tên nhân viên')
+    sh.write(0, 3, 'Điểm')
+    sh.write(0, 4, 'Trạng thái tài khoản')
+    
+    idx = 0
+    for row in result:
+        sh.write(idx+1, 0, str(row[0]))
+        sh.write(idx+1, 1, row[1])
+        sh.write(idx+1, 2, row[2])
+        sh.write(idx+1, 3, row[3])
+        if row[4] == 1:
+            sh.write(idx+1, 4, "Hoạt động")
+        else: 
+            sh.write(idx+1, 4, "Đã bị khóa")
+        idx += 1
+    
+    workbook.save(output)
+    output.seek(0)
+    return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=employee_report.xls"})
+
 def loopschedule():
     mycursor = mydb.cursor()
     mycursor.execute(SQL.SQLLOOP)
@@ -287,29 +281,26 @@ sched.start()
 
 @app.route('/changepassword', methods=['GET', 'POST'])
 def changepassword():
-    try:
-        error = ""
-        if request.method == "POST":
-            email = CTS.session['idname']
-            old = request.form['oldpassword']
-            oldmd5 =  hashlib.md5(old.encode()).hexdigest()
-            password = request.form['password']
-            confirm_password = request.form['confirm_password']
-            mycursor = mydb.cursor()
-            mycursor.execute(SQL.SQLPASSWORD, (email,))
-            user = mycursor.fetchone()
-            if oldmd5 != user[0]:
-                flash('{}'.format(alert.PASSWORDOLD))
-            elif password != confirm_password:
-                flash('{}'.format(alert.PASSWORD))
-            else:
-                passhash = hashlib.md5(password.encode()).hexdigest()
-                mycursor.execute(SQL.SQLUPDATEPASSWORD, (passhash, email))
-                mydb.commit()
-                flash('{}'.format(alert.UPDATEPASSWORD))
-                return redirect(url_for('profile'))
-        return redirect(url_for('profile'))
-    except:
-        return redirect(url_for('errorpage'))
+    error = ""
+    if request.method == "POST":
+        email = CTS.session['idname']
+        old = request.form['oldpassword']
+        oldmd5 =  hashlib.md5(old.encode()).hexdigest()
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        mycursor = mydb.cursor()
+        mycursor.execute(SQL.SQLPASSWORD, (email,))
+        user = mycursor.fetchone()
+        if oldmd5 != user[0]:
+            flash('{}'.format(alert.PASSWORDOLD))
+        elif password != confirm_password:
+            flash('{}'.format(alert.PASSWORD))
+        else:
+            passhash = hashlib.md5(password.encode()).hexdigest()
+            mycursor.execute(SQL.SQLUPDATEPASSWORD, (passhash, email))
+            mydb.commit()
+            flash('{}'.format(alert.UPDATEPASSWORD))
+            return redirect(url_for('profile'))
+    return redirect(url_for('profile'))
         
     

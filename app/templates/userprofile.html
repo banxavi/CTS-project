@@ -1,11 +1,12 @@
 {% extends 'layout.html' %}
 {% include 'header.html'%}
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='snackbar.css') }}">
+</head>
 <body>
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <head>
-    <title>Thông tin cá nhân</title>
-</head>
+
   
    <div class="form-group">
     <div class="col-md-8 text-right">
@@ -25,8 +26,7 @@
         {% for a in data %}
         
      <div style="padding: 0 200px;" class="form-group" >
-      <h5 style="color:skyblue;" >Tải ảnh real-time</h5>
-        <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 25px;"  />
+        <img  name="img" src="{{ url_for('static',filename=a.2 )}}" style="height: 100px; width: 100px; border-radius: 100px;object-fit:cover;"  />
       
         <fieldset>
             <!-- <div  id="progressbar"> -->
@@ -62,16 +62,14 @@
        	
     </div>
     {% endfor %}
- <div style="padding: 0 200px;"class="form-group">
-    {% with messages = get_flashed_messages() %}         
-    {% if messages %} 
+    <div class="form-group" align="right">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
       {% for message in messages %}
-        <div  class="alert alert-success  alert-dismissible">
-         {{message}}
-          </div>              
-      {% endfor %} 
-    {% endif %} 
-  {% endwith %}
+      <div id="snackbar">{{message}}</div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
   </div>
     <div style="padding: 0 200px;" class = "form-group">
         <div class="col" align="center">
@@ -240,8 +238,7 @@
               {          
                   var text = 'Đã thay đổi file thành công';
                   alert(text)
-                  window.location = 'http://localhost:1200/profile';
-
+                  window.location = 'http://localhost:5000/profile';
               }
               else
               {
@@ -285,6 +282,15 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+<script>
+  $(function () {
+      var x = document.getElementById("snackbar");
+      x.className = "show";
+      setTimeout(function () {
+          x.className = x.className.replace("show", "");
+      }, 3000);
+  })
+</script>
 
 
 {% endblock  %}
@@ -309,8 +315,7 @@
 
   .notice {
     font-size: 80%;
+  
   }
-
-
-
 </style>
+
