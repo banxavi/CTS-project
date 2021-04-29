@@ -97,14 +97,10 @@
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="View"><i class="material-icons">remove_red_eye</i></a>
-                            <a href="/takemission/{{a.0}}" id="takemiss" data-toggle="tooltip" class="accept"
-                               title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
+                                <a href="/takemission/{{a.0}}" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')" class="accept"
+                                title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
                                     class="material-icons">add_shopping_cart</i></a>
-                                    <script>
-                                        document.getElementById('takemiss').onclick = function () {
-                                        this.disabled = true;
-                            }
-                                    </script>
+                                
 
                             </td>
                         </tr>
