@@ -64,9 +64,7 @@ def broadcast(message):
 
 def receive():
     """Generator that yields a message at least every KEEP_ALIVE_DELAY seconds.
-
     yields messages sent by `broadcast`.
-
     """
     now = time.time()
     end = now + MAX_DURATION
@@ -311,5 +309,3 @@ def changepassword():
         return redirect(url_for('profile'))
     except:
         return redirect(url_for('errorpage'))
-        
-    

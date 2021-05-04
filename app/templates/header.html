@@ -12,55 +12,58 @@
 <header>
 
   <body>
-    <nav class="navbar" >
+    <nav class="navbar">
       <div class="content">
         <div class="logo">
-          
-              <a class="letters">Hello Admin</a>
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-              <script>
-                // Wrap every letter in a span
-              var textWrapper = document.querySelector('.logo .letters');
-              textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
-              
-              anime.timeline({loop: true})
-                .add({
-                  targets: '.logo .letter',
-                  translateY: ["1.1em", 0],
-                  translateZ: 0,
-                  duration: 750,
-                  delay: (el, i) => 50 * i
-                }).add({
-                  targets: '.logo',
-                  opacity: 0,
-                  duration: 1000,
-                  easing: "easeOutExpo",
-                  delay: 1000
-                });
-              </script>
-              <style>
-                .logo {
-                  
-                  color: #fff;
-                  font-size: 30px;
-                  font-weight: 600;
-                  text-decoration: none;;
-              }
-              
-              .logo .text-wrapper {
-                position: relative;
-                display: inline-block;
-                padding-top: 0.2em;
-                padding-right: 0.05em;
-                padding-bottom: 0.1em;
-                overflow: hidden;
-              }
-              
-              .logo .letter {
-                display: inline-block;
-                line-height: 1em;
-              }
-              </style>
+
+          <a class="letters">Hello Admin</a>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+          <script>
+            // Wrap every letter in a span
+            var textWrapper = document.querySelector('.logo .letters');
+            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+
+            anime.timeline({
+                loop: true
+              })
+              .add({
+                targets: '.logo .letter',
+                translateY: ["1.1em", 0],
+                translateZ: 0,
+                duration: 750,
+                delay: (el, i) => 50 * i
+              }).add({
+                targets: '.logo',
+                opacity: 0,
+                duration: 1000,
+                easing: "easeOutExpo",
+                delay: 1000
+              });
+          </script>
+          <style>
+            .logo {
+
+              color: #fff;
+              font-size: 30px;
+              font-weight: 600;
+              text-decoration: none;
+              ;
+            }
+
+            .logo .text-wrapper {
+              position: relative;
+              display: inline-block;
+              padding-top: 0.2em;
+              padding-right: 0.05em;
+              padding-bottom: 0.1em;
+              overflow: hidden;
+            }
+
+            .logo .letter {
+              display: inline-block;
+              line-height: 1em;
+            }
+          </style>
         </div>
         <ul class="menu-list">
           <div class="icon1 cancel-btn">
@@ -70,18 +73,17 @@
           <li><a href="/mission">Quản lí nhiệm vụ</a></li>
           <li><a href="/usermanagement">Quản lí nhân viên</a></li>
           <li><a href="/managementward">Quản lí đổi thưởng</a></li>
-          <li><a href="#">Thông báo</a></li>
           <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
         </ul>
         <script type="text/javascript">
-        const current = location.href;
-        const menuItem = document.querySelectorAll("a")
-        const menuLength = menuItem.length
-        for (let i=0; i<menuLength; i++){
-          if(menuItem[i].href===current){
-            menuItem[i].className ='active'
+          const current = location.href;
+          const menuItem = document.querySelectorAll("a")
+          const menuLength = menuItem.length
+          for (let i = 0; i < menuLength; i++) {
+            if (menuItem[i].href === current) {
+              menuItem[i].className = 'active'
+            }
           }
-        }
         </script>
         <div class="icon1 menu-btn">
           <i class="fas fa-bars"></i>
@@ -101,82 +103,85 @@
 
       <div class="logo">
         <a class="letters">Hello Member</a>
-  
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
-            <script>
-              // Wrap every letter in a span
-            var textWrapper = document.querySelector('.logo .letters');
-            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
-            
-            anime.timeline({loop: true})
-              .add({
-                targets: '.logo .letter',
-                translateY: ["1.1em", 0],
-                translateZ: 0,
-                duration: 750,
-                delay: (el, i) => 50 * i
-              }).add({
-                targets: '.logo',
-                opacity: 0,
-                duration: 1000,
-                easing: "easeOutExpo",
-                delay: 1000
-              });
-            </script>
-            <style>
-              .logo {  
-                              
-                color:#fff;
-                font-size: 30px;
-                font-weight: 600;
-                text-decoration: none;;
-            }
-            
-            .logo .text-wrapper {
-              position: relative;
-              display: inline-block;
-              padding-top: 0.2em;
-              padding-right: 0.05em;
-              padding-bottom: 0.1em;
-              overflow: hidden;
-            }
-            
-            .logo .letter {
-              display: inline-block;
-              line-height: 1em;
-            }
-            </style>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+        <script>
+          // Wrap every letter in a span
+          var textWrapper = document.querySelector('.logo .letters');
+          textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+
+          anime.timeline({
+              loop: true
+            })
+            .add({
+              targets: '.logo .letter',
+              translateY: ["1.1em", 0],
+              translateZ: 0,
+              duration: 750,
+              delay: (el, i) => 50 * i
+            }).add({
+              targets: '.logo',
+              opacity: 0,
+              duration: 1000,
+              easing: "easeOutExpo",
+              delay: 1000
+            });
+        </script>
+        <style>
+          .logo {
+
+            color: #fff;
+            font-size: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            ;
+          }
+
+          .logo .text-wrapper {
+            position: relative;
+            display: inline-block;
+            padding-top: 0.2em;
+            padding-right: 0.05em;
+            padding-bottom: 0.1em;
+            overflow: hidden;
+          }
+
+          .logo .letter {
+            display: inline-block;
+            line-height: 1em;
+          }
+        </style>
       </div>
 
-      <a style="padding-left: 10px;" href="/profile" title="Thông tin cá nhân"> <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
-        style="width:50px;height:50px;border-radius: 25px;" class="avatar"></a>
+      <a style="padding-left: 10px;" href="/profile" title="Thông tin cá nhân"> <img
+          src="{{ url_for('static',filename=img )}}" alt="Avatar"
+          style="width:50px;height:50px;border-radius: 25px;object-fit: cover;" class="avatar"></a>
 
       <ul class="menu-list">
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
         <li><a href="/">Trang chủ</a></li>
-        <li >        
-            <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
-          </li>
-            <li >
-            <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>        
+        <li>
+          <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
+        </li>
+        <li>
+          <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>
         </li>
         <li><a href="#ward">Đổi quà</a></li>
-        <li><a href="#about">Thông báo</a></li>
         <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
-        <li><a href="#" style=" padding-left: 10px; color:#fff;">Điểm:{{point}}</a></li>
+        <li><a href="#" style="color:rgb(235, 255, 124);">Điểm:{{point}}</a></li>
       </ul>
       <script type="text/javascript">
         const current = location.href;
         const menuItem = document.querySelectorAll("a")
         const menuLength = menuItem.length
-        for (let i=0; i<menuLength; i++){
-          if(menuItem[i].href===current){
-            menuItem[i].className ='active'
+        for (let i = 0; i < menuLength; i++) {
+          if (menuItem[i].href === current) {
+            menuItem[i].className = 'active'
           }
         }
-        </script>
+      </script>
       <div class="icon1 menu-btn">
         <i class="fas fa-bars"></i>
       </div>
@@ -203,10 +208,10 @@
   }
 </script>
 <style>
-  ul li a.active{
+  ul li a.active {
     width: 100%;
-    border-radius:6px;
-    background:#0f538b;
+    border-radius: 6px;
+    background: #0f538b;
     color: #fff;
     width: 50px;
   }

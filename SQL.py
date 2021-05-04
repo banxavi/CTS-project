@@ -49,12 +49,12 @@ SQLHOMECOUNTMISS='select count(mission.Mission_Id) from mission'
 SQLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 SQLUNLOCKACC = 'UPDATE employee SET Status = %s WHERE Employee_Id = (%s)'
 # SHOW MISSION AVAIABLE
-SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id DESC) as STT from mission where State=1 and `Limit` > 0'
+SQLMISSION1 = 'select Mission_Id,Title,Description,StartDate,EndDate,State,`Limit`,Point,ROW_NUMBER() OVER(Order by mission.Mission_Id) as STT from mission where State=1 and `Limit` > 0'
 
 # SHOW MISSION OF USER
 SQLMISSIONUSER ='select   process.Process_Id, mission.Mission_Id, mission.Title \
                 ,mission.Description,mission.StartDate,mission.EndDate , mission.Point , \
-                process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id DESC)  as STT  from employee, mission, process\
+                process.Status,ROW_NUMBER() OVER(Order by mission.Mission_Id)  as STT  from employee, mission, process\
                 where process.Employee_Id=employee.Employee_Id and \
                 process.Mission_Id=mission.Mission_Id \
                 and employee.Email = %s' 
@@ -90,8 +90,9 @@ inner join Schedule where mission.Mission_Id=Schedule.Mission_Id and DateLoop >0
 SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `State` = %s, mission.Limit=mission.LimitDefault   WHERE (`Mission_Id` = %s)'
 SQLCURRENTDATE = 'UPDATE `cts`.`schedule` SET `CurrentDate` = CurrentDate+1 where Mission_Id=%s '
 #SHOW MISSION OF USER by ID
-SQLSHOWUSERMISSION="Select ROW_NUMBER() OVER(Order by mission.Mission_Id desc) as STT , mission.Title,mission.Point, process.status\
-                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay From((cts.employee\
+SQLSHOWUSERMISSION="Select employee.Employee_Id, mission.Mission_Id, mission.Title,mission.Point, process.status\
+                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay\
+	                    From((cts.employee\
 	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
 	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
                         where employee.Employee_Id = %s"
