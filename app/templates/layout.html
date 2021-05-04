@@ -22,12 +22,12 @@
         "sInfo": "Bảng có _TOTAL_ dữ liệu(_START_ đến _END_)",
         "oPaginate": {
           "sNext": "Tiếp",
-          "sPrevious": "Lùi",   
+          "sPrevious": "Lùi",
         }
       },
       "language": {
-      "infoFiltered": ""
-   },
+        "infoFiltered": ""
+      },
       "aLengthMenu": [
         [10, 15, 20, 25, -1],
         [10, 15, 20, 25, "All"]
@@ -61,3 +61,51 @@
 </html>
 
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+  $(".modal-header").on('mousedown', function (downEvt) {
+    var $draggable = $(this)
+    var x = downEvt.pageX - $draggable.offset().left,
+      y = downEvt.pageX - $draggable.offset().top;
+    $('body').on('mousemove.draggable', function (moveEvt) {
+      $draggable.closest(".modal-dialog").offset({
+        "left": moveEvt.pageX - x,
+        "top": moveEvt.pageY - y
+      })
+    })
+    $('body').on('mouseup', function () {
+      $('body').off('mousemove.draggable')
+    })
+    $draggable.closest('.modal').one("bs.modal.hide", function () {
+      $('body').off("mousemove.draggable")
+    })
+  })
+  $(".modal-footer").on('mousedown', function (downEvt) {
+    var $draggable = $(this)
+    var x = downEvt.pageX - $draggable.offset().left,
+      y = downEvt.pageX - $draggable.offset().top;
+    $('body').on('mousemove.draggable', function (moveEvt) {
+      $draggable.closest(".modal-dialog").offset({
+        "left": moveEvt.pageX - x,
+        "top": moveEvt.pageY - y
+      })
+    })
+    $('body').on('mouseup', function () {
+      $('body').off('mousemove.draggable')
+    })
+    $draggable.closest('.modal').one("bs.modal.hide", function () {
+      $('body').off("mousemove.draggable")
+    })
+  })
+</script>
+<style>
+  .modal-backdrop {
+    display: none !important;
+  }
+  
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+
+</html>
