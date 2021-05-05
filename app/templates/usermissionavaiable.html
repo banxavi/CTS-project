@@ -20,6 +20,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='missionsystemadmin.css') }}">
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous">
+    </script>
+
 </head>
 
 
@@ -41,7 +46,7 @@
                     <label style="font-size: 30px;justify-content: center;display: flex;font-weight: 30;
                     color:red">{{constants_list.AVAIABLE_MISSIONSYSTEM }}</label>
                 </div>
-
+              
 
             </div>
             <div class="form-group" align="right">
@@ -74,9 +79,9 @@
                         <td>{{a.8}}</td>
                         <td>{{a.1}}</td>
                         <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.3}}"
-                                readonly></td>
+                                disabled = true></td>
                         <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.4}}"
-                                readonly></td>
+                                disabled = true></td>
                         <td style="text-align: center;">{{a.7}}</td>
                         <td style="text-align: center;">{{a.6}}</td>
                         {% if a.5 == 1 %}
@@ -87,6 +92,7 @@
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="View"><i class="material-icons">remove_red_eye</i></a>
+
                             <a href="/takemission/{{a.0}}" onClick="document.location.reload(true)" value="Reload Page"
                                 class="accept" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')"
                                 class="accept" title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
@@ -102,6 +108,7 @@
             <!-- Modal VIEW -->
             {% for a in mission %}
             <div>
+
                 <div id="modalview{{a.0}}" class="modal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -162,6 +169,7 @@
                     </div>
                 </div>
                 {% endfor %}
+
 </body>
 
 </html>
