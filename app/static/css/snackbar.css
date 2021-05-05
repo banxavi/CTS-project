@@ -2,7 +2,6 @@
     visibility: hidden;
     min-width: 250px;
     font-weight: 700;
-    margin-left: -125px;
     background-color: #57c141;
     color: #ffffff;
     text-align: center;
@@ -10,7 +9,6 @@
     padding: 10px;
     position: fixed;
     z-index: 1;
-    left: 50%;
     top: 8%;
     font-size: 18px;
 }

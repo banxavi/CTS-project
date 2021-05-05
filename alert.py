@@ -45,6 +45,9 @@ NOTTAKEMISSION = "Chưa có người nhận"
 LOOPTASK = "Thời gian của nhiệm vụ được lặp thành công"
 ERRORSYSTEM = "Lỗi chưa được xác định"
 
+#Alert update Image
+UPDATEIMAGESUCC = "Cập nhật Avatar thành công"
+UPDATEIMAGEFAIL = "Vui lòng chọn hình ảnh có đuôi được cho phép"
 
 #UPDATE PASSOWRD
 UPDATEPASSWORD = "Cập nhật mật khẩu thành công"
