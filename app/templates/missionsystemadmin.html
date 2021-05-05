@@ -451,7 +451,7 @@
                                     alert(result);
 
                                 }
-
+                            }
                          
                                 document.getElementById('start1').addEventListener('change', function() {
                                     if (this.value != null  ) {
@@ -462,27 +462,23 @@
                                 });
                           
 
-
                         </script>
-                        <div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="required">Điểm:</label>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="required">Điểm:</label>
 
-                                        <input type="number" min="1" max="1000" name="point"
-                                            oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
-                                            onchange="this.setCustomValidity('')" class="form-control" required>
-                                    </div>
-                                    <div class="col">
-                                        <label class="required">Số lượng:</label>
-                                        <input type="number" min="1" max="100" name="limit"
-                                            oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
-                                            onchange="this.setCustomValidity('')" class="form-control" required>
-                                    </div>
+                                    <input type="number" min="1" max="1000" name="point"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="required">Số lượng:</label>
+                                    <input type="number" min="1" max="100" name="limit"
+                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                        onchange="this.setCustomValidity('')" class="form-control" required>
                                 </div>
                             </div>
-
                         </div>
                         <div>
                         <div class="form-group">
@@ -490,27 +486,25 @@
                                     <input class="form-control" type="number" value="0" placeholder="Số"
                                         oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
                                         onchange="this.setCustomValidity('')" name="loop" min="0" max="30"
-                                    id="time"    disabled="true" required>
+                                    id="time" readOnly=true required>
                         </div>
                         <div>
                                     <select class="form-control" id="menu" name="unitloop" required>
                                         <option value="0">Không lặp</option>
 
+                                        <option value="1">Ngày</option>
 
-                                    <option value="1">Ngày</option>
+                                        <option value="7">Tuần</option>
 
-                                    <option value="7">Tuần</option>
-
-                                    <option value="30">Tháng</option>
-
+                                        <option value="30">Tháng</option>
 
                                     </select>   
                             <script>
                                 document.getElementById('menu').addEventListener('change', function() {
                                     if (this.value == 1 || this.value == 7 ||this.value == 30  ) {
-                                        document.getElementById('time').disabled = false;
+                                        document.getElementById('time').readOnly = false;
                                     } else {
-                                        document.getElementById('time').disabled = true;
+                                        document.getElementById('time').readOnly = true;
                                     }
                                 });
                             </script>              
