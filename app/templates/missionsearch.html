@@ -56,16 +56,26 @@
                                 <td style="text-align: center">{{a.0}}</td>
                                 <td >{{a.1}}</td>
                                 <td style="text-align: center">{{a.2}}</td>
-                                {% if a.3 == 0 %}
-                                <td style="text-align: center">{{constants_list.CANCEL}}</td>
-                                {% endif %}
-                                {% if a.3 == 1 %}
-                                <td style="text-align: center">{{constants_list.DOING}}</td>
-                                {% endif %}
                                 {% if a.3 == 2 %}
                                 <td style="text-align: center">{{constants_list.COMPLETE}}</td>
+                              
+
+                                {% elif a.3 == 0 %}
+                                <td style="text-align: center">{{constants_list.CANCEL}}</td>
+                             
+
+                                {% elif 0 >= a.5 %}
+                                <td style="text-align: center;">Hết hạn</td>
+                               
+
+
+                                {% else %}
+                                <td style="text-align: center">{{constants_list.DOING}}</td>
                                 {% endif %}
-                                <td style="text-align: center">{{a.4}} {{constants_list.DAY}}</td>
+                            
+                                <td style="text-align: center"><input value={{a.4}} type="date" disabled = true></td>
+
+
 
                             </tr>
                             {% endfor %}

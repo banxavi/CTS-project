@@ -6,7 +6,7 @@ SQLVIEWMISSI = 'SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employ
 and Mission_Id = %s'
 
 SQLVIEWMISS = ' SELECT  ROW_NUMBER() OVER(Order by employee.Email) as STT,employee.Name, employee.Email,\
-employee.POINT,process.status,mission.Title ,employee.Image from mission, process,employee where\
+employee.POINT,process.status,mission.Title ,employee.Image,DATEDIFF(mission.EndDate,curdate()) as FinalDay from mission, process,employee where\
  process.Employee_Id=employee.Employee_Id and mission.Mission_Id=process.Mission_Id and process.Mission_Id = %s'
 
 SQLINSERTMISSION = 'INSERT INTO `cts`.`mission` (Mission_Id,`Title`, `Description`, `StartDate`, `EndDate`, `Limit`, `Point`,LimitDefault) \
@@ -91,7 +91,7 @@ SQLUPDATETLOOPMIS = 'UPDATE `cts`.`mission` SET  startdate=%s, enddate=%s, `Stat
 SQLCURRENTDATE = 'UPDATE `cts`.`schedule` SET `CurrentDate` = CurrentDate+1 where Mission_Id=%s '
 #SHOW MISSION OF USER by ID
 SQLSHOWUSERMISSION="Select ROW_NUMBER() OVER(Order by mission.Mission_Id desc) as STT , mission.Title,mission.Point, process.status\
-                        ,DATEDIFF(mission.EndDate,curdate()) as FinalDay From((cts.employee\
+                    ,mission.EndDate,DATEDIFF(mission.EndDate,curdate()) as FinalDay From((cts.employee\
 	                    Inner join cts.process on process.Employee_Id = employee.Employee_Id )\
 	                    Inner join cts.mission on process.Mission_Id = mission.Mission_Id)\
                         where employee.Employee_Id = %s"

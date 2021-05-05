@@ -502,7 +502,7 @@ def takemission(id):
 #Research MissionofUser
 @app.route('/missionsearch/<id>',methods=['GET','POST'])
 def missionsearch(id):
-    try:
+
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLSHOWUSERMISSION,(id,))
         listEmployee = cursor.fetchall()
@@ -510,8 +510,7 @@ def missionsearch(id):
         NameEmployee = cursor.fetchall()
         constants_list  = constants
         return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
-    except:
-        return redirect(url_for('errorpage'))
+
 
 # Admin management user
 @app.route('/usermanagement')

@@ -19,7 +19,7 @@ QUANTITY_REMAINING ="Số Lượng Còn"
 STATUS ="Trạng Thái"
 ACTION ="Tác Vụ"
 DESCRIPTION = "Mô Tả"
-TIME_REMAINING ="Thời Gian Còn Lại"
+TIME_REMAINING ="Ngày Kết Thúc"
 STT = "STT"
 #Notification
 AVAIABLE = "Còn"
