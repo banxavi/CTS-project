@@ -47,19 +47,13 @@
                           <input type="text" value="{{idplo}}" hidden>
             </div>
             <div class="form-group" align="right">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div style="width:100% ;text-align: center" class="alert alert-success alert-dismissable" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                    <span aria-hidden="true">x</span>
-
-                </button>
-                {{message}}
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div id="snackbar">{{message}}</div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
             </div>
             <table id="example" class="table table-striped table-hover table-bordered">
                 <thead>
