@@ -99,9 +99,12 @@
           color: #694f86;     
              ">Tham gia ngay</h3>
           <p>
-            Hãy tham gia cùng với chúng tôi để hiện hiện khả năng của mình,
-            teamwork, và nhận các phần thường hấp dẫn nhé!
+            Hãy tham gia cùng với chúng tôi để thể hiện khả năng của mình,
+            teamwork, và nhận các phần thưởng hấp dẫn nhé!
           </p>
+          {% if session['idname'] !="administrator"%}
+          <a class="btn btn-primary" href="/usermissionavaiable">Tham gia</a>
+          {% endif %}
     
         </div>
       </section>
