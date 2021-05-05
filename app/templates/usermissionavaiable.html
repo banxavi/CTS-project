@@ -18,7 +18,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='missionsystemadmin.css') }}">
-   
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </head>
 
@@ -38,9 +38,8 @@
                         </div>
                     </div>
 
-                    <label style="font-size: 30px; padding: 0 320px;
-                font-weight: 30;
-                color:red">{{constants_list.AVAIABLE_MISSIONSYSTEM }}</label>
+                    <label style="font-size: 30px;justify-content: center;display: flex;font-weight: 30;
+                    color:red">{{constants_list.AVAIABLE_MISSIONSYSTEM }}</label>
                 </div>
 
 
@@ -58,7 +57,7 @@
                 <thead>
 
                     <tr style="text-align: center;">
-                        <th>#</th>
+                        <th>STT</th>
                         <th>{{constants_list.NAME_MISSION }}</th>
                         <th>{{constants_list.START_DATE }}</th>
                         <th>{{constants_list.END_DATE }}</th>
@@ -88,10 +87,9 @@
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="View"><i class="material-icons">remove_red_eye</i></a>
-                            <a href="/takemission/{{a.0}}"
-                            onClick="document.location.reload(true)" value="Reload Page"  class="accept"
-                                onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')" class="accept"
-                                title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
+                            <a href="/takemission/{{a.0}}" onClick="document.location.reload(true)" value="Reload Page"
+                                class="accept" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')"
+                                class="accept" title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
                                     class="material-icons">add_shopping_cart</i></a>
                             <!-- <a href="/edit/{{a.0}}"  data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit" title="Edit" >Sửa</a>
                             <a href="/delete/{{a.0}}" class="delete" title="Delete" data-toggle="tooltip">Xóa</a> -->
@@ -128,42 +126,43 @@
                                             name="address" readonly>{{a.2}}  
                      
                                 </textarea>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>{{constants_list.START_DATE}}:</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>{{constants_list.START_DATE}}:</label>
 
-                                            <input type="date" class="form-control" value="{{a.3}}" readonly>
-                                        </div>
-                                        <div class="col">
-                                            <label>{{constants_list.END_DATE}}c:</label>
-                                            <input type="date" class="form-control" value="{{a.4}}" readonly>
+                                                <input type="date" class="form-control" value="{{a.3}}" readonly>
+                                            </div>
+                                            <div class="col">
+                                                <label>{{constants_list.END_DATE}}c:</label>
+                                                <input type="date" class="form-control" value="{{a.4}}" readonly>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>{{constants_list.POINT}}:</label>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>{{constants_list.POINT}}:</label>
 
-                                            <input type="text" class="form-control" value="{{a.7}}" readonly>
+                                                <input type="text" class="form-control" value="{{a.7}}" readonly>
+                                            </div>
+
                                         </div>
-
                                     </div>
-                                </div>
 
 
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 </body>
+
 </html>
 {% endblock %}

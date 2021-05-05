@@ -64,15 +64,14 @@
                         <thead>
 
                             <tr style="text-align: center;">
-                                <th>#</th>
+                                <th>STT</th>
                                 <th>Tên nhiệm vụ</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
-                                <th>Điểm<i class="fa fa-sort"></i></th>
+                                <th >Điểm<i class="fa fa-sort"></i></th>
                                 <th>Số lượng còn <i class="fa fa-sort"></i></th>
                                 <th>Trạng thái<i class="fa fa-sort"></i></th>
-
-                                <th>Tác vụ</th>
+                                <th >Tác vụ</th>
                             </tr>
 
                         </thead>
@@ -82,11 +81,11 @@
                                 <td>{{a.8}}</td>
                                 <td>{{a.1}}</td>
 
-                                <td style="text-align: center;"><input style="text-align: center;" type="date"
+                                <td style="text-align: center;width: 1%; "><input style="text-align: center;" type="date"
                                         value="{{a.3}}" readonly></td>
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
                                         value="{{a.4}}" readonly></td>
-                                <td style="text-align: center;">{{a.7}}</td>
+                                <td style="text-align: center;width:7%">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
                                 {% if a.5 == 0 or a.6 == 0%}
                                 <td style="text-align: center;">Hết</td>
@@ -96,10 +95,10 @@
                                 {% else %}
                                 <td style="text-align: center;">Còn</td>
 
-                               
+
                                 {% endif %}
 
-                                <td>
+                                <td style ="width: 13%;">
 
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
@@ -282,17 +281,17 @@
 
 
 
-               
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     <button class="btn btn-primary" type="submit" data-toggle="modal">Cập nhập</button>
-                    
+
                 </div>
             </div>
         </div>
     </div>
-</form>
+    </form>
     {% endfor %}
 
     </table>
@@ -324,7 +323,7 @@
                                     <input id="loop" type="number" name="loop" value="{{a.3}}"
                                         oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
                                         onchange="this.setCustomValidity('')" min="0" max="30" required>
-                                    <select class="form-group" id="unitloop"  name="unitloop">
+                                    <select class="form-group" id="unitloop" name="unitloop">
                                         {%if a.4 ==0 %}
                                         <option value="0">Không lặp</option>
                                         {% elif a.4 ==1 %}
@@ -343,12 +342,12 @@
                                         <option value="30">Tháng</option>
 
                                     </select>
-                              
+
                                 </div>
                             </div>
                         </div>
 
-             
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -357,7 +356,7 @@
             </div>
         </div>
     </div>
-</form>
+    </form>
     {% endfor %}
     </table>
     </div>
@@ -442,70 +441,66 @@
                                 }
 
                             }
-
                         </script>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="required">Điểm:</label>
-
-                                    <input type="number" min="1" max="1000" name="point"
-                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
-                                        onchange="this.setCustomValidity('')" class="form-control" required>
-                                </div>
-                                <div class="col">
-                                    <label class="required">Số lượng:</label>
-                                    <input type="number" min="1" max="100" name="limit"
-                                        oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
-                                        onchange="this.setCustomValidity('')" class="form-control" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                              <label>Thời gian lặp lại nhiệm vụ:</label>
-                                    <input class="form-control" type="number" value="0" placeholder="Số"
-                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
-                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30" required>
-                        </div>
                         <div>
-                                    <select class="form-control" name="unitloop" required>
-                                        <option value="0">Không lặp</option>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="required">Điểm:</label>
 
-                                        <option value="1">Ngày</option>
-
-                                        <option value="7">Tuần</option>
-
-                                        <option value="30">Tháng</option>
-
-                                    </select>
-
+                                        <input type="number" min="1" max="1000" name="point"
+                                            oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                            onchange="this.setCustomValidity('')" class="form-control" required>
+                                    </div>
+                                    <div class="col">
+                                        <label class="required">Số lượng:</label>
+                                        <input type="number" min="1" max="100" name="limit"
+                                            oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
+                                            onchange="this.setCustomValidity('')" class="form-control" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label>Thời gian lặp lại nhiệm vụ:</label>
+                                <input class="form-control" type="number" value="0" placeholder="Số"
+                                    oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                    onchange="this.setCustomValidity('')" name="loop" min="0" max="30" required>
+                            </div>
+                            <div>
+                                <select class="form-control" name="unitloop" required>
+                                    <option value="0">Không lặp</option>
 
-                        <div class="form-group">
-                            <button class="btn btn-primary" type="submit">Lưu</button>
+                                    <option value="1">Ngày</option>
+
+                                    <option value="7">Tuần</option>
+
+                                    <option value="30">Tháng</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="idbtn" class="btn btn-primary" type="submit">Lưu</button>
+
+                            </div>
                         </div>
                     </form>
-                                    </select>   
-                    
-                    </div>
-              
-                </div>
-             
-                    
-                
-               
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button 
-                     id="idbtn" class="btn btn-primary" type="submit">Lưu</button>
+                    </select>
 
                 </div>
-            </form>
-             
+
             </div>
+
+
+
+
+
+            </form>
+
         </div>
+    </div>
     </div>
     </div>
     </div>
@@ -521,5 +516,6 @@
         }, 3000);
     })
 </script>
+
 </html>
 {% endblock %}
