@@ -18,11 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-    <!-- <script>
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script> -->
+
 </head>
 
 
@@ -67,16 +63,17 @@
                                 <td>{{a.1}}</td>
                                 <td>{{a.2}}</td>
                                 <td>{{a.3}}</td>
-                                {% if a.4 == 0 %}
+                                {% if a.4 == 2 %}
+                                <td style="text-align: center;">Hoàn thành</td>
+                                {% elif a.4 == 0 %}
                                 <td style="text-align: center;">Đã hủy</td>
-                                {% endif %}
-
-                                {% if a.4 == 1 %}
+                                {% elif 0 >= a.7 %}
+                                <td style="text-align: center;">Hết hạn</td>
+                                {% elif a.4 == 1 %}
                                 <td style="text-align: center;">Đang làm</td>
-                                {% endif %}
 
-                                  {% if a.4 == 2 %}      
-                                  <td style="text-align: center;">Hoàn thành</td>
+                                {% else %}      
+                                
                                   {% endif %}                                
                             </tr>
                             {% endfor %}                         

@@ -101,10 +101,11 @@
                                         value="{{a.4}}" readonly></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
-                                {% if a.5 == 0 or a.6 == 0%}
-                                <td style="text-align: center;">Hết</td>
-                                {% elif a.9 >= a.4 %}
+                                {% if a.9 >= a.4 %}
                                 <td style="text-align: center;">Quá hạn</td>
+                                {% elif a.5 == 0 or a.6 == 0%}
+                                <td style="text-align: center;">Hết</td>
+                               
 
                                 {% else %}
                                 <td style="text-align: center;">Còn</td>
@@ -269,6 +270,18 @@
                                     <input type="date" name="enddate" id='end' min={{max}} class="form-control"
                                         oninvalid="this.setCustomValidity('Ngày không hợp lệ')" value="{{a.4}}"
                                         onchange="handleredit(event),this.setCustomValidity('')" ; required>
+                                        <script>
+                                        function handleredit(e) {
+                                            var dateone = new Date(document.getElementById('start').value);
+                                            var datetwo = new Date(document.getElementById('end').value);
+            
+                                            if (dateone > datetwo) {
+                                                result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
+                                                alert(result);
+                                            }
+            
+                                        }
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -310,7 +323,7 @@
 
     </table>
     </div>
-
+    <!-- Loop -->
     {% for a in schedule %}
     <div id="modalloop{{a.0}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -330,14 +343,16 @@
 
                             <input type="text" class="form-control" name="name" value="{{a.1}}" readonly>
                         </div>
+                        <div>
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col">
+        
                                     <label>Thời gian lặp lại nhiệm vụ:</label>
-                                    <input id="loop" type="number" name="loop" value="{{a.3}}"
+                                    <input  class="form-control" id="time1" type="number" name="loop" value="{{a.3}}"
                                         oninvalid="this.setCustomValidity('Dữ liệu không hợp lệ')"
-                                        onchange="this.setCustomValidity('')" min="0" max="30" required>
-                                    <select class="form-group" id="unitloop"  name="unitloop">
+                                     onchange="this.setCustomValidity('')" min="0" max="30" required>
+                                        </div>
+                                        <div>
+                                    <select class="form-control" id="menu1"  name="unitloop">
                                         {%if a.4 ==0 %}
                                         <option value="0">Không lặp</option>
                                         {% elif a.4 ==1 %}
@@ -354,14 +369,16 @@
                                         <option value="7">Tuần</option>
 
                                         <option value="30">Tháng</option>
-
-                                    </select>
-                              
+                                    </select>  
+                                    <script>
+                                    document.getElementById('menu1').addEventListener('change', function() {
+                                    if (this.value == 0  ) {
+                                        document.getElementById('time1').text = 0;
+                                    }
+                                });
+                                    </script>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-             
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -377,7 +394,7 @@
 
 
 
-    <!-- Modal loop -->
+
 
     <!-- Modal Add Employee-->
     <div id="mymodal" class="modal fade" role="dialog">
@@ -428,7 +445,7 @@
                                     <input type="date" id='end1' name="enddate"
                                         oninvalid="this.setCustomValidity('Ngày không hợp lệ')" min={{max}}
                                         class="form-control" onchange="handler(event),this.setCustomValidity('')"
-                                        required>
+                                        disabled = true    required>
                                 </div>
                             </div>
                         </div>
@@ -442,19 +459,16 @@
                                     alert(result);
 
                                 }
-
                             }
-
-                            function handleredit(e) {
-                                var dateone = new Date(document.getElementById('start').value);
-                                var datetwo = new Date(document.getElementById('end').value);
-
-                                if (dateone > datetwo) {
-                                    result = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc! Vui lòng chọn lại";
-                                    alert(result);
-                                }
-
-                            }
+                         
+                                document.getElementById('start1').addEventListener('change', function() {
+                                    if (this.value != null  ) {
+                                        document.getElementById('end1').disabled = false;
+                                    } else {
+                                        document.getElementById('end1').disabled = true;
+                                    }
+                                });
+                          
 
                         </script>
                         <div class="form-group">
@@ -474,14 +488,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div>
                         <div class="form-group">
                               <label>Thời gian lặp lại nhiệm vụ:</label>
                                     <input class="form-control" type="number" value="0" placeholder="Số"
                                         oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
-                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30" required>
+                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30"
+                                    id="time"    disabled="true" required>
                         </div>
                         <div>
-                                    <select class="form-control" name="unitloop" required>
+                                    <select class="form-control" id="menu" name="unitloop" required>
                                         <option value="0">Không lặp</option>
 
                                         <option value="1">Ngày</option>
@@ -491,14 +507,19 @@
                                         <option value="30">Tháng</option>
 
                                     </select>   
-                    
+                            <script>
+                                document.getElementById('menu').addEventListener('change', function() {
+                                    if (this.value == 1 || this.value == 7 ||this.value == 30  ) {
+                                        document.getElementById('time').disabled = false;
+                                    } else {
+                                        document.getElementById('time').disabled = true;
+                                    }
+                                });
+                            </script>              
                     </div>
-              
+                </div>
                 </div>
              
-                    
-                
-               
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     <button 

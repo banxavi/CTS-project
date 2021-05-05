@@ -290,7 +290,7 @@ def addmission():
             end = datetime.strptime(enddate,"%Y-%m-%d")
             date = 0
             unit = 0
-            if start >= end:
+            if start > end:
                 flash("{}".format(alert.ADDERRORDATE))
                 return redirect(url_for('mission'))
             elif int(dateloop)==0 or int(unitloop)==0:
@@ -502,7 +502,7 @@ def takemission(id):
 #Research MissionofUser
 @app.route('/missionsearch/<id>',methods=['GET','POST'])
 def missionsearch(id):
-    try:
+
         cursor = mysql.connection.cursor()
         cursor.execute(SQL.SQLSHOWUSERMISSION,(id,))
         listEmployee = cursor.fetchall()
@@ -510,8 +510,7 @@ def missionsearch(id):
         NameEmployee = cursor.fetchall()
         constants_list  = constants
         return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
-    except:
-        return redirect(url_for('errorpage'))
+
 
 # Admin management user
 @app.route('/usermanagement')
