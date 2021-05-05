@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- Created By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
@@ -170,7 +171,13 @@
         </li>
         <li><a href="#ward">Đổi quà</a></li>
         <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
-        <li><a href="#" style="color:rgb(235, 255, 124);">Điểm:{{point}}</a></li>
+    
+        <li><a href="#" data-toggle="modal" data-target="#modaledit"
+            style="color:rgb(235, 255, 124);">Điểm:{{point}}</a></li>
+           
+
+       
+
       </ul>
       <script type="text/javascript">
         const current = location.href;
@@ -214,5 +221,42 @@
     background: #0f538b;
     color: #fff;
     width: 50px;
+
   }
+
+  
 </style>
+    <div id="modaledit"  class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div style="display: inline-table;" class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Các nhiệm vụ đã hoàn thành</h4>
+                </div>
+               
+                  <table class="table table-striped table-hover table-bordered">
+                    <thead>
+
+                        <tr >
+                            <th>Tên nhiệm vụ</th>
+                            <th>Điểm</th>
+                            <th>Ngày kết thúc</th>
+                           
+                        </tr>
+                    <tbody>
+                      {% for a in missiondone %}
+                        <tr>
+                            <td>{{a.0}}</td>
+                            <td>{{a.2}}</td>
+                            <td><input type="date" value="{{a.1}}" disabled = true></td>
+                           
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+         
+            </div>
+        </div>
+    </div>
+  
