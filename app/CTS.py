@@ -38,8 +38,9 @@ s = URLSafeTimedSerializer('thisisascrect!')
 
 @app.route('/')
 def home():
-    try:
+
         global image
+        global missiondone
         if 'idname' not in session:
             return render_template("login.html")
         elif session['idname']=="administrator":   
@@ -55,11 +56,12 @@ def home():
             homeuser1 = cursor.fetchone()
             cursor.execute(SQL.SQLMAXPOINT)
             homeuser2 = cursor.fetchone()
-            return render_template('home.html',homeuser2=homeuser2[0],img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
+            cursor.execute(SQL.SQLPOINTDONE,(email,))
+            missiondone = cursor.fetchall()
+            return render_template('home.html',missiondone=missiondone,homeuser2=homeuser2[0],img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
         else:
             return render_template("login.html")
-    except:
-        return redirect(url_for('errorpage'))
+  
 
 @app.route('/home')
 def homeadmin():
@@ -423,7 +425,7 @@ def usermission():
             cursor.execute(SQL.SQLIMAGE,(email,))
             image1 = cursor.fetchone()
             constants_list = constants
-            return render_template("usermission.html",missionuser=missionuser,img=image[0],point=image1[1],constants_list=constants_list)
+            return render_template("usermission.html",missiondone=missiondone,missionuser=missionuser,img=image[0],point=image1[1],constants_list=constants_list)
     except:
         return redirect(url_for('errorpage'))
 #Cancel Mission
@@ -469,7 +471,7 @@ def usermissionavaiable():
         cursor.execute(SQL.SQLMISSION1)
         mission = cursor.fetchall()
         constants_list = constants
-        return render_template("usermissionavaiable.html",mission=mission,img=image[0],point=image[1],constants_list=constants_list)
+        return render_template("usermissionavaiable.html",missiondone=missiondone,mission=mission,img=image[0],point=image[1],constants_list=constants_list)
     except:
         return redirect(url_for('errorpage'))
 #Take Mission
@@ -510,7 +512,7 @@ def missionsearch(id):
         cursor.execute(SQL.SQLSHOWNAMEOFUSER,(id,))
         NameEmployee = cursor.fetchall()
         constants_list  = constants
-        return render_template('missionsearch.html',listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
+        return render_template('missionsearch.html',missiondone=missiondone,listEmployee=listEmployee,NameEmployee=NameEmployee,constants_list=constants_list)
     except:
         return redirect(url_for('errorpage'))
 

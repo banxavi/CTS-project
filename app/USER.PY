@@ -198,7 +198,7 @@ def profile():
         id = CTS.session['idname']
         mycursor.execute(SQL.SQLSHOWPROFILE,(id,))
         myresult = mycursor.fetchall()
-        return render_template("userprofile.html",data = myresult,img=CTS.image[0],point=CTS.image[1])
+        return render_template("userprofile.html",missiondone=CTS.missiondone,data = myresult,img=CTS.image[0],point=CTS.image[1])
     except:
         return redirect(url_for('errorpage'))    
 

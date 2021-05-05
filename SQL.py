@@ -107,3 +107,9 @@ SQLVALIDATE_CANCEL = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Emplo
 SQLVALIDATE_COMPLETE = "SELECT Employee_Id,Mission_Id FROM cts.process WHERE Employee_Id =%s and Mission_Id=%s and Status =2"
 SQLGETEMP_ID = "SELECT Employee_Id FROM cts.employee where Email=%s"
 SQLUPDATEMISSION = "UPDATE cts.mission SET mission.Limit=mission.Limit-1 where Mission_Id=%s"  
+#Show point done
+SQLPOINTDONE = "select  mission.Title ,mission.EndDate , mission.Point \
+            from employee, mission, process\
+                where process.Employee_Id=employee.Employee_Id and \
+                process.Mission_Id=mission.Mission_Id \
+                and employee.Email = %s and process.Status =2"
