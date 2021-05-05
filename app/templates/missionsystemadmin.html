@@ -96,9 +96,9 @@
                                 <td>{{a.1}}</td>
 
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
-                                        value="{{a.3}}" readonly></td>
+                                        value="{{a.3}}" disabled=true></td>
                                 <td style="text-align: center;"><input style="text-align: center;" type="date"
-                                        value="{{a.4}}" readonly></td>
+                                        value="{{a.4}}" disabled=true ></td>
                                 <td style="text-align: center;">{{a.7}}</td>
                                 <td style="text-align: center;">{{a.6}}</td>
                                 {% if a.9 >= a.4 %}
@@ -334,7 +334,7 @@
                 <div class="modal-body">
                     <form action="/schedule" method="POST">
 
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>ID:</label>
                             <input type="text" class="form-control" name="id" value="{{a.0}}" readonly>
                         </div>

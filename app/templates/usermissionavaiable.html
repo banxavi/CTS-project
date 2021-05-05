@@ -83,9 +83,9 @@
                         <td>{{a.8}}</td>
                         <td>{{a.1}}</td>
                         <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.3}}"
-                                readonly></td>
+                                disabled = true></td>
                         <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.4}}"
-                                readonly></td>
+                                disabled = true ></td>
                         <td style="text-align: center;">{{a.7}}</td>
                         <td style="text-align: center;">{{a.6}}</td>
                         {% if a.5 == 1 %}
@@ -96,7 +96,7 @@
                         <td style="text-align: center;">
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="View"><i class="material-icons">remove_red_eye</i></a>
-                            <a href="/takemission/{{a.0}}" onclick="return confirm('Bạn có muốn nhận nhiệm vụ này không')" class="accept"
+                            <a href="/takemission/{{a.0}}" class="accept"
                                 title="Bạn có muốn nhận nhiệm vụ này chứ?"><i
                                     class="material-icons">add_shopping_cart</i></a>
                             <!-- <a href="/edit/{{a.0}}"  data-toggle="modal" data-target="#modaledit{{a.0}}" class="edit" title="Edit" >Sửa</a>

@@ -75,8 +75,8 @@
                     
                         <td>{{a.8}}</td>
                         <td>{{a.2}}</td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.4}}" readonly></td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.5}}"readonly></td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.4}}"  disabled = true></td>
+                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.5}}" disabled = true></td>
                         <td style="text-align: center;">{{a.6}}</td>
                         {% if a.7==1 %}
                         <td style="text-align: center;">{{constants_list.DOING}}</td>
@@ -91,18 +91,9 @@
                             <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                 title="Xem"><i class="material-icons">remove_red_eye</i></a>
                             {% if a.7 == 1 %}
-                             <a href="/donemission/{{a.0}}" onclick="f()" class="done"
+                             <a href="/donemission/{{a.0}}"  onclick="return confirm('Bạn có chắc muốn hoàn thành nhiệm vụ này chứ?')" class="done" 
                                 title="Hoàn thành"><i class="material-icons">done</i></a>
-                                <script>
-                                    var first = true;
-                                    function f() {
-                                        if ( first ) {
-                                            first = false;
-                                            alert("Bạn có muốn hoàn thành nhiệm vụ này?")
-                                            
-                                        }
-                                    }
-                                </script>
+                            
                             {% else %}
                                 <a href="/" onclick="return false;" class="done"  style="cursor: no-drop;"
                                 title="Hoàn thành"><i class="material-icons">done</i></a>

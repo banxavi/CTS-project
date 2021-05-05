@@ -290,7 +290,7 @@ def addmission():
             end = datetime.strptime(enddate,"%Y-%m-%d")
             date = 0
             unit = 0
-            if start > end:
+            if start >= end:
                 flash("{}".format(alert.ADDERRORDATE))
                 return redirect(url_for('mission'))
             elif int(dateloop)==0 or int(unitloop)==0:
