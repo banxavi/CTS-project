@@ -26,6 +26,7 @@ from datetime import date, datetime,timedelta
 import pyautogui as pag
 import constants
 import configpass
+from app import USER
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['MYSQL_HOST'] = 'localhost'

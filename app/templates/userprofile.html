@@ -33,7 +33,7 @@
     {% for a in data %}
     <div style="padding: 0 200px;" class="form-group">
       {% if filename %}
-      <img name="img" id="image" src="{{ url_for('display_image',filename=filename)}}"
+      <img name="img" id="image" src="{{ url_for('static',filename=a.2)}}"
         style="height: 100px; width: 100px; border-radius: 100px;object-fit:cover;" />
       {% else %}
       <img name="img" src="{{ url_for('static',filename=a.2 )}}"

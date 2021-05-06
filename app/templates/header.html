@@ -156,7 +156,7 @@
 
       <a style="padding-left: 10px;" href="/profile" title="Thông tin cá nhân"> <img
         {% if filename %}
-        <img name="img" id="image" src="{{ url_for('display_image',filename=filename)}}"
+        <img name="img" id="image" src="{{ url_for('static',filename=img)}}"
           style="height: 50px; width: 50px; border-radius: 250px;object-fit:cover;" class="avatar" />
         {% else %}
         <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
