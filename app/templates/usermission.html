@@ -42,43 +42,45 @@
                     <label style="font-size: 30px;display: flex;    justify-content: center;
                 font-weight: 30;
 
-                color:red">{{constants_list.YOUR_MISSION_BOL}}</label> 
-                     
-                          <input type="text" value="{{idplo}}" hidden>
-            </div>
-            <div class="form-group" align="right">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                {% for message in messages %}
-                <div id="snackbar">{{message}}</div>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
-            </div>
-            <table id="example" class="table table-striped table-hover table-bordered">
-                <thead>
-                    
-                    <tr style="text-align: center;">
-                        
-                        <th>{{constants_list.STT}}</th>
-                        <th>{{constants_list.NAME_MISSION}}</th>
-                        <th>{{constants_list.START_DATE}}</th>
-                        <th>{{constants_list.END_DATE}}</th>
-                        <th>{{constants_list.POINT}}<i class="fa fa-sort"></i></th>
-                        <th>{{constants_list.STATUS}}<i class="fa fa-sort"></i></th>
-                        <th>{{constants_list.ACTION}}</th>
-                    </tr>
-                  
-                </thead>
-                <tbody>
-                    {% for a in missionuser %}
-                    <tr>
-                        
-                        <td>{{a.8}}</td>
-                        <td>{{a.2}}</td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date"  value="{{a.4}}"  disabled = true></td>
-                        <td style="text-align: center;"><input style="text-align: center;" type="date" value="{{a.5}}" disabled = true></td>
-                        <td style="text-align: center;">{{a.6}}</td>
+                color:red">{{constants_list.YOUR_MISSION_BOL}}</label>
+
+                    <input type="text" value="{{idplo}}" hidden>
+                </div>
+                <div class="form-group" style = "display: flex; justify-content: center;">
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div id="snackbar">{{message}}</div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <table id="example" class="table table-striped table-hover table-bordered">
+                    <thead>
+
+                        <tr style="text-align: center;">
+
+                            <th>{{constants_list.STT}}</th>
+                            <th>{{constants_list.NAME_MISSION}}</th>
+                            <th>{{constants_list.START_DATE}}</th>
+                            <th>{{constants_list.END_DATE}}</th>
+                            <th>{{constants_list.POINT}}<i class="fa fa-sort"></i></th>
+                            <th>{{constants_list.STATUS}}<i class="fa fa-sort"></i></th>
+                            <th>{{constants_list.ACTION}}</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {% for a in missionuser %}
+                        <tr>
+
+                            <td>{{a.8}}</td>
+                            <td>{{a.2}}</td>
+                            <td style="text-align: center;"><input style="text-align: center;" type="date"
+                                    value="{{a.4}}" disabled=true></td>
+                            <td style="text-align: center;"><input style="text-align: center;" type="date"
+                                    value="{{a.5}}" disabled=true></td>
+                            <td style="text-align: center;">{{a.6}}</td>
                             {% if a.7==1 %}
                             <td style="text-align: center;">{{constants_list.DOING}}</td>
                             {% endif %}
@@ -93,16 +95,16 @@
                                 <a href="/view/{{a.0}}" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                     title="Xem"><i class="material-icons">remove_red_eye</i></a>
                                 {% if a.7 == 1 %}
-                                <a href="/donemission/{{a.0}}" id="btn" onclick="clickAndDisable(this);" class="done" title="Hoàn thành"><i
-                                        class="material-icons">done</i></a>
-                                        <script> 
-                                            function clickAndDisable(link) {
-                                              // disable subsequent clicks
-                                              link.onclick = function(event) {
-                                                 event.preventDefault();
-                                              }
-                                            }   
-                                         </script>
+                                <a href="/donemission/{{a.0}}" id="btn" onclick="clickAndDisable(this);" class="done"
+                                    title="Hoàn thành"><i class="material-icons">done</i></a>
+                                <script>
+                                    function clickAndDisable(link) {
+                                        // disable subsequent clicks
+                                        link.onclick = function (event) {
+                                            event.preventDefault();
+                                        }
+                                    }
+                                </script>
                                 {% else %}
                                 <a href="/" onclick="return false;" class="done" style="cursor: no-drop;"
                                     title="Hoàn thành"><i class="material-icons">done</i></a>
@@ -190,7 +192,7 @@
             </div>
         </div>.
 
-    </form>
+        </form>
 </body>
 
 </html>
