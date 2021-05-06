@@ -449,6 +449,7 @@ def cancelmission(id):
 #Complete Mission
 @app.route('/donemission/<id>/',methods=['GET','POST'])
 def donemission(id):
+    global image1
     try:
         cursor = mysql.connection.cursor()
         if request.method == "GET":
@@ -471,7 +472,11 @@ def usermissionavaiable():
         cursor.execute(SQL.SQLMISSION1)
         mission = cursor.fetchall()
         constants_list = constants
-        return render_template("usermissionavaiable.html",missiondone=missiondone,mission=mission,img=image[0],point=image[1],constants_list=constants_list)
+        if 'idname' in session: 
+            email = session['idname']
+            cursor.execute(SQL.SQLIMAGE,(email,))
+            image1 = cursor.fetchone()
+            return render_template("usermissionavaiable.html",missiondone=missiondone,mission=mission,img=image[0],point=image1[1],constants_list=constants_list)
     except:
         return redirect(url_for('errorpage'))
 #Take Mission
