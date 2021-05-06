@@ -14,7 +14,6 @@ from werkzeug.utils import format_string
 import SQL
 import alert
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from pymysql import cursors
 from werkzeug.utils import format_string
 from flask_mail import Mail, Message
 import alert
@@ -23,10 +22,8 @@ import constants
 import configadmin
 import constants
 from datetime import date, datetime,timedelta
-import pyautogui as pag
 import constants
 import configpass
-from app import USER
 app.config.from_pyfile('MailConfig.cfg')
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['MYSQL_HOST'] = 'localhost'
