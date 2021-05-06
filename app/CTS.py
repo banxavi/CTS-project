@@ -36,7 +36,7 @@ s = URLSafeTimedSerializer('thisisascrect!')
 
 @app.route('/')
 def home():
-
+    try:
         global image
         global missiondone
         if 'idname' not in session:
@@ -59,6 +59,8 @@ def home():
             return render_template('home.html',missiondone=missiondone,homeuser2=homeuser2[0],img=image[0],point=image[1],homeuser=homeuser[0],homeuser1=homeuser1[0])
         else:
             return render_template("login.html")
+    except:
+        return redirect(url_for('errorpage')) 
   
 
 @app.route('/home')

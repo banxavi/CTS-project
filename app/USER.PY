@@ -90,8 +90,11 @@ def upload_image():
 
 @app.route('/display/<filename>')
 def display_image(filename):
+    try:
 	#print('display_image filename: ' + filename)
-	return redirect(url_for('static', filename='uploads/'+ filename), code=301)
+	    redirect(url_for('static', filename='uploads/'+ filename), code=301)
+    except:
+        return redirect(url_for('errorpage')) 
 
 @app.route('/profile')
 def profile():
