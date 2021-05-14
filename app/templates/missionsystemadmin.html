@@ -78,7 +78,7 @@
                         <tbody>
                             {% for a in task %}
                             <tr>
-                                <td>{{a.8}}</td>
+                                <td  style="text-align: center;">{{a.8}}</td>
                                 <td>{{a.1}}</td>
 
 
@@ -90,7 +90,7 @@
 
                                 <td style="text-align: center;">{{a.6}}</td>
                                 {% if a.9 >= a.4 %}
-                                <td style="text-align: center;">Quá hạn</td>
+                                <td style="text-align: center;">Hết hạn</td>
                                 {% elif a.5 == 0 or a.6 == 0%}
                                 <td style="text-align: center;">Hết</td>
                                
@@ -101,7 +101,7 @@
 
                                 {% endif %}
 
-                                <td style ="width: 13%;">
+                                <td style ="width: 13%;text-align: center; ">
 
                                     <a href="/" data-toggle="modal" data-target="#modalview{{a.0}}" class="view"
                                         title="Xem "><i class="material-icons">remove_red_eye</i></a>
@@ -388,7 +388,7 @@
 
 
 
-    <!-- Modal Add Employee-->
+    <!-- Modal Add Mission-->
     <div id="mymodal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -483,13 +483,7 @@
                         <div>
                         <div class="form-group">
                               <label>Thời gian lặp lại nhiệm vụ:</label>
-                                    <input class="form-control" type="number" value="0" placeholder="Số"
-                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
-                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30"
-                                    id="time" readOnly=true required>
-                        </div>
-                        <div>
-                                    <select class="form-control" id="menu" name="unitloop" required>
+                               <select class="form-control" id="menu" name="unitloop" required>
                                         <option value="0">Không lặp</option>
 
                                         <option value="1">Ngày</option>
@@ -499,6 +493,13 @@
                                         <option value="30">Tháng</option>
 
                                     </select>   
+                                    
+                        </div>
+                        <div>
+                                <input class="form-control" type="number" value="0" placeholder="Số"
+                                        oninvalid="this.setCustomValidity('Vui lòng không được bỏ trống')"
+                                        onchange="this.setCustomValidity('')" name="loop" min="0" max="30"
+                                    id="time" readOnly=true required>
                             <script>
                                 document.getElementById('menu').addEventListener('change', function() {
                                     if (this.value == 1 || this.value == 7 ||this.value == 30  ) {
