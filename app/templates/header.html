@@ -1,92 +1,266 @@
+
 <!DOCTYPE html>
 <!-- Created By CodingNepal - www.codingnepalweb.com -->
 <html lang="en">
+
 <head>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
 </head>
 
-{% if session['idname'] =="abc"%}
+{% if session['idname'] =="administrator"%}
 <header>
-<body>
-  <nav class="navbar">
-    <div class="content">
-      <div class="logo">
-        <a href="#">Hello Admin</a>
-      </div>
-      <ul class="menu-list">
-        <div class="icon1 cancel-btn">
-          <i class="fas fa-times"></i>
+
+  <body>
+    <nav class="navbar">
+      <div class="content">
+        <div class="logo">
+
+          <a class="letters">Hello Admin</a>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+          <script>
+            // Wrap every letter in a span
+            var textWrapper = document.querySelector('.logo .letters');
+            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+
+            anime.timeline({
+                loop: true
+              })
+              .add({
+                targets: '.logo .letter',
+                translateY: ["1.1em", 0],
+                translateZ: 0,
+                duration: 750,
+                delay: (el, i) => 50 * i
+              }).add({
+                targets: '.logo',
+                opacity: 0,
+                duration: 1000,
+                easing: "easeOutExpo",
+                delay: 1000
+              });
+          </script>
+          <style>
+            .logo {
+
+              color: #fff;
+              font-size: 30px;
+              font-weight: 600;
+              text-decoration: none;
+              ;
+            }
+
+            .logo .text-wrapper {
+              position: relative;
+              display: inline-block;
+              padding-top: 0.2em;
+              padding-right: 0.05em;
+              padding-bottom: 0.1em;
+              overflow: hidden;
+            }
+
+            .logo .letter {
+              display: inline-block;
+              line-height: 1em;
+            }
+          </style>
         </div>
-        <li class="active"><a href="/">Trang chủ</a></li>
-        <li><a href="/mission">Quản lí nhiệm vụ</a></li>
-        <li><a href="/usermanagement">Quản lí nhân viên</a></li>
-        <li><a href="/managementward">Quản lý đổi thưởng</a></li>
-        <li><a href="#">Thông báo</a></li>
-        <li><a href="/logout">Đăng xuất</a></li>
-      </ul>
-      <div class="icon1 menu-btn">
-        <i class="fas fa-bars"></i>
+        <ul class="menu-list">
+          <div class="icon1 cancel-btn">
+            <i class="fas fa-times"></i>
+          </div>
+          <li><a href="/home">Trang chủ</a></li>
+          <li><a href="/mission">Quản lí nhiệm vụ</a></li>
+          <li><a href="/usermanagement">Quản lí nhân viên</a></li>
+          <li><a href="/managementward">Quản lí đổi thưởng</a></li>
+          <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
+        </ul>
+        <script type="text/javascript">
+          const current = location.href;
+          const menuItem = document.querySelectorAll("a")
+          const menuLength = menuItem.length
+          for (let i = 0; i < menuLength; i++) {
+            if (menuItem[i].href === current) {
+              menuItem[i].className = 'active'
+            }
+          }
+        </script>
+        <div class="icon1 menu-btn">
+          <i class="fas fa-bars"></i>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 </header>
+
 
 {% endif %}
 
-{% if session['idname'] !="abc"%}
+{% if session['idname'] !="administrator"%}
 <header>
 
   <nav class="navbar">
     <div class="content">
+
       <div class="logo">
-        <a href="#">Hello Member</a>
-       
-          <img src="https://img4.thuthuatphanmem.vn/uploads/2020/03/23/anh-de-thuong-cua-rose-black-pink_051300075.jpg" alt="Avatar" style="width:50px;height:50px;border-radius: 25px;" class="avatar">
-       
+        <a class="letters">Hello Member</a>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+        <script>
+          // Wrap every letter in a span
+          var textWrapper = document.querySelector('.logo .letters');
+          textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<div class='letter'>$&</div>");
+
+          anime.timeline({
+              loop: true
+            })
+            .add({
+              targets: '.logo .letter',
+              translateY: ["1.1em", 0],
+              translateZ: 0,
+              duration: 750,
+              delay: (el, i) => 50 * i
+            }).add({
+              targets: '.logo',
+              opacity: 0,
+              duration: 1000,
+              easing: "easeOutExpo",
+              delay: 1000
+            });
+        </script>
+        <style>
+          .logo {
+
+            color: #fff;
+            font-size: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            ;
+          }
+
+          .logo .text-wrapper {
+            position: relative;
+            display: inline-block;
+            padding-top: 0.2em;
+            padding-right: 0.05em;
+            padding-bottom: 0.1em;
+            overflow: hidden;
+          }
+
+          .logo .letter {
+            display: inline-block;
+            line-height: 1em;
+          }
+        </style>
       </div>
+
+      <a style="padding-left: 10px;" href="/profile" title="Thông tin cá nhân"> <img
+        {% if filename %}
+        <img name="img" id="image" src="{{ url_for('static',filename=img)}}"
+          style="height: 50px; width: 50px; border-radius: 250px;object-fit:cover;" class="avatar" />
+        {% else %}
+        <img src="{{ url_for('static',filename=img )}}" alt="Avatar"
+          style="width:50px;height:50px;border-radius: 25px;object-fit: cover;" class="avatar"></a>
+        {%endif%}
       <ul class="menu-list">
         <div class="icon1 cancel-btn">
           <i class="fas fa-times"></i>
         </div>
-        <li class="active" ><a  href="/">Trang chủ</a></li>
-        <li><a href="/usermission">Danh sách nhiệm vụ</a></li>
-        <li><a href="/doithuonguser">Đổi quà</a></li>
-        <li><a href="#about">Thông báo</a></li>
-        <li><a href="/logout">Đăng xuất</a></li>
-        <li><a href ="#" style=" padding-left: 10px; color:#fff;">Điểm:235</a></li>
-      </ul>
-      
-      <div class="icon1 menu-btn">
-        <i class="fas fa-bars"></i>
-      </div>
-    </div>
+        <li><a href="/">Trang chủ</a></li>
+        <li>
+          <a href="{{ url_for('usermission') }}">Nhiệm vụ của bạn</a>
+        </li>
+        <li>
+          <a href="{{ url_for('usermissionavaiable') }}">Nhiệm vụ hệ thống</a>
+        </li>
+        <li><a href="#ward">Đổi quà</a></li>
+        <li><a onclick="return confirm('Đăng xuất tài khoản?')" href="/logout">Đăng xuất</a></li>
     
+        <li><a href="#" data-toggle="modal" data-target="#modaledit"
+            style="color:rgb(235, 255, 124);">Điểm:{{point}}</a></li>
+           
+
+       
+
+      </ul>
+      <script type="text/javascript">
+        const current = location.href;
+        const menuItem = document.querySelectorAll("a")
+        const menuLength = menuItem.length
+        for (let i = 0; i < menuLength; i++) {
+          if (menuItem[i].href === current) {
+            menuItem[i].className = 'active'
+          }
+        }
+      </script>
+      <div class="icon1 menu-btn">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+
   </nav>
 </header>
 
 {% endif %}
-  <script>
-    const body = document.querySelector("body");
-    const navbar = document.querySelector(".navbar");
-    const menuBtn = document.querySelector(".menu-btn");
-    const cancelBtn = document.querySelector(".cancel-btn");
-    menuBtn.onclick = ()=>{
-      navbar.classList.add("show");
-      menuBtn.classList.add("hide");
-      body.classList.add("disabled");
-    }
-    cancelBtn.onclick = ()=>{
-      body.classList.remove("disabled");
-      navbar.classList.remove("show");
-      menuBtn.classList.remove("hide");
-    }
-  </script>
+<script>
+  const body = document.querySelector("body");
+  const navbar = document.querySelector(".navbar");
+  const menuBtn = document.querySelector(".menu-btn");
+  const cancelBtn = document.querySelector(".cancel-btn");
+  menuBtn.onclick = () => {
+    navbar.classList.add("show");
+    menuBtn.classList.add("hide");
+    body.classList.add("disabled");
+  }
+  cancelBtn.onclick = () => {
+    body.classList.remove("disabled");
+    navbar.classList.remove("show");
+    menuBtn.classList.remove("hide");
+  }
+</script>
+<style>
+  ul li a.active {
+    width: 100%;
+    border-radius: 6px;
+    background: #0f538b;
+    color: #fff;
+    width: 50px;
 
-  <script type="text/javascript">
-    $(document).on('click','ul li', function(){
-      $(this).addClass('active').siblings().removeClass('active')
-    })
-  </script>
+  }
 
+  
+</style>
+    <div id="modaledit"  class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div style="display: inline-table;" class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Các nhiệm vụ đã hoàn thành</h4>
+                </div>
+               
+                  <table class="table table-striped table-hover table-bordered">
+                    <thead>
+
+                        <tr >
+                            <th>Tên nhiệm vụ</th>
+                            <th>Điểm</th>
+                            <th>Ngày kết thúc</th>
+                           
+                        </tr>
+                    <tbody>
+                      {% for a in missiondone %}
+                        <tr>
+                            <td>{{a.0}}</td>
+                            <td>{{a.2}}</td>
+                            <td><input type="date" value="{{a.1}}" disabled = true></td>
+                           
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+         
+            </div>
+        </div>
+    </div>
+  

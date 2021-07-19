@@ -48,6 +48,7 @@
   
   .footer-dark .item.social {
     text-align:center;
+    padding-top: 2%;
   }
   
   @media (max-width:991px) {
